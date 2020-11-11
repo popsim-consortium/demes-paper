@@ -1,0 +1,172 @@
+\documentclass[11pt]{article}
+\usepackage[round,comma,authoryear]{natbib}
+\usepackage{fullpage}
+\usepackage{authblk}
+\usepackage{graphicx}
+\usepackage[newfloat]{minted}
+\usepackage{tcolorbox}
+\usepackage{etoolbox}
+\BeforeBeginEnvironment{minted}{\begin{tcolorbox}}
+\AfterEndEnvironment{minted}{\end{tcolorbox}}
+\usepackage{url}
+\usepackage{fancyvrb}
+\usepackage{caption}
+\newenvironment{code}{\captionsetup{type=listing}\centering}{}
+\SetupFloatingEnvironment{listing}{name=Demographic Model}
+
+
+% local definitions
+\newcommand{\msprime}[0]{\texttt{msprime}}
+\newcommand{\stdpopsim}[0]{\texttt{stdpopsim}}
+\newcommand{\demes}[0]{\texttt{demes}}
+\newcommand{\Demes}[0]{\texttt{Demes}}
+\newcommand{\YAML}[0]{\texttt{YAML}}
+\newcommand{\moments}[0]{\texttt{moments}}
+\newcommand{\dadi}[0]{\texttt{$\partial$a$\partial$i}}
+\newcommand{\fwdpy}[0]{\texttt{fwdpy11}}
+\newcommand{\slim}[0]{\texttt{slim}}
+
+\newcommand{\aprcomment}[1]{{\textcolor{blue}{APR: #1}}}
+
+\begin{document}
+
+\title{\demes: a Python package for pain-free specification of complex demography}
+\author[1,*]{Graham Gower}
+\author[2,*]{Jerome Kelleher}
+\author[3,*]{Aaron P. Ragsdale}
+\author[4,*]{Kevin Thornton}
+\affil[1]{}
+\affil[2]{}
+\affil[3]{}
+\affil[4]{}
+\affil[*]{Authors listed alphabetically}
+\maketitle
+
+\abstract{
+come back to title and abstract later
+}
+
+\section*{Introduction}
+
+The ever-increasing amount of genetic sequencing data from genetically and
+geographically diverse species and populations has allowed us to
+infer complex demography and study life history at fine scales. An integral
+component to such population genetics studies is simulation. Software to
+either simulate whole genome sequences
+\citep{thornton2014c++,kelleher2016efficient,haller2019slim,adrion2020community}
+or informative summary statistics of diversity
+\citep{gutenkunst2009inferring,kamm2017efficient,jouganous2017inferring}
+have enabled the increasing complexity of genomic studies, with many software
+packages able to handle large sample sizes, many interacting populations, and
+deviations from random-mating models of panmixia.
+
+The ability to simulate complex demographic scenarios, however, does not come
+without its own set of obstacles and frustrations. First of all, specifying models
+with many populations and parameters can be cumbersome and error-prone
+(e.g., \citep{ragsdale2020lessons}). It is
+time-consuming and tedious to implement and then verify the correctness
+of such demographic models. Making matters worse, each software package typically has
+its own application programming interface (API), which makes it difficult to translate
+models between simulation methods.
+
+Secondly, many software API are not particularly easy to read, especially when there
+are a large number of demographic events and parameters. This not only makes
+debugging difficult, but it can be difficult to even notice if a mistake has been
+made. A common interface for unambiguously specifying demographic
+models would reduce implementation errors and promote ease-of-use for many simulation
+software packages.
+
+Finally, simulated or inferred demographic models are regularly shared in the
+literature, and for someone else to be able to reproduce or reimplement some
+demographic scenario, it needs to be described fully and without ambiguity. However,
+it is common for reported demographic models to lack clear or even complete
+descriptions, hindering reproducibility. A human-readable description for
+such models would facilitate their sharing and reimplementation.
+
+Here, we present \demes, a Python package for specifying complex demographic models
+in a way that is both human readable and can be directly passed to a growing
+number of simulation engines. \Demes\ supports model specification in a high-level
+\YAML\ format \citep{ben2009yaml}
+that is designed to be as easy as possible to implement, read, and
+share. Models are then represented in an unambiguous low-level format within Python
+that checks model validity and can then be used as the input for simulation software.
+The initial release of \demes\ (version 1.0, described here) supports \emph{static}
+demographic descriptions, that is, models with fixed parameters. Future releases
+will support [drawing parameters from distributions, for example for ABC-based
+inference, or describing ``dynamic`` models where parameters may be fit to data,
+e.g. \moments\ or \dadi].
+
+\section*{Defining demographic models with \demes}
+
+\subsection*{High-level model specification in \YAML}
+
+\begin{itemize}
+\item Short description of YAML language and why it's appropriate here
+\item General overview (1 paragraph) of defining demography in YAML
+\item A generic, commonly used, simple demographic model for illustration (e.g. IM)
+\end{itemize}
+
+\begin{code}
+\label{code:im_model}
+\captionof{listing}{An IM model.}
+\begin{minted}[linenos,numbersep=5pt]{yaml}
+description: A two-population isolation-with-migration model.
+time_units: generations
+demes:
+  ancestral:
+    description: The ancestral deme that splits into two child demes.
+    initial_size: 5000
+    end_time: 2000
+  deme1:
+    description: The first child deme.
+    ancestors: ancestral
+    initial_size: 1000
+    final_size: 10000
+  deme2:
+    description: The second child deme.
+    ancestors: ancestral
+    initial_size: 2000
+    final_size: 8000
+migrations:
+  symmetric:
+  - demes: deme1, deme2
+    rate: 1e-4
+\end{minted}
+\end{code}
+
+\subsection*{Python representation of demography as input for simulation software}
+
+\begin{itemize}
+\item The Python API, reading in a YAML, and unambiguous and manipulable representation
+\end{itemize}
+
+\subsubsection*{Software support for \demes}
+\aprcomment{at time of publication. TBD...}
+\begin{itemize}
+\item \msprime
+\item \stdpopsim
+\item \fwdpy
+\item \moments
+\item \dadi? should try to get Ryan on board
+\item \slim? I guess that comes with \stdpopsim
+\end{itemize}
+
+\subsection*{Specifying complex demography}
+
+\aprcomment{A few examples of complex demography - e.g. 1) the very common out-of-Africa
+model, 2) Denisovan admixture with a ton of populations and demographic events, 3) a
+non-human model, perhaps with selfing rates and rate changes}
+
+\aprcomment{Perhaps examples should be in the appendix, to keep the paper concise}
+
+\section*{Prospects and future directions}
+
+\bibliographystyle{plainnat}
+\bibliography{paper}
+
+\section*{Appendix}
+
+
+
+
+\end{document}
