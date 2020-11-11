@@ -1,0 +1,21 @@
+description: A two-population isolation-with-migration model.
+time_units: generations
+demes:
+  ancestral:
+    description: The ancestral deme that splits into two child demes.
+    initial_size: 5000
+    end_time: 2000
+  deme1:
+    description: The first child deme.
+    ancestors: ancestral
+    initial_size: 1000
+    final_size: 10000
+  deme2:
+    description: The second child deme.
+    ancestors: ancestral
+    initial_size: 2000
+    final_size: 8000
+migrations:
+  symmetric:
+  - demes: deme1, deme2
+    rate: 1e-4

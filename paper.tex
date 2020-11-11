@@ -103,35 +103,16 @@ e.g. \moments\ or \dadi].
 \begin{itemize}
 \item Short description of YAML language and why it's appropriate here
 \item General overview (1 paragraph) of defining demography in YAML
-\item A generic, commonly used, simple demographic model for illustration (e.g. IM)
+\item A generic, commonly used, simple demographic model for illustration (e.g.
+  an IM in Model~\ref{code:im_model})
 \end{itemize}
 
 \begin{code}
-\label{code:im_model}
 \captionof{listing}{An IM model.}
-\begin{minted}[linenos,numbersep=5pt]{yaml}
-description: A two-population isolation-with-migration model.
-time_units: generations
-demes:
-  ancestral:
-    description: The ancestral deme that splits into two child demes.
-    initial_size: 5000
-    end_time: 2000
-  deme1:
-    description: The first child deme.
-    ancestors: ancestral
-    initial_size: 1000
-    final_size: 10000
-  deme2:
-    description: The second child deme.
-    ancestors: ancestral
-    initial_size: 2000
-    final_size: 8000
-migrations:
-  symmetric:
-  - demes: deme1, deme2
-    rate: 1e-4
-\end{minted}
+\begin{tcolorbox}
+\inputminted[linenos,numbersep=5pt]{yaml}{models/IM.yaml}
+\end{tcolorbox}
+\label{code:im_model}
 \end{code}
 
 \subsection*{Python representation of demography as input for simulation software}
