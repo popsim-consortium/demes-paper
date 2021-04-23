@@ -3,6 +3,7 @@
 \usepackage{fullpage}
 \usepackage{authblk}
 \usepackage{graphicx}
+
 \usepackage[newfloat]{minted}
 \usepackage{tcolorbox}
 \usepackage{etoolbox}
@@ -13,7 +14,8 @@
 \usepackage{caption}
 \newenvironment{code}{\captionsetup{type=listing}\centering}{}
 \SetupFloatingEnvironment{listing}{name=Demographic Model}
-
+% can either input code directly in a minted environment
+% or input from a source file using \inputminted
 
 % local definitions
 \newcommand{\msprime}[0]{\texttt{msprime}}
@@ -108,10 +110,10 @@ e.g. \moments\ or \dadi].
 \end{itemize}
 
 \begin{code}
-\captionof{listing}{An IM model.}
 \begin{tcolorbox}
 \inputminted[linenos,numbersep=5pt]{yaml}{models/IM.yaml}
 \end{tcolorbox}
+\captionof{listing}{An IM model.}
 \label{code:im_model}
 \end{code}
 
