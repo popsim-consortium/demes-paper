@@ -26,9 +26,11 @@
 \newcommand{\moments}[0]{\texttt{moments}}
 \newcommand{\dadi}[0]{\texttt{$\partial$a$\partial$i}}
 \newcommand{\fwdpy}[0]{\texttt{fwdpy11}}
-\newcommand{\slim}[0]{\texttt{slim}}
+\newcommand{\slim}[0]{\texttt{SLiM}}
+\newcommand{\gadma}[0]{\texttt{GADMA}}
 
 \newcommand{\aprcomment}[1]{{\textcolor{blue}{APR: #1}}}
+\newcommand{\jkcomment}[1]{{\textcolor{red}{JK: #1}}}
 
 \begin{document}
 
@@ -36,8 +38,8 @@
 \author[*]{Graham Gower}
 \author[*]{Aaron P. Ragsdale}
 \author[ ]{...Others here...}
-\author[**]{Kevin Thornton}
 \author[**]{Jerome Kelleher}
+\author[**]{Kevin Thornton}
 \affil[*,**]{Denote equal contribution}
 \maketitle
 
@@ -134,6 +136,25 @@ fit to data, e.g. \moments\ or \dadi]].
     \item Unambiguous, redundant information
     \item Designed to be programatically read by simulation software backends
 \end{itemize}
+
+
+\begin{table}
+\begin{center}
+\begin{tabular}{llr}
+\msprime & \citep{kelleher2016efficient} & Coalescent simulator \\
+\stdpopsim & \citep{adrion2020community} & Library of standardised simulations \\
+\fwdpy & \citep{thornton2014c++} & Forward-time simulator \\
+\moments & \citep{jouganous2017inferring,ragsdale2019models}
+    & Demographic inference \\
+\dadi & \citep{gutenkunst2009inferring}  & Demographic inference \\
+\gadma & \citep{noskova2020gadma}  & Demographic inference \\
+\end{tabular}
+\end{center}
+\caption{Software supporting Demes as an input or output format.
+\jkcomment{This is a very rough first pass. It's not clear that a table is the
+right format for presenting this information, maybe a description
+list would be better instead?}}
+\end{table}
 
 \section*{Extensions and future directions}
 
