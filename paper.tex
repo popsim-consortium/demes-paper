@@ -3,6 +3,7 @@
 \usepackage{fullpage}
 \usepackage{authblk}
 \usepackage{graphicx}
+\usepackage{booktabs}
 
 \usepackage[newfloat]{minted}
 \usepackage{tcolorbox}
@@ -137,56 +138,67 @@ fit to data, e.g. \moments\ or \dadi]].
     \item Designed to be programatically read by simulation software backends
 \end{itemize}
 
+% Add a bit more space between rows.
+\renewcommand{\arraystretch}{1.5}
+\begin{table}
+\begin{center}
+\begin{tabular}{lp{12cm}}
+\toprule
+\multicolumn{2}{l}{Software infrastructure}\\
+\midrule
+\texttt{demes-python} &
+    A Python library for loading, saving, and working with
+    Demes models. Includes conversion utilities for existing formats
+    demographic model descriptions such as
+    \texttt{ms}~\citep{hudson2002generating}.\\
 
-% \begin{table}
-% \begin{center}
-% \begin{tabular}{llr}
-% \msprime & \citep{kelleher2016efficient} & Coalescent simulator \\
-% \stdpopsim & \citep{adrion2020community} & Library of standardised simulations \\
-% \fwdpy & \citep{thornton2014c++} & Forward-time simulator \\
-% \moments & \citep{jouganous2017inferring,ragsdale2019models}
-%     & Demographic inference \\
-% \dadi & \citep{gutenkunst2009inferring}  & Demographic inference \\
-% \gadma & \citep{noskova2020gadma}  & Demographic inference \\
-% \end{tabular}
-% \end{center}
-% \caption{Software supporting Demes as an input or output format.
-% \jkcomment{This is a very rough first pass. It's not clear that a table is the
-% right format for presenting this information, maybe a description
-% list would be better instead?}}
-% \end{table}
+\texttt{demes-c} &
+    A C library for parsing Demes YAML descriptions.
+    (\url{https://github.com/grahamgower/demes-c.git}). \\
 
-\subsection*{Software support for Demes}
+\texttt{demesdraw} &
+    A Python library for visualising Demes models
+    (\url{https://github.com/grahamgower/demesdraw.git}). \\
 
-\begin{description}
-    \item[demes-python] A Python library for loading, saving, and working with
-        Demes models. Includes conversion utilities for existing formats
-        demographic model descriptions such as
-        \texttt{ms}~\citep{hudson2002generating}.
-    \item[demes-c] A C library for parsing Demes YAML descriptions.
-    \item[demesdraw] A Python library for visualising Demes models
-     (\url{https://github.com/grahamgower/demesdraw.git}).
-\end{description}
+\midrule
+\multicolumn{2}{l}{Methods using Demes as input/output format}\\
+\midrule
 
+% TOOL AUTHORS: please add a row to this table to summarise what the software
+% does, and how it implements demes.
 
-\subsection*{Software implementing Demes}
-At the time of writing, the following software implements the Demes
-specification, as a supported input or output format.
+\dadi &
+    Summary of what dadi does and how it implements Demes~\citep{gutenkunst2009inferring}.
+    \\
 
-\begin{description}
-    \item[msprime:] Coalescent simulation
-        \citep{kelleher2016efficient,kelleher2020coalescent}
-    \item[stdpopsim:] A collection of community empirical data for species
-        and demographic models specified in Demes format~\citep{adrion2020community}.
-    \item[fwdpy11:] forward-time Wright-Fisher simulation \citep{thornton2014c++}
-    \item[moments:] compute expected diversity statistics (SFS, LD) and perform
-        demographic inference using summary statistics
-        \citep{jouganous2017inferring,ragsdale2019models}.
-    \item[$\partial$a$\partial$i] compute the expected SFS and
-        perform demographic inference using
-        summary statistics \citep{gutenkunst2009inferring}.
-    \item[GADMA] Demographic inference \citep{noskova2020gadma}.
-\end{description}
+\fwdpy &
+    Forward-time Wright-Fisher simulation \citep{thornton2014c++}\\
+
+\gadma &
+    Demographic inference \citep{noskova2020gadma}.\\
+
+\moments &
+    Compute expected diversity statistics (SFS, LD) and perform
+    demographic inference using summary statistics
+    \citep{jouganous2017inferring,ragsdale2019models}.\\
+
+\msprime &
+    Coalescent simulation of Demes models, including command line
+    interface~\citep{kelleher2016efficient,kelleher2020coalescent}.\\
+
+\stdpopsim &
+    A collection of community empirical data for species
+    and demographic models specified in Demes
+    format~\citep{adrion2020community}.\\
+
+\bottomrule
+\end{tabular}
+\end{center}
+\caption{Software support for Demes. We have included software infrastructure developed
+for working with Demes models (parsing, validation, visualisation, etc)
+as well as all known downstream software that implements the specification,
+at the time of writing.}
+\end{table}
 
 \subsection*{Other stuff...}
 
@@ -198,11 +210,5 @@ specification, as a supported input or output format.
 
 \bibliographystyle{plainnat}
 \bibliography{paper}
-
-\section*{Appendix}
-
-\aprcomment{Perhaps and example of a many-population model, and API to simulate using
-\msprime, \fwdpy, and \moments?}
-
 
 \end{document}
