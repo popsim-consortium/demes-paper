@@ -138,45 +138,59 @@ fit to data, e.g. \moments\ or \dadi]].
 \end{itemize}
 
 
-\begin{table}
-\begin{center}
-\begin{tabular}{llr}
-\msprime & \citep{kelleher2016efficient} & Coalescent simulator \\
-\stdpopsim & \citep{adrion2020community} & Library of standardised simulations \\
-\fwdpy & \citep{thornton2014c++} & Forward-time simulator \\
-\moments & \citep{jouganous2017inferring,ragsdale2019models}
-    & Demographic inference \\
-\dadi & \citep{gutenkunst2009inferring}  & Demographic inference \\
-\gadma & \citep{noskova2020gadma}  & Demographic inference \\
-\end{tabular}
-\end{center}
-\caption{Software supporting Demes as an input or output format.
-\jkcomment{This is a very rough first pass. It's not clear that a table is the
-right format for presenting this information, maybe a description
-list would be better instead?}}
-\end{table}
+% \begin{table}
+% \begin{center}
+% \begin{tabular}{llr}
+% \msprime & \citep{kelleher2016efficient} & Coalescent simulator \\
+% \stdpopsim & \citep{adrion2020community} & Library of standardised simulations \\
+% \fwdpy & \citep{thornton2014c++} & Forward-time simulator \\
+% \moments & \citep{jouganous2017inferring,ragsdale2019models}
+%     & Demographic inference \\
+% \dadi & \citep{gutenkunst2009inferring}  & Demographic inference \\
+% \gadma & \citep{noskova2020gadma}  & Demographic inference \\
+% \end{tabular}
+% \end{center}
+% \caption{Software supporting Demes as an input or output format.
+% \jkcomment{This is a very rough first pass. It's not clear that a table is the
+% right format for presenting this information, maybe a description
+% list would be better instead?}}
+% \end{table}
 
-\section*{Extensions and future directions}
+\subsection*{Software support for Demes}
 
-\subsection*{Software support for \demes}
-\aprcomment{at time of publication. TBD...}
-\begin{itemize}
-    \item \msprime: coalescent simulation \citep{kelleher2016efficient}
-    \item \stdpopsim: a collection of maintained species and demographic models,
-        which includes a large number of models specified using \demes
-        \citep{adrion2020community}
-    \item \fwdpy: forward-time Wright-Fisher simulation \citep{thornton2014c++}
-    \item \moments: compute expected diversity statistics (SFS, LD) and perform
+\begin{description}
+    \item[demes-python] A Python library for loading, saving, and working with
+        Demes models. Includes conversion utilities for existing formats
+        demographic model descriptions such as
+        \texttt{ms}~\citep{hudson2002generating}.
+    \item[demes-c] A C library for parsing Demes YAML descriptions.
+    \item[demesdraw] A Python library for visualising Demes models
+     (\url{https://github.com/grahamgower/demesdraw.git}).
+\end{description}
+
+
+\subsection*{Software implementing Demes}
+At the time of writing, the following software implements the Demes
+specification, as a supported input or output format.
+
+\begin{description}
+    \item[msprime:] Coalescent simulation
+        \citep{kelleher2016efficient,kelleher2020coalescent}
+    \item[stdpopsim:] A collection of community empirical data for species
+        and demographic models specified in Demes format~\citep{adrion2020community}.
+    \item[fwdpy11:] forward-time Wright-Fisher simulation \citep{thornton2014c++}
+    \item[moments:] compute expected diversity statistics (SFS, LD) and perform
         demographic inference using summary statistics
-        \citep{jouganous2017inferring,ragsdale2019models}
-    \item \dadi: compute the expected SFS and perform demographic inference using
-        summary statistics \citep{gutenkunst2009inferring}
-\end{itemize}
+        \citep{jouganous2017inferring,ragsdale2019models}.
+    \item[$\partial$a$\partial$i] compute the expected SFS and
+        perform demographic inference using
+        summary statistics \citep{gutenkunst2009inferring}.
+    \item[GADMA] Demographic inference \citep{noskova2020gadma}.
+\end{description}
 
 \subsection*{Other stuff...}
 
 \begin{itemize}
-    \item \texttt{demesdraw} (\url{https://github.com/grahamgower/demesdraw.git})
     \item General framework for inference (have been working on that over in \moments,
         and perhaps it could be generalized to work with any simulation engine
     \item Defining distributions of parameter values, perhaps?
