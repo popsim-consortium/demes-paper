@@ -125,15 +125,16 @@ is to make simulations more realistic.
 Simulation methods take three broad approches to specifying
 the demographic model to simulate,
 using either a command line
-% JK: is there a simulator that just uses a CLI that's not using ms format?
-interface~\citep[e.g.][]{hudson2002generating},
-a custom input file format~\citep[e.g.][]{excoffier2011fastsimcoal,guillaume2006nemo},
-or an Application Programming Interface (API)~\citep[e.g.][]{
-thornton2014cpp,kelleher2016efficient,haller2019slim}.
+interface~\citep[e.g.][]{hudson2002generating,kern2016discoal},
+a custom input file
+format~\citep[e.g.][]{guillaume2006nemo,excoffier2011fastsimcoal,shlyakhter2014cosi2},
+or an Application Programming Interface (API) to allow
+models be defined programmatically~\citep[e.g.][]{
+thornton2014cpp,kelleher2016efficient,becheler2019quetzal,haller2019slim}.
 Command line interfaces are a concise way of expressing
 demographic models, and the syntax defined by \ms~\citep{hudson2002generating}
 is used by a number of different
-simulators~\citep[e.g.][]{ewing2010msms,staab2015scrm},
+simulators~\citep[e.g.][]{ewing2010msms,chen2009fast,staab2015scrm},
 and the POPDemog visualisation method~\citep{zhou2018popdemog}.
 However, this conciseness means that models of even intermediate complexity
 are difficult for humans to understand, making errors highly likely.
