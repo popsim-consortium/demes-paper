@@ -19,11 +19,11 @@
 % or input from a source file using \inputminted
 
 % local definitions
+\newcommand{\ms}[0]{\texttt{ms}}
 \newcommand{\msprime}[0]{\texttt{msprime}}
 \newcommand{\stdpopsim}[0]{\texttt{stdpopsim}}
 \newcommand{\demes}[0]{\texttt{demes}}
 \newcommand{\Demes}[0]{\texttt{Demes}}
-\newcommand{\YAML}[0]{\texttt{YAML}}
 \newcommand{\moments}[0]{\texttt{moments}}
 \newcommand{\dadi}[0]{\texttt{$\partial$a$\partial$i}}
 \newcommand{\fwdpy}[0]{\texttt{fwdpy11}}
@@ -35,17 +35,39 @@
 
 \begin{document}
 
-\title{\demes: a pain-free specification for complex demography}
-\author[*]{Graham Gower}
-\author[*]{Aaron P. Ragsdale}
-\author[ ]{...Others here...}
-\author[**]{Jerome Kelleher}
-\author[**]{Kevin Thornton}
-\affil[*,**]{Denote equal contribution}
+\title{Demes: a specification for interchanging complex demography}
+% First authors
+\author[1,$\star$]{Graham Gower}
+\author[2,$\star$]{Aaron P. Ragsdale}
+
+% Authors: please add your name and affiliation here, in alphabetical order.
+% Second Authors
+\author[3]{Ryan N. Gutenkunst}
+\author[4]{Matthew Hartfield}
+\author[5]{Ekaterina Noskova}
+\author[3]{Travis J. Struck}
+%Senior Authors
+\author[6,$\dagger$,$\aleph$]{Jerome Kelleher}
+\author[7,$\dagger$]{Kevin R. Thornton}
+
+\affil[1]{Lundbeck GeoGenetics Centre, Globe Institute, University of Copenhagen}
+\affil[2]{FIXME: Aaron's affiliation}
+\affil[3]{Department of Molecular and Cellular Biology, University of Arizona}
+\affil[4]{Institute of Evolutionary Biology, The University of Edinburgh}
+\affil[5]{Computer Technologies Laboratory, ITMO University}
+\affil[6]{Big Data Institute, Li Ka Shing Centre for Health Information and
+    Discovery, University of Oxford}
+\affil[7]{Ecology and Evolutionary Biology, University of California at Irvine}
+
+\affil[$\star$]{Denotes shared first authorship, listed alphabetically}
+\affil[$\dagger$]{Denotes shared senior authorship, listed alphabetically}
+\affil[$\aleph$]{Denotes corresponding authors}
+
+
 \maketitle
 
-\abstract{
-}
+\abstract{}
+
 
 \section*{Introduction}
 
@@ -54,49 +76,100 @@ geographically diverse species and populations has allowed us to infer complex
 demography and study life history at fine scales. An integral component to such
 population genetics studies is simulation. Software to either simulate whole
 genome sequences
-\citep{thornton2014c++,kelleher2016efficient,haller2019slim,adrion2020community}
+\citep{thornton2014cpp,staab2015scrm,kelleher2016efficient,haller2019slim}
 or informative summary statistics of diversity
 \citep{gutenkunst2009inferring,kamm2017efficient,jouganous2017inferring} have
-enabled the increasing complexity of genomic studies, with many software
-packages able to handle large sample sizes, many interacting populations, and
+enabled the increasing complexity of genomic studies, with several software
+packages capable of working with large sample sizes, many interacting populations, and
 deviations from random-mating models of panmixia.
+This ability to infer and simulate such complex demographic scenarios, however,
+has highlighted a major shortcoming in community standards. The fragmented
+landscape of different approaches to describing demographic models makes
+it difficult to compare inferences made by different methods,
+and to reliably simulate from previously inferred models.
 
-The ability to simulate complex demographic scenarios, however, does not come
-without its own set of obstacles and frustrations. First, specifying models
-with many populations and parameters can be cumbersome and error-prone (e.g.,
-\citep{ragsdale2020lessons}). It is time-consuming and tedious to implement and
-then verify the correctness of such demographic models. Making matters worse,
-each software package typically has its own application programming interface
-(API), which makes it difficult to translate models between simulation
-software.
+Inference methods for demography usually output a set of
+text files which describe the inferred model,
+and nearly all methods use different file formats.
+% Thus, any comparison
+% between inferences requires these file formats to be parsed, with the user
+% being left with the task of unifying the data models.
+Inference results are typically reported in publications
+via a combination of visual depiction,
+a list of key parameters in tabular form and a discussion within the text.
+Unfortunately there is often ambiguity in these descriptions and
+implementing the precise model inferred for later simulation
+is at best tedious and error prone~\citep{ragsdale2020lessons}
+and occasionally impossible because of missing information.
+The \stdpopsim\ project is a community-maintained catalog of species
+information and demographic models designed to provide standardised
+population genetic simulations~\citep{adrion2020community}.
+The development process for adding demographic models to
+\stdpopsim\ tries to avoid errors in model implementation by requiring two
+independent implementations of each model
+to be equivalent. While this process is
+robust and has uncovered both significant
+errors~\citep{ragsdale2020lessons} and ambiguities in
+published models, it is labour intensive.
+It would be far better if published results
+were reported in an unambiguous standardised format that could be provided
+directly as input to simulators.
 
-Second, many software API are not particularly easy to read, especially when
-there are a large number of demographic events and parameters. This not only
-makes debugging difficult, but it can be difficult to even notice if a mistake
-has been made. A common interface for unambiguously specifying demographic
-models would reduce implementation errors and promote ease-of-use for many
-simulation software packages.
+Simulation is a core tool in population genetics, and a
+large number of different methods have been developed
+over the past three decades~\citep{carvajal2008simulation,liu2008survey,
+arenas2012simulation,yuan2012overview,hoban2012computer}.
+Simulations are based on highly idealised population models
+and one of the key uses of inferred demographic histories
+is to make simulations more realistic.
+Simulation methods take three broad approches to specifying
+the demographic model to simulate,
+using either a command line
+interface~\citep[e.g.][]{hudson2002generating,kern2016discoal},
+a custom input file
+format~\citep[e.g.][]{guillaume2006nemo,excoffier2011fastsimcoal,shlyakhter2014cosi2},
+or an Application Programming Interface (API) to allow
+models be defined programmatically~\citep[e.g.][]{
+thornton2014cpp,kelleher2016efficient,becheler2019quetzal,haller2019slim}.
+Command line interfaces are a concise way of expressing
+demographic models, and the syntax defined by \ms~\citep{hudson2002generating}
+is used by a number of different
+simulators~\citep[e.g.][]{ewing2010msms,chen2009fast,staab2015scrm},
+and the POPDemog visualisation method~\citep{zhou2018popdemog}.
+However, this conciseness means that models of even intermediate complexity
+are difficult for humans to understand, making errors highly likely.
+Input parameter file formats for simulators allow the model specification
+to be less terse and (potentially) also allow for documentation in the
+form of comments. However, there is no standard format shared across
+simulators, and the details of the demographic models are not separated
+from other simulation parameters. The APIs use by individual simulators
+to define demographic models are also not appropriate as an interchange
+standard because of the dependency on both the programming language involved,
+and the specific details of the simulator in question.
 
-Finally, simulated or inferred demographic models are regularly shared in the
-literature, and for someone else to be able to reproduce or reimplement some
-demographic scenario, it needs to be described fully and without ambiguity.
-However, it is common for reported demographic models to lack clear or even
-complete descriptions, hindering reproducibility. A human-readable description
-for such models would facilitate their sharing and reimplementation.
+Here we present ``Demes'', a data model and file format
+specification for complex demographic models developed by the PopSim
+Consortium. The Demes data model precisely defines key parameters
+of populations and their relationships over time in an extensible way,
+and provides a way to explicitly encode all information relevant to
+demography while avoiding repetition. This data model is implemented
+in the widely used YAML format~\citep{ben2009yaml}, which provides a
+good balance between human and machine readability.
+The specification precisely
+defines the required behaviour of implementations, ensuring that there
+is no ambiguity of interpretation, and includes both a reference
+implementation and an extensive suite of test examples and their expected
+output. The initial software ecosystem includes high-quality
+Python and C parser implementations, as well as utilities for verification
+and visualisation of Demes models, and has been implemented in
+several popular inference and simulation methods
+(Table~\ref{tab-software}).
+We hope that this
+data model and file format will be widely adopted by the community,
+such that users can expect to simulate directly from
+inferred models with little or no programming effort.
 
-Here, we present \demes, a specification of complex demographic models that is
-both human readable and can be directly passed to a growing number of
-simulation software. \Demes\ supports model specification in a high-level
-\YAML\ format \citep{ben2009yaml} that is designed to be as easy as possible to
-implement, read, and share. Models are then represented in an unambiguous
-low-level format within Python that checks model validity. The initial Python
-release of \demes\ (version 0.1, described here) supports \emph{static}
-demographic descriptions, that is, models with fixed parameters. Future
-releases will support [[drawing parameters from distributions, for example for
-ABC-based inference, or describing ``dynamic`` models where parameters may be
-fit to data, e.g. \moments\ or \dadi]].
-
-\section*{The \demes\ specification}
+\section*{Demes}
 
 \begin{itemize}
     \item Demographic models are comprised of one or more interacting
@@ -111,7 +184,7 @@ fit to data, e.g. \moments\ or \dadi]].
         demes
 \end{itemize}
 
-\subsection*{High-level model specification in \YAML}
+\subsection*{High-level model specification in YAML}
 
 \begin{itemize}
     \item YAML allows us to write this information in a human-readable and
@@ -172,7 +245,7 @@ fit to data, e.g. \moments\ or \dadi]].
     \\
 
 \fwdpy &
-    Forward-time Wright-Fisher simulation \citep{thornton2014c++}\\
+    Forward-time Wright-Fisher simulation \citep{thornton2014cpp}\\
 
 \gadma &
     Demographic inference \citep{noskova2020gadma}.\\
@@ -194,18 +267,41 @@ fit to data, e.g. \moments\ or \dadi]].
 \bottomrule
 \end{tabular}
 \end{center}
-\caption{Software support for Demes. We have included software infrastructure developed
+\caption{\label{tab-software}
+Software support for Demes. We have included software infrastructure developed
 for working with Demes models (parsing, validation, visualisation, etc)
 as well as all known downstream software that implements the specification,
 at the time of writing.}
 \end{table}
 
-\subsection*{Other stuff...}
+\section*{Discussion}
+
+This is an unstructured list of things we should mention:
 
 \begin{itemize}
-    \item General framework for inference (have been working on that over in \moments,
-        and perhaps it could be generalized to work with any simulation engine
-    \item Defining distributions of parameter values, perhaps?
+    \item Recent developments in software engineering have favoured
+    static, declarative configuration formats. It feels like a good idea to
+    have a Turing complete configuration format, but it turns out not to be.
+
+    \item Drawing parameters from distributions. Why we are static.
+    % https://github.com/popsim-consortium/demes-paper/issues/3
+
+    \item Why we've avoided turning this into a model of everything, allowing
+    for the specification of genome properties like recombination rates,
+    etc.
+
+    \item
+    % JK: I thought there was another simulation frontend somewhere..
+    Previous efforts such as \texttt{coala}~\citep{staab2016coala} have focused on
+    abstracting the differences between individual simulators by providing
+    a frontend.
+
+    \item
+    % https://github.com/popsim-consortium/demes-paper/issues/11
+    We should mention coasim~\citep{mailund2005coasim} because its model
+    seems quite close to what we have. It's not suitable as a standard though
+    because it uses a programming language.
+
 \end{itemize}
 
 \bibliographystyle{plainnat}
