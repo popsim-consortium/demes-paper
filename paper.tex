@@ -61,13 +61,34 @@
 
 \affil[$\star$]{Denotes shared first authorship, listed alphabetically}
 \affil[$\dagger$]{Denotes shared senior authorship, listed alphabetically}
-\affil[$\aleph$]{Denotes corresponding authors}
+\affil[$\aleph$]{Denotes corresponding author}
 
 
 \maketitle
 
-\abstract{}
-
+\abstract{
+Understanding the demographic history of populations is a
+key goal in population genetics, and with improving methods
+and data, ever more complex models are being estimated.
+Demographic models of current interest (consisting of a set of discrete populations,
+their sizes and growth rates, and continuous and pulse migrations
+between those populations over a number of epochs) can require
+dozens of parameters to fully describe. There is currently
+no standard format to define such models, significantly
+hampering  progress in the field. In particular, the important
+task of translating the model descriptions in published
+work into input suitable for population genetic simulators is labour intensive
+and error prone.
+We propose the Demes data model and file format,
+built on widely used technologies,
+to alleviate these issues. Demes provides a well-defined and unambigous
+graphical model of populations and their properties that is straightforward to
+implement in software, and a text file format that is designed for
+simplicity and clarity.
+We provide thoroughly tested implementations of Demes parsers in Python
+and C, and showcase initial support in a number of simulators and inference
+methods.
+}
 
 \section*{Introduction}
 
