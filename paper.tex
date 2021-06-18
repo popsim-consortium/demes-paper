@@ -259,6 +259,9 @@ of why certain decisions were made
     for the specification of genome properties like recombination rates,
     etc.
 
+    \item Why we've versioned the specification, and how we've planned
+    for future extensions.
+
 \end{itemize}
 
 
@@ -364,7 +367,28 @@ Table~\ref{tab-software} shows some initial infrastructure that we have
 built as part of developing Demes, but many other useful tools
 can be envisaged that either produce or consume this format.
 
-A standard format also serves to improve scientific reproducibility. Authors simply include their demographic model as a supplementary file, or upload it to a data repository, so that readers need not transcribe the model themselves. This removes the opportunity for error due to model misinterpretation or incorrect translation to a simulatable format. In the event that the Demes standard becomes outdated, published Demes files will be convertible to future formats with relative ease because the data model is unambiguously specified.
+Reproducibility is a significant problem throughout the
+sciences~\citep{baker20161} and various measures have been
+proposed to increase the likelihood of researchers being
+able to replicate results in the
+literature~\citep{munafo2017manifesto}. The most basic requirement
+for reproducibility is that we must be able to state precisely what
+the result in question is. The lack of standardisation in how
+complex demographic models are communicated today, and the lack of
+precision in the published model descriptions means that it is difficult
+to replicate analyses, or reproduce those models for later simulation.
+Thus, we hope that the Demes standard introduced here will be widely adopted
+by inference methods and the results reported in publications
+routinely included as supplemental material or uploaded to a data
+repository in Demes format.
+
+\jkcomment{sketch of last paragraph}
+Another basic requirement for scientific progress in the inference
+of demographic models is that we should be able to compare the output
+of one method to the output of another, or to compare an inferred
+demography to some simulated ground truth. Demes facilitates this,
+paving the way for things like methods competitions. PopSim
+Consortium FTW!
 
 \bibliographystyle{plainnat}
 \bibliography{paper}
