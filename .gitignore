@@ -1,0 +1,8 @@
+*.pdf
+*.dvi
+*.ps
+*.aux
+*.bbl
+*.blg
+*.log
+_minted-paper

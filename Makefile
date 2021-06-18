@@ -1,16 +1,31 @@
-paper.pdf: paper.tex paper.bib
+DEPS=paper.tex paper.bib models/IM.yaml models/IM-resolved.yaml fig/IM.pdf
+
+paper.pdf: $(DEPS)
 	pdflatex -shell-escape paper.tex
 	bibtex paper
+	pdflatex -shell-escape paper.tex
 	pdflatex -shell-escape paper.tex
 
 paper.ps: paper.dvi
 	dvips paper
 
-paper.dvi: paper.tex paper.bib
+paper.dvi: $(DEPS)
 	latex paper.tex
 	bibtex paper
 	latex paper.tex
 	latex paper.tex
+
+fig/IM.pdf: drawfig.py models/IM.yaml
+	python drawfig.py
+
+resolve: models/IM.yaml
+	#python -c \
+	#	"import sys, demes; print(demes.dumps(demes.load(sys.argv[1]), simplified=False))" \
+	#	models/IM.yaml > models/IM-resolved.yaml
+	# Use demes-c resolver. Omit the yaml leader/footer with sed.
+	../demes-c/resolve models/IM.yaml \
+		| sed -e '/^---$$/d' -e '/^\.\.\.$$/d' \
+		> models/IM-resolved.yaml
 
 clean:
 	rm -f *.log *.dvi *.aux

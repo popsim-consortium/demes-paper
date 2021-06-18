@@ -214,13 +214,23 @@ inferred models with little or no programming effort.
     \item Example of an IM Model~\ref{code:im_model}
 \end{itemize}
 
-\begin{code}
+\begin{figure}
+\begin{minipage}{0.48\textwidth}
 \begin{tcolorbox}
-\inputminted[linenos,numbersep=5pt]{yaml}{models/IM.yaml}
+\inputminted[fontsize=\scriptsize,linenos,numbersep=5pt]{yaml}{models/IM.yaml}
 \end{tcolorbox}
+\begin{tcolorbox}
+\includegraphics[width=\textwidth]{fig/IM}
+\end{tcolorbox}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}
+\begin{tcolorbox}
+\inputminted[fontsize=\scriptsize,linenos,numbersep=5pt]{yaml}{models/IM-resolved.yaml}
+\end{tcolorbox}
+\end{minipage}\\
 \captionof{listing}{An IM model.}
 \label{code:im_model}
-\end{code}
+\end{figure}
 
 \subsection*{Unambiguous low-level representation}
 
