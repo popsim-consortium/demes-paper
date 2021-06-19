@@ -330,19 +330,47 @@ is suitable for the particular programming language, and
 that can be used directly by the implementing program.
 
 
-\subsection*{Design rationale}
+\subsection*{Scope of the specification}
+\jkcomment{This section is very rough.}
 
-This is an unstructured list of things we should mention in terms
-of why certain decisions were made
+% https://github.com/popsim-consortium/demes-paper/issues/3
+
+The Demes specification is by design simple and static---we wish to
+unambiguously describe a demographic model with fully specified
+and fixed parameters. This simplicity means that we cannot directly
+specify distributions or estimated confidence intervals
+for those parameters. While it is not difficult to imagine extending
+the specification in ways that would allows us to do this, it would
+greatly increase the complexity of parsers and would likely be of
+little practical use in any case. This is because the parameters of
+demographic models are typically tightly coupled, and cases in which
+distributions for different parameters can be simply described are rare.
+In this situation, the simplest way to describe estimated
+distribution is simply to list a large number samples from
+the posterior. While writing out a large number of Demes models in
+YAML format may seem inefficient, it can in fact be a compact
+way to describe these distributions.
+\jkcomment{TODO: add in a quick example here where we take an IM model
+and simulate a posterior distribution under some reasonable model. Report
+how much space it takes to represent a large number of samples from this
+distribution}
+
+Similarly, one might be interested in running simulations in which
+the demographic model parameters are drawn from a distribution, e.g.,
+in ABC inference~\citep{beaumont2002approximate}. Allowing for
+the many distributions of interest would greatly increase the complexity
+parsers, with a relatively limited benefit. It would be far simpler
+and more powerful to write some code to sample directly from the
+distributions of interest, using, for example the Demes Python
+API.
+\jkcomment{This is garbled, but we get the point? You're probably never
+going to be doing ABC from a completely general Demes model as input.
+There will be some basic model that you have in mind, that you're generating
+distributions of parameters around. So, what's the point in writing
+general machinery to do this sampling, when you could write it yourself in
+10 lines of Python?}
 
 \begin{itemize}
-    \item Recent developments in software engineering have favoured
-    static, declarative configuration formats. It feels like a good idea to
-    have a Turing complete configuration format, but it turns out not to be.
-
-    \item Drawing parameters from distributions. Why we are static.
-    % https://github.com/popsim-consortium/demes-paper/issues/3
-
     \item Why we've avoided turning this into a model of everything, allowing
     for the specification of genome properties like recombination rates,
     etc.
