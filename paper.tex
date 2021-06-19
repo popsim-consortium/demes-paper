@@ -242,6 +242,29 @@ inferred models with little or no programming effort.
     \item Designed to be programatically read by simulation software backends
 \end{itemize}
 
+\subsection*{Design rationale}
+
+This is an unstructured list of things we should mention in terms
+of why certain decisions were made
+
+\begin{itemize}
+    \item Recent developments in software engineering have favoured
+    static, declarative configuration formats. It feels like a good idea to
+    have a Turing complete configuration format, but it turns out not to be.
+
+    \item Drawing parameters from distributions. Why we are static.
+    % https://github.com/popsim-consortium/demes-paper/issues/3
+
+    \item Why we've avoided turning this into a model of everything, allowing
+    for the specification of genome properties like recombination rates,
+    etc.
+
+    \item Why we've versioned the specification, and how we've planned
+    for future extensions.
+
+\end{itemize}
+
+
 % Add a bit more space between rows.
 \renewcommand{\arraystretch}{1.5}
 \begin{table}
@@ -307,41 +330,57 @@ at the time of writing.}
 
 \section*{Discussion}
 
-This is an unstructured list of things we should mention:
+The difficulty of describing complex demographic models
+for population genetic simulations has long been acknowledged
+~\citep[][e.g.]{antao2007modeler4simcoal2}, % jk - any older refs for this?
+and a number of different methods have been proposed to
+make such simulations more accessible and less error prone.
+Several Graphical User Interface (GUI) and visualisation
+methods have been developed, which greatly facilitate
+interpretation~\citep{mailund2005coasim,antao2007modeler4simcoal2,
+ewing2010msms,zhou2018popdemog}. However, these methods
+currently have little traction as they are all either directly coupled
+to an internal simulation method or to the specific syntax
+of a given simulator. Another approach that has been taken to
+simplify running such simulations is to provide an API in a
+scripting language such as Python or R, providing a flexible
+interface either to a built-in simulation
+engine~\citep{thornton2014cpp,kelleher2016efficient,haller2017flexible}
+% jk: are/were there other simulation frontends out there?
+or as a frontend for other simulators~\citep{staab2016coala}.
+While APIs have many advantages and have grown in popularity in
+recent years, the demographic model descriptions are tied
+to the details of both the underlying simulation engines
+and the programming language in question.
 
-\begin{itemize}
-    \item Recent developments in software engineering have favoured
-    static, declarative configuration formats. It feels like a good idea to
-    have a Turing complete configuration format, but it turns out not to be.
+Stable and healthy software ecosystems require standard interchange
+formats, allowing for the development of high-quality and long-lasting
+tools that produce and consume the standard.
+Demographic models are a key part of population genetics research,
+and to date the transfer of inferred models to downstream simulations
+has been ad-hoc, and conversions between the many different ways
+of expressing such models is both labour intensive and fraught with errors.
+The proposed Demes standard is an attempt to bridge this gap
+between inference and simulation, and also to provide the foundations
+for a sustainable ecosystem of tools built around this data model.
+Table~\ref{tab-software} shows some initial infrastructure that we have
+built as part of developing Demes, but many other useful tools
+can be envisaged that either produce or consume this format.
 
-    \item Drawing parameters from distributions. Why we are static.
-    % https://github.com/popsim-consortium/demes-paper/issues/3
-
-    \item Why we've avoided turning this into a model of everything, allowing
-    for the specification of genome properties like recombination rates,
-    etc.
-
-    \item
-    % JK: I thought there was another simulation frontend somewhere..
-    Previous efforts such as \texttt{coala}~\citep{staab2016coala} have focused on
-    abstracting the differences between individual simulators by providing
-    a frontend.
-
-    \item
-    % https://github.com/popsim-consortium/demes-paper/issues/11
-    We should mention coasim~\citep{mailund2005coasim} because its model
-    seems quite close to what we have. It's not suitable as a standard though
-    because it uses a programming language. Besides coasim, there was
-    PopPlanner~\citep{ewing2010msms}
-    (a Java GUI which allows the user to build models
-    graphically and export the corresponding \ms\ command lines)
-    and MODELER4SIMCOAL2~\citep{antao2007modeler4simcoal2}
-    (a webapp that provided a set of common model templates that could be
-    parameterised to output the corresponding simcoal input files.)
-    \jkcomment{Not sure where these fit into the narrative, just
-    summarising here for later reference}.
-
-\end{itemize}
+Reproducibility is a significant problem throughout the
+sciences~\citep{baker20161} and various measures have been
+proposed to increase the likelihood of researchers being
+able to replicate results in the
+literature~\citep{munafo2017manifesto}. The most basic requirement
+for reproducibility is that we must be able to state precisely what
+the result in question is. The lack of standardisation in how
+complex demographic models are communicated today, and the lack of
+precision in the published model descriptions means that it is difficult
+to replicate analyses, or reproduce those models for later simulation.
+Thus, we hope that the Demes standard introduced here will be widely adopted
+by inference methods and the results reported in publications
+routinely included as supplemental material or uploaded to a data
+repository in Demes format.
 
 \bibliographystyle{plainnat}
 \bibliography{paper}

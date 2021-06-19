@@ -16,7 +16,7 @@ paper.dvi: $(DEPS)
 	latex paper.tex
 
 fig/IM.pdf: drawfig.py models/IM.yaml
-	python drawfig.py
+	python3 drawfig.py
 
 resolve: models/IM.yaml
 	#python -c \
