@@ -255,7 +255,7 @@ Example isolation-with-migration Demes model. (A) The compact non-redundant
 representation expressed using YAML. (B) The same model in the fully-qualified
 form. (C) A visual representation of the model using \texttt{demesdraw}.
 The YAML descriptions in (A) and (B) correspond exactly to a JSON description,
-but are much more concise.
+but are much more human-readable.
 }
 \end{figure}
 
@@ -265,13 +265,15 @@ but are much more concise.
 The high-level description of Demes models is focused on the efficiency of
 human understanding and the avoidance of errors. We have adopted the widely
 used YAML format~\citep{ben2009yaml} as the recommended means of interchanging
-Demes models (see Figure~\ref{fig-example} for exampels). YAML is a data
+Demes models (see Figure~\ref{fig-example} for examples). YAML is a data
 serialisation language with an emphasis on simplicity, and interoperates well
 with JSON (indeed, YAML 1.2 is a superset of JSON). We chose YAML over JSON
 because although JSON is an excellent format for data interchange, it is
 ill-suited for human understanding or manipulation. We also considered other
-data formats such as TOML, but chose YAML because of its greater popularity and
-software support. Since the Demes data model is defined in JSON Schema,
+declarative data exchange formats such as TOML,
+but chose YAML because of equivalance with JSON,
+its popularity and good software support.
+Since the Demes data model is defined in JSON Schema,
 however, there is no formal dependency on YAML and implementations may choose
 to use JSON directly if they wish (e.g., for greater efficiency).
 
@@ -346,7 +348,7 @@ little practical use in any case. This is because the parameters of
 demographic models are typically tightly coupled, and cases in which
 distributions for different parameters can be simply described are rare.
 In this situation, the simplest way to describe estimated
-distribution is simply to list a large number samples from
+distribution is simply to list a large number of samples from
 the posterior. While writing out a large number of Demes models in
 YAML format may seem inefficient, it can in fact be a compact
 way to describe these distributions.
@@ -358,7 +360,7 @@ distribution}
 Similarly, one might be interested in running simulations in which
 the demographic model parameters are drawn from a distribution, e.g.,
 in ABC inference~\citep{beaumont2002approximate}. Allowing for
-the many distributions of interest would greatly increase the complexity
+the many distributions of interest would greatly increase the complexity of
 parsers, with a relatively limited benefit. It would be far simpler
 and more powerful to write some code to sample directly from the
 distributions of interest, using, for example the Demes Python
@@ -369,6 +371,9 @@ There will be some basic model that you have in mind, that you're generating
 distributions of parameters around. So, what's the point in writing
 general machinery to do this sampling, when you could write it yourself in
 10 lines of Python?}
+\jkcomment{Key point: if there was a concise way of writing down the joint
+distribution of all the parameters, we wouldn't be doing simulations in the
+first place.}
 
 \begin{itemize}
     \item Why we've avoided turning this into a model of everything, allowing
