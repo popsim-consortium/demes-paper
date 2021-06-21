@@ -192,27 +192,49 @@ inferred models with little or no programming effort.
 
 \section*{Demes}
 
-\begin{itemize}
-    \item Demographic models are comprised of one or more interacting
-        populations, along with description, doi, time units and generation
-        times.
-    \item Populations (or demes) are treated as discrete collection of
-        exchangeable individuals following a well-defined set of rules
-    \item These rules include population sizes, times of existence, and other
-        information about the mating system (e.g. selfing or cloning rates)
-    \item Relationships between demes are defined by ancestors/descendents
-        and possible continuous or instantaneous migration between coexisting
-        demes
-\end{itemize}
+The Demes specification is a formal data model for describing
+the properties of populations over time,
+along with some metadata and provenance information.
+The data model is based on the ubiquitous JSON~\citep{bray2017javascript}
+standard, and the structure formally defined using
+JSON Schema~\citep{wright2020json}.
+The Demes JSON schema rigorously defines the data model,
+specifying the hierarchical structure and the properties that are allowed in different
+contexts along with their types and permissable ranges. This schema, and its
+accompanying documentation, fully describe the entities in the model and their
+relationships, and the required behaviour of implementations. Since the
+schema is definitive, we will not recapitulate the details
+here, but instead focus on the high level properties of the model and
+the rationale behind key design decisions.
 
-\subsection*{High-level model specification in YAML}
+In Demes, demographic models consist of one or more interacting
+% JK: not sure at all about this, but let's see how it goes for now.
+populations (or ``demes"; to avoid confusion with the name of the
+specification itself we will use the term ``population'' in this
+discussion, in the understanding that the terms are interchangeable
+for our purposes). Populations are defined as a collection of
+exchangable individuals that exist for some period of time,
+following a well-defined set of rules regarding population
+sizes, mating systems, etc. Ancestor/descendent relationships
+between populations can be defined, as well as
+possible continuous or instantaneous migration between coexisting
+populations. The history of each population is defined as a
+series of ``epochs'' during which the population's parameters are
+fixed.
 
-\begin{itemize}
-    \item YAML allows us to write this information in a human-readable and
-        structured manner (lists, keys/items, etc)
-    \item Implicit values, so that models can be written compactly
-    \item Example of an IM Model~\ref{code:im_model}
-\end{itemize}
+The design of Demes is a balance between two partially competing requirements:
+that (a) models should be easy for humans to understand and manipulate; and (b)
+software processing Demes models should be provided with an unambiguous
+representation that is straightforward to process. For efficiency of
+understanding and avoidance of model specification error, we require a data
+representation without redundancy (i.e., repetition of values). But, for the
+simplicity of software working with the Demes model (and the avoidance of
+programming error, or divergence in interpretations of the specification)
+it is preferable to have an explicit representation, in
+which all relevant values are readily available. Thus, we consider
+three entities: the high-level, human readable, model specification;
+the low-level, fully-qualified model specification; and the parser,
+which is responsible for transforming the former into the latter.
 
 \begin{figure}
 \begin{minipage}{0.48\textwidth}
@@ -228,33 +250,132 @@ inferred models with little or no programming effort.
 \inputminted[fontsize=\scriptsize,linenos,numbersep=5pt]{yaml}{models/IM-resolved.yaml}
 \end{tcolorbox}
 \end{minipage}\\
-\captionof{listing}{An IM model.}
-\label{code:im_model}
+\caption{\label{fig-example}
+Example isolation-with-migration Demes model. (A) The compact non-redundant
+representation expressed using YAML. (B) The same model in the fully-qualified
+form. (C) A visual representation of the model using \texttt{demesdraw}.
+The YAML descriptions in (A) and (B) correspond exactly to a JSON description,
+but are much more human-readable.
+}
 \end{figure}
+
+
+\subsection*{High-level model specification}
+
+The high-level description of Demes models is focused on the efficiency of
+human understanding and the avoidance of errors. We have adopted the widely
+used YAML format~\citep{ben2009yaml} as the recommended means of interchanging
+Demes models (see Figure~\ref{fig-example} for examples). YAML is a data
+serialisation language with an emphasis on simplicity, and interoperates well
+with JSON (indeed, YAML 1.2 is a superset of JSON). We chose YAML over JSON
+because although JSON is an excellent format for data interchange, it is
+ill-suited for human understanding or manipulation. We also considered other
+declarative data exchange formats such as TOML,
+but chose YAML because of equivalance with JSON,
+its popularity and good software support.
+Since the Demes data model is defined in JSON Schema,
+however, there is no formal dependency on YAML and implementations may choose
+to use JSON directly if they wish (e.g., for greater efficiency).
+
+Structurally, the high-level Demes specification encourages human understanding
+by avoiding redundancy in the description where possible, and
+by providing a mechanism for specifying default values that
+are inherited hierarchically. Figure~\ref{fig-example} shows an example
+Demes model expressed in both the high and low-level forms (both in
+terms of YAML syntax).
+
+\jkcomment{Finish up this section with a discussion of how we (a)
+use default values defined in JSON schema; (b) define more
+subtle implicit values in the specification itself; and (c) use the
+defaults sections, all explified by Fig 1.}
+
+\subsection*{Parsers}
+The implicit value inference and default value propagation required to
+fully resolve the high-level Demes model description is straightforward
+to describe, but still requires significant effort to implement in
+software. Moreover, there are many constraints on the data model
+(for example, epoch \texttt{end\_time} values should be strictly increasing
+within a deme), which must be enforced.
+It would not be reasonable to require every program that
+takes Demes models as input to implement this logic, as the programming
+effort would be significant (limiting adoption)
+and it is likely that if there were many implementations some would differ
+in their details (harming the software ecosystem). We therefore define
+a standard software entity as part of the specification (the parser),
+which performs this task, and which can be shared by programs that
+support demes as an input. By having relatively few (ideally, one
+per programming language), high-quality Demes parsers available as
+libraries the probability of divergences from the standard is
+greatly reduced.
+
+The Demes specification precisely defines the required behaviour of
+parsers, and we also provide a reference implementation written
+in Python to resolve any potential ambiguities and to provide a
+helpful template for other implementations. We also provide an
+extensive suite suite of examples and the expected outputs. In addition,
+we have high-quality parser implementations in the Python and C
+languages (published under liberal open source licences),
+providing a solid foundation for the software ecosystem.
+
 
 \subsection*{Unambiguous low-level representation}
 
+\jkcomment{Not sure if there's much point in this as a separate section any
+more? This could really be said in the previous section.}
+
+Parsers output the low-level description of Demes models,
+which is an explicit representation
+of the model where all parameters have been assigned values, and
+all data constraints have been checked. The output is formally defined
+as JSON, but in practise parsers output an object model that
+is suitable for the particular programming language, and
+that can be used directly by the implementing program.
+
+
+\subsection*{Scope of the specification}
+\jkcomment{This section is very rough.}
+
+% https://github.com/popsim-consortium/demes-paper/issues/3
+
+The Demes specification is by design simple and static---we wish to
+unambiguously describe a demographic model with fully specified
+and fixed parameters. This simplicity means that we cannot directly
+specify distributions or estimated confidence intervals
+for those parameters. While it is not difficult to imagine extending
+the specification in ways that would allows us to do this, it would
+greatly increase the complexity of parsers and would likely be of
+little practical use in any case. This is because the parameters of
+demographic models are typically tightly coupled, and cases in which
+distributions for different parameters can be simply described are rare.
+In this situation, the simplest way to describe estimated
+distribution is simply to list a large number of samples from
+the posterior. While writing out a large number of Demes models in
+YAML format may seem inefficient, it can in fact be a compact
+way to describe these distributions.
+\jkcomment{TODO: add in a quick example here where we take an IM model
+and simulate a posterior distribution under some reasonable model. Report
+how much space it takes to represent a large number of samples from this
+distribution}
+
+Similarly, one might be interested in running simulations in which
+the demographic model parameters are drawn from a distribution, e.g.,
+in ABC inference~\citep{beaumont2002approximate}. Allowing for
+the many distributions of interest would greatly increase the complexity of
+parsers, with a relatively limited benefit. It would be far simpler
+and more powerful to write some code to sample directly from the
+distributions of interest, using, for example the Demes Python
+API.
+\jkcomment{This is garbled, but we get the point? You're probably never
+going to be doing ABC from a completely general Demes model as input.
+There will be some basic model that you have in mind, that you're generating
+distributions of parameters around. So, what's the point in writing
+general machinery to do this sampling, when you could write it yourself in
+10 lines of Python?}
+\jkcomment{Key point: if there was a concise way of writing down the joint
+distribution of all the parameters, we wouldn't be doing simulations in the
+first place.}
+
 \begin{itemize}
-    \item The Python API, which can read in a YAML file or be built using the
-        Builder
-    \item Demographic model validitation
-    \item Unambiguous, redundant information
-    \item Designed to be programatically read by simulation software backends
-\end{itemize}
-
-\subsection*{Design rationale}
-
-This is an unstructured list of things we should mention in terms
-of why certain decisions were made
-
-\begin{itemize}
-    \item Recent developments in software engineering have favoured
-    static, declarative configuration formats. It feels like a good idea to
-    have a Turing complete configuration format, but it turns out not to be.
-
-    \item Drawing parameters from distributions. Why we are static.
-    % https://github.com/popsim-consortium/demes-paper/issues/3
-
     \item Why we've avoided turning this into a model of everything, allowing
     for the specification of genome properties like recombination rates,
     etc.
@@ -263,7 +384,6 @@ of why certain decisions were made
     for future extensions.
 
 \end{itemize}
-
 
 % Add a bit more space between rows.
 \renewcommand{\arraystretch}{1.5}
