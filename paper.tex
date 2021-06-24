@@ -4,6 +4,7 @@
 \usepackage{authblk}
 \usepackage{graphicx}
 \usepackage{booktabs}
+\usepackage{amsmath}
 
 \usepackage[newfloat]{minted}
 \usepackage{tcolorbox}
@@ -294,7 +295,7 @@ The implicit value inference and default value propagation required to
 fully resolve the high-level Demes model description is straightforward
 to describe, but still requires significant effort to implement in
 software. Moreover, there are many constraints on the data model
-(for example, epoch \texttt{end\_time} values should be strictly increasing
+(for example, epoch \texttt{end\_time} values should be strictly decreasing
 within a deme), which must be enforced.
 It would not be reasonable to require every program that
 takes Demes models as input to implement this logic, as the programming
@@ -312,7 +313,7 @@ The Demes specification precisely defines the required behaviour of
 parsers, and we also provide a reference implementation written
 in Python to resolve any potential ambiguities and to provide a
 helpful template for other implementations. We also provide an
-extensive suite suite of examples and the expected outputs. In addition,
+extensive test suite of examples and the expected outputs. In addition,
 we have high-quality parser implementations in the Python and C
 languages (published under liberal open source licences),
 providing a solid foundation for the software ecosystem.
@@ -352,10 +353,15 @@ distribution is simply to list a large number of samples from
 the posterior. While writing out a large number of Demes models in
 YAML format may seem inefficient, it can in fact be a compact
 way to describe these distributions.
-\jkcomment{TODO: add in a quick example here where we take an IM model
-and simulate a posterior distribution under some reasonable model. Report
-how much space it takes to represent a large number of samples from this
-distribution}
+For example, consider a one-population model with piecewise-constant sizes over
+20 epochs which has $\sim$~40 free parameters---the \texttt{start\_size} and
+\texttt{end\_time} values for each epoch. Supposing we sample 50,000 models
+from the posterior distribution, the resulting multi-document YAML file is
+45~MiB.
+This format compresses down to 8.4~MiB when gzipped or 6.2~MiB
+when compressed with LZMA2, which is on par with an equivalent binary
+representation of the free parameters
+($40\times50000\times4~\text{bytes} \approx 7.6~\text{MiB}$).
 
 Similarly, one might be interested in running simulations in which
 the demographic model parameters are drawn from a distribution, e.g.,
