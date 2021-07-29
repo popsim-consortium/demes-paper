@@ -169,28 +169,23 @@ to define demographic models are also not appropriate as an interchange
 standard because of the dependency on both the programming language involved,
 and the specific details of the simulator in question.
 
-Here we present ``Demes'', a data model and file format
-specification for complex demographic models developed by the PopSim
-Consortium. \aprcomment{do we need ``developed by the PopSim Consortium''?}
-The Demes data model precisely defines key parameters
-of populations and their relationships over time in an extensible way,
-and provides a way to explicitly encode all information relevant to
-demography while avoiding repetition. This data model is implemented
-in the widely used YAML format~\citep{ben2009yaml}, which provides a
-good balance between human and machine readability.
-The specification precisely
-defines the required behaviour of implementations, ensuring that there
-is no ambiguity of interpretation, and includes both a reference
-implementation and an extensive suite of test examples and their expected
-output. The initial software ecosystem includes high-quality
-Python and C parser implementations, as well as utilities for verification
-and visualisation of Demes models, and has been implemented in
-several popular inference and simulation methods
-(Table~\ref{tab-software}).
-We hope that this
-data model and file format will be widely adopted by the community,
-such that users can expect to simulate directly from
-inferred models with little or no programming effort.
+Here we present ``Demes'', a data model and file format specification for
+complex demographic models developed by the PopSim Consortium. The Demes data
+model precisely defines key parameters of populations and their relationships
+over time in an extensible way, and provides a way to explicitly encode all
+information relevant to demography while avoiding repetition. This data model
+is implemented in the widely used YAML format~\citep{ben2009yaml}, which
+provides a good balance between human and machine readability. The
+specification precisely defines the required behaviour of implementations,
+ensuring that there is no ambiguity of interpretation, and includes both a
+reference implementation and an extensive suite of test examples and their
+expected output. The initial software ecosystem includes high-quality Python
+and C parser implementations, as well as utilities for verification and
+visualisation of Demes models, and has been implemented in several popular
+inference and simulation methods (Table~\ref{tab-software}).  We hope that this
+data model and file format will be widely adopted by the community, such that
+users can expect to simulate directly from inferred models with little or no
+programming effort.
 
 \section*{Demes}
 
@@ -338,12 +333,13 @@ by avoiding redundancy in the description where possible and by providing a
 mechanism for specifying default values that are inherited hierarchically.
 Figure~\ref{fig-example} shows an example Demes model expressed in both the
 high and low-level forms (both in terms of YAML syntax). For values that repeat
-across fields, default may be used to implicity assign a default value to
+across fields, defaults may be used to implicity assign default values to
 fields of the given type.  A default is superceded by an explicitly provided
-value if given. Other values are inherited naturally following the progression
-of time. For example, if an epoch \texttt{start\_size} is not provided, it is
-assumed to be equal to the \texttt{end\_size} of the previous epoch. This also
-means that the first epoch of each population must specify the initial size.
+value if given. Other implicit values are inherited naturally following the
+progression of time. For example, if an epoch \texttt{start\_size} is not
+provided, it is assumed to be equal to the \texttt{end\_size} of the previous
+epoch. This also means that the first epoch of each population must specify the
+initial size.
 
 \aprcomment{not sure if this is sufficient here}
 
@@ -369,7 +365,7 @@ The Demes specification precisely defines the required behaviour of parsers,
 which translate the high-level specifications into unambiguous low-level
 representations where all parameters have been assigned values and data
 constraints have been checked. The output is formally defined as JSON, but in
-practise parsers output an object model that is suitable for the particular
+practice parsers output an object model that is suitable for the particular
 programming language and that can be used directly by the implementing program.
 We provide a reference implementation written in Python to resolve any
 potential ambiguities and to provide a helpful template for other
@@ -428,12 +424,12 @@ general machinery to do this sampling, when you could write it yourself in
 distribution of all the parameters, we wouldn't be doing simulations in the
 first place.}
 
-Demes is meant to interface with a large number of simulation and inference
+Demes is designed to interface with a large number of simulation and inference
 methods, so we have restricted to the specification to only describe
 demographic features at the population level. As the underlying discrete
 demographic structure is the common thread connecting many widely used
-population genetic software, many features of underlying genome biology are
-omitted.  Most notably, mutation and recombination rates are left unspecified
+population genetic methods, many features of underlying genome biology are
+omitted. Most notably, mutation and recombination rates are left unspecified
 (though they can be encoded as metadata in the data structure). Genome ploidy
 is left ambiguous, and selection and dominance models are absent. Using a Demes
 model, which specifies deterministic population sizes, as the demographic input
@@ -443,19 +439,14 @@ population fitness \citep{christiansen1975hard}. It is possible to instead
 interpret population sizes as carrying capacities, allowing for a model of
 \emph{hard} selection. However, this should not be understood as the default
 interpretation of population sizes, which conventionally specifies a
-deterministic number of individuals.  Finally, as Demes assumes the
-exchangeability of individuals within populations, Demes does not provide a way
-to define geographic spatial structure within populations.
+deterministic number of individuals. Finally, as Demes assumes exchangeability
+of individuals within populations, it not provide a way to define geographic
+spatial structure within populations.
 
 Demes version 1.0 is intended to provide a stable and minimal specification
-that is compatible with a wide range of simulation softwares. Beginning with
-version 1.0, a Demes-specified model is expected to provide the version of
-Demes for which it is valid, and if unprovided, it should be a valid model
-under the default version, 1.0. Future extensions of the Demes specification
-will be released with versions following semantic versioning guidelines [cite
-or url?], and downstream software that incorporate Demes are expected to
-indicate and check Demes version compatibility.
-
+that is compatible with a wide range of simulators. To ensure consistency
+across implementations, the specification is versioned and we commit to
+following semantic versioning guidelines.
 
 % Add a bit more space between rows.
 \renewcommand{\arraystretch}{1.5}
