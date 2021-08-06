@@ -33,6 +33,7 @@
 
 \newcommand{\aprcomment}[1]{{\textcolor{blue}{APR: #1}}}
 \newcommand{\jkcomment}[1]{{\textcolor{red}{JK: #1}}}
+\newcommand{\ggcomment}[1]{{\textcolor{yellow!60!red}{GG: #1}}}
 
 \begin{document}
 
@@ -82,7 +83,7 @@ work into input suitable for population genetic simulators is labour intensive
 and error prone.
 We propose the Demes data model and file format,
 built on widely used technologies,
-to alleviate these issues. Demes provides a well-defined and unambigous
+to alleviate these issues. Demes provides a well-defined and unambiguous
 graphical model of populations and their properties that is straightforward to
 implement in software, and a text file format that is designed for
 simplicity and clarity.
@@ -144,7 +145,7 @@ arenas2012simulation,yuan2012overview,hoban2012computer}.
 Simulations are based on highly idealised population models
 and one of the key uses of inferred demographic histories
 is to make simulations more realistic.
-Simulation methods take three broad approches to specifying
+Simulation methods take three broad approaches to specifying
 the demographic model to simulate,
 using either a command line
 interface~\citep[e.g.][]{hudson2002generating,kern2016discoal},
@@ -157,7 +158,7 @@ Command line interfaces are a concise way of expressing
 demographic models, and the syntax defined by \ms~\citep{hudson2002generating}
 is used by a number of different
 simulators~\citep[e.g.][]{ewing2010msms,chen2009fast,staab2015scrm},
-and the POPDemog visualisation method~\citep{zhou2018popdemog}.
+and the POPDemog visualisation software~\citep{zhou2018popdemog}.
 However, this conciseness means that models of even intermediate complexity
 are difficult for humans to understand, making errors highly likely.
 Input parameter file formats for simulators allow the model specification
@@ -197,7 +198,7 @@ standard, and the structure formally defined using
 JSON Schema~\citep{wright2020json}.
 The Demes JSON schema rigorously defines the data model,
 specifying the hierarchical structure and the properties that are allowed in different
-contexts along with their types and permissable ranges. This schema, and its
+contexts along with their types and permissible ranges. This schema, and its
 accompanying documentation, fully describe the entities in the model and their
 relationships and the required behaviour of implementations. Since the
 schema is definitive, we will not recapitulate the details
@@ -220,10 +221,12 @@ into the latter.
 
 \subsection*{Population genetics model}
 
-In Demes, demographic models consist of one or more interacting populations (or
-``demes''; to avoid confusion with the name of the specification itself we will
-use the term ``population'' in this discussion, in the understanding that the
-terms are interchangeable for our purposes). Populations are defined as a
+In Demes, demographic models consist of one or more interacting populations,
+or ``demes'', by which we mean a grouping of individuals that is convenient
+for modelling \citep{gilmour_demes_1939,gilmour_deme_1955}.
+To avoid confusion with the name of the specification itself we will
+use the term ``population'' in this discussion, with the understanding that the
+terms are interchangeable for our purposes. Populations are defined as a
 collection of exchangeable individuals that exist for a specified period of
 time, following a well-defined set of rules regarding population sizes, mating
 systems, and so on. Ancestor/descendant relationships between populations can
@@ -253,10 +256,10 @@ and end sizes that must remain positive.
 Within a population, individuals are assumed to be exchangeable, but there are
 also parameters for nonrandom mating, such as selfing or cloning rates, which
 give the probability that offspring are generated from one generation to the
-next by self-fertilization or cloning of an individual. Cloning and selfing
+next by self-fertilisation or cloning of an individual. Cloning and selfing
 rates can take any value between zero and one, and if both are specified then
 the selfing rate is the probability an offspring is generated through
-self-fertilization given it was produced sexually (i.e. with probability one
+self-fertilisation given it was produced sexually (i.e. with probability one
 minus the cloning rate). We omit any details regarding selection, as those would
 fall outside the scope of demographic model specification, but...
 \aprcomment{If selection is placed on top of the demographic model, this implies
@@ -322,7 +325,7 @@ with JSON (indeed, YAML 1.2 is a superset of JSON). We chose YAML over JSON
 because although JSON is an excellent format for data interchange, it is
 ill-suited for human understanding or manipulation. We also considered other
 declarative data exchange formats such as TOML,
-but chose YAML because of equivalance with JSON,
+but chose YAML because of equivalence with JSON,
 its popularity and good software support.
 Since the Demes data model is defined in JSON Schema,
 however, there is no formal dependency on YAML and implementations may choose
@@ -333,8 +336,8 @@ by avoiding redundancy in the description where possible and by providing a
 mechanism for specifying default values that are inherited hierarchically.
 Figure~\ref{fig-example} shows an example Demes model expressed in both the
 high and low-level forms (both in terms of YAML syntax). For values that repeat
-across fields, defaults may be used to implicity assign default values to
-fields of the given type.  A default is superceded by an explicitly provided
+across fields, defaults may be used to implicitly assign default values to
+fields of the given type.  A default is superseded by an explicitly provided
 value if given. Other implicit values are inherited naturally following the
 progression of time. For example, if an epoch \texttt{start\_size} is not
 provided, it is assumed to be equal to the \texttt{end\_size} of the previous
@@ -354,7 +357,11 @@ It would not be reasonable to require every program that
 takes Demes models as input to implement this logic, as the programming
 effort would be significant (limiting adoption)
 and it is likely that if there were many implementations some would differ
-in their details (harming the software ecosystem). We therefore define
+in their details (harming the software ecosystem).
+% GG: this is currently the case for programs accepting ms command lines. E.g.
+%  - MaCS interprets -es proportion as 1-proportion compared to ms.
+%  - SCRM uses different options for -ema command.
+We therefore define
 a standard software entity as part of the specification (the parser),
 which performs this task, and which can be shared by programs that
 support demes as an input. By having relatively few high-quality Demes
@@ -377,22 +384,40 @@ providing a solid foundation for the software ecosystem.
 \aprcomment{wrapped below section about parsers to here}
 
 \subsection*{Scope of the specification}
+\subsubsection*{Static models, not parameterised models}
 \jkcomment{This section is very rough.}
 
 % https://github.com/popsim-consortium/demes-paper/issues/3
 
-The Demes specification is by design simple and static---we wish to
-unambiguously describe a demographic model with fully specified
-and fixed parameters. This simplicity means that we cannot directly
-specify distributions or estimated confidence intervals
+The Demes specification is static by design---we wish to
+unambiguously describe a demographic model with a concrete set
+of parameters. This simplicity means that we cannot directly
+specify parameter distributions or estimated confidence intervals
 for those parameters. While it is not difficult to imagine extending
-the specification in ways that would allows us to do this, it would
-greatly increase the complexity of parsers and would likely be of
-little practical use in any case. This is because the parameters of
+the specification in ways that would allow this, it's not immediately
+clear that the benefits are worth the increased parser complexity.
+
+\ggcomment{
+Possible reasons to advocate for non-static features are as follows.
+\begin{enumerate}
+\item Specifying prior distributions of parameters for an ABC.
+\item Specifying upper and lower bounds of parameters and inter-parameter
+      constraints for input to an optimisation-based inference.
+\item Specifying joint distribution, or confidence intervals, for the output of
+      an inference procedure.
+\item Simulating from some arbitrary joint distribution that was inferred
+      previously. E.g. using an ABC posterior distribution of models to
+      train a neural network.
+\item Extending someone else's static model to reinfer parameters,
+      or add new parameters.
+\end{enumerate}
+}
+
+The parameters of
 demographic models are typically tightly coupled, and cases in which
 distributions for different parameters can be simply described are rare.
-In this situation, the simplest way to describe estimated
-distribution is simply to list a large number of samples from
+In this situation, the simplest way to describe an estimated
+distribution is to list a large number of samples from
 the posterior. While writing out a large number of Demes models in
 YAML format may seem inefficient, it can in fact be a compact
 way to describe these distributions.
@@ -408,22 +433,34 @@ representation of the free parameters
 
 Similarly, one might be interested in running simulations in which
 the demographic model parameters are drawn from a distribution, e.g.,
-in ABC inference~\citep{beaumont2002approximate}. Allowing for
-the many distributions of interest would greatly increase the complexity of
-parsers, with a relatively limited benefit. It would be far simpler
-and more powerful to write some code to sample directly from the
-distributions of interest, using, for example the Demes Python
-API.
-\jkcomment{This is garbled, but we get the point? You're probably never
-going to be doing ABC from a completely general Demes model as input.
-There will be some basic model that you have in mind, that you're generating
-distributions of parameters around. So, what's the point in writing
-general machinery to do this sampling, when you could write it yourself in
-10 lines of Python?}
-\jkcomment{Key point: if there was a concise way of writing down the joint
-distribution of all the parameters, we wouldn't be doing simulations in the
-first place.}
+in ABC inference~\citep{beaumont2002approximate}.
+Other inference procedures based on optimising a loss function
+\citep{gutenkunst2009inferring,kamm2017efficient,jouganous2017inferring}
+(\ggcomment{more refs? MCMC? neural networks?})
+need users to specify parameter bounds,
+and possibly non-linear constraints between parameters.
+Indeed, the choice of how to parameterise a model could be important for
+some inference methods (e.g. absolute times versus relative times between events).
 
+Implementing the many distributions of interest, and supporting a general
+way to describe a model's free parameters, would greatly increase the
+complexity of parsers, with relatively limited benefit to most users.
+It's unlikely that Demes could be made sufficiently
+flexible without considerable effort to implement many features of
+general-purpose programming languages, such as variables, arithmetic,
+and flow control.
+Such use cases are therefore better served by writing model-generating
+functions in an existing programming language, for example
+using the Demes Python API.
+To modify an existing static Demes model, perhaps to infer new parameters,
+this would unfortunately require reimplementing the model.
+However, there exist many templating solutions for YAML and JSON that are
+specifically designed for extending static data in arbitrarily complex
+(\ggcomment{refs: YTT, Jsonnet, CUE, Dhall}),
+offering intriguing possibilities.
+
+
+\subsubsection*{Population-level features, not genome features}
 Demes is designed to interface with a large number of simulation and inference
 methods, so we have restricted to the specification to only describe
 demographic features at the population level. As the underlying discrete
@@ -440,7 +477,7 @@ interpret population sizes as carrying capacities, allowing for a model of
 \emph{hard} selection. However, this should not be understood as the default
 interpretation of population sizes, which conventionally specifies a
 deterministic number of individuals. Finally, as Demes assumes exchangeability
-of individuals within populations, it not provide a way to define geographic
+of individuals within populations, it doesn't provide a way to define geographic
 spatial structure within populations.
 
 Demes version 1.0 is intended to provide a stable and minimal specification
@@ -460,15 +497,16 @@ following semantic versioning guidelines.
     A Python library for loading, saving, and working with
     Demes models. Includes conversion utilities for existing
     demographic model descriptions such as
-    \texttt{ms}~\citep{hudson2002generating}.\\
+    \texttt{ms}~\citep{hudson2002generating}
+    (\url{https://github.com/popsim-consortium/demes-python}).\\
 
 \texttt{demes-c} &
     A C library for parsing Demes YAML descriptions.
-    (\url{https://github.com/grahamgower/demes-c.git}). \\
+    (\url{https://github.com/grahamgower/demes-c}). \\
 
 \texttt{demesdraw} &
     A Python library for visualising Demes models
-    (\url{https://github.com/grahamgower/demesdraw.git}). \\
+    (\url{https://github.com/grahamgower/demesdraw}). \\
 
 \midrule
 \multicolumn{2}{l}{Methods using Demes as input/output format}\\
@@ -530,7 +568,7 @@ scripting language such as Python or R, providing a flexible
 interface either to a built-in simulation
 engine~\citep{thornton2014cpp,kelleher2016efficient,haller2017flexible}
 % jk: are/were there other simulation frontends out there?
-or as a frontend for other simulators~\citep{staab2016coala}.
+or as a front end for other simulators~\citep{staab2016coala}.
 While APIs have many advantages and have grown in popularity in
 recent years, the demographic model descriptions are tied
 to the details of both the underlying simulation engines
@@ -548,7 +586,7 @@ between inference and simulation, and also to provide the foundations
 for a sustainable ecosystem of tools built around this data model.
 Table~\ref{tab-software} shows some initial infrastructure that we have
 built as part of developing Demes, but many other useful tools
-can be envisaged that either produce or consume this format.
+can be envisaged that consume, transform, or produce this format.
 
 Reproducibility is a significant problem throughout the
 sciences~\citep{baker20161} and various measures have been

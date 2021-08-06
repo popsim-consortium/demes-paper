@@ -27,6 +27,10 @@ resolve: models/IM.yaml
 		| sed -e '/^---$$/d' -e '/^\.\.\.$$/d' \
 		> models/IM-resolved.yaml
 
+.PHONY: spellcheck
+spellcheck: aspell.conf
+	aspell --conf ./aspell.conf --check paper.tex
+
 clean:
 	rm -f *.log *.dvi *.aux
 	rm -f *.blg *.bbl
