@@ -247,20 +247,11 @@ refers to ``now'' or the final generation of a simulation. A natural
 specification for time units is in generations, although other time units are
 permitted, such as years, accompanied by the generation time.
 
-Population sizes are given as the number of individuals.
+Population sizes are given as the number of individuals, and details
+such as ploidy levels are considered external to the model.
 We focus on the number of individuals as opposed to the number of genomes
-in order to not limit other software (need term -- "consumers"?) by placing potentially arbitrary
-restrictions on how the numbers of chromosomes, etc., vary amongst individuals.
-\jkcomment{As opposed to genomes. Why did we do this?}
-\aprcomment{With this, we might want to be able to specify ploidy in as
-a graph-level option, which defaults to 2. That would make the reasons
-behind this decision obvious then, I think.}
-\krtcomment{The number of genomes can be a non-obvious function of the number of individuals, too.
-Polymorphism for chromosome number, etc., are all real complications.}
-\krtcomment{We support limited aspects of the mating system--more on this below.}
 Sizes and mating system details are specified for each population within
-epochs. Epochs are contiguous time intervals that define
-
+epochs.
 Epochs are contiguous time intervals that define
 the existence interval of the population. Each epoch specifies the population size
 over that interval, which can be a constant value or function defined by start
@@ -276,7 +267,8 @@ self-fertilisation given it was produced sexually (i.e. with probability one
 minus the cloning rate). We omit any details regarding selection.
 Thus, the history of population size changes does not depend on mean fitnesses within
 a population nor on differences in mean fitness between populations.
-This indepedence of population size and selection is often called ``soft" selection \citep{christiansen1975hard}.
+This indepedence of population size and
+selection is often called ``soft" selection \citep{christiansen1975hard}.
 
 List of thoughts to turn into a paragraph:
 
@@ -360,21 +352,22 @@ because such details are necessarily complicated, vary greatly by
 application, and any attempt to encompass such a broad range of biological
 processes is doomed to failure. An ``individual'' (i.e., a discrete
 organism) is an abstraction that should have a well defined interpretation
-in most cases, despite the endless creativity of biological reality.
+in most cases.
 This narrow focus on individuals and their groupings into populations
 should ensure that the Demes standard is stable, and not subject to
 continual development as more and more elaborations of basic processes
 are added. We could never hope to fully encompass all the details
-of every possible simulation (including mating system, ploidy,
+of every possible simulation (including ploidy,
 genome sizes, recombination, mutation and gene conversion rates,
 selection coefficients, and so on) and so we clearly demarcate the
+% FIXME Not quite true here, we're including selfing and cloning rate
 role of the specification by including \emph{none} of them.
 Such details can be specified by existing mechanisms used by
 simulators. If they vary according to the demography (for example,
 we have different recombination maps across populations), then
 we can unambiguously define these by referring to the population
 identifiers and times defined by the Demes model. Rather than attempting
-to \emph{embed} this information into the demographic model, we
+to embed this information \emph{in} the demographic model, we
 can define it externally and refer \emph{to} the demography.
 
 \subsection*{High-level model specification}
