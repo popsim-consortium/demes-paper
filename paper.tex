@@ -34,6 +34,7 @@
 \newcommand{\aprcomment}[1]{{\textcolor{blue}{APR: #1}}}
 \newcommand{\jkcomment}[1]{{\textcolor{red}{JK: #1}}}
 \newcommand{\ggcomment}[1]{{\textcolor{yellow!60!red}{GG: #1}}}
+\newcommand{\krtcomment}[1]{{\textcolor{purple}{KRT: #1}}}
 
 \begin{document}
 
@@ -99,7 +100,7 @@ geographically diverse species and populations has allowed us to infer complex
 demography and study life history at fine scales. An integral component to such
 population genetics studies is simulation. Software to either simulate whole
 genome sequences
-\citep{thornton2014cpp,staab2015scrm,kelleher2016efficient,haller2019slim}
+\citep{thornton2014cpp,thornton2019-nu,staab2015scrm,baumdicker2021-iu,kelleher2016efficient,haller2019slim}
 or informative summary statistics of diversity
 \citep{gutenkunst2009inferring,kamm2017efficient,jouganous2017inferring} have
 enabled the increasing complexity of genomic studies, with several software
@@ -153,7 +154,7 @@ a custom input file
 format~\citep[e.g.][]{guillaume2006nemo,excoffier2011fastsimcoal,shlyakhter2014cosi2},
 or an Application Programming Interface (API) to allow
 models be defined programmatically~\citep[e.g.][]{
-thornton2014cpp,kelleher2016efficient,becheler2019quetzal,haller2019slim}.
+thornton2014cpp,thornton2019-nu,baumdicker2021-iu,kelleher2016efficient,becheler2019quetzal,haller2019slim}.
 Command line interfaces are a concise way of expressing
 demographic models, and the syntax defined by \ms~\citep{hudson2002generating}
 is used by a number of different
@@ -247,6 +248,8 @@ Population sizes are given as the number of individuals.
 \aprcomment{With this, we might want to be able to specify ploidy in as
 a graph-level option, which defaults to 2. That would make the reasons
 behind this decision obvious then, I think.}
+\krtcomment{The number of genomes can be a non-obvious function of the number of individuals, too.
+Polymorphism for chromosome number, etc., are all real complications.}
 Sizes and mating system details are specified for each population within
 epochs. Epochs are contiguous time intervals that define
 the existence interval of the population. Each epoch specifies the population size
@@ -265,9 +268,16 @@ fall outside the scope of demographic model specification, but...
 \aprcomment{If selection is placed on top of the demographic model, this implies
 that we are living in a soft selection world. Though sizes could just as easily
 be interpreted as carrying capacities in a hard selection model.}
+\krtcomment{We are firmly in the soft selection world here.  The connection to hard selection
+requires some other strong assumptions that will sometimes be met, and sometimes not.
+For example, if the mean fitnesses are approximately equal across demes, then a hard selection
+model could be similar to a soft selection model.  Relevant literature to dig up: Felsenstein's review,
+which will lead to other stuff.}
 
 \jkcomment{More detail here. Also, why only selfing and cloning, why not selection
 coefficients and whatnot?}
+\krtcomment{Selection is a can of worms: scaling of diploid genotype fitnesses will differ between tools.
+The possibility of "GxE" ("different s for same genotype in different demes") can lead to quadratic complexity.}
 
 A population may have one
 or more ancestors, which are other populations that exist at the population's
@@ -520,7 +530,7 @@ following semantic versioning guidelines.
     \\
 
 \fwdpy &
-    Forward-time Wright-Fisher simulation \citep{thornton2014cpp}\\
+    Forward-time Wright-Fisher simulation \citep{thornton2014cpp,thornton2019-nu}\\
 
 \gadma &
     Demographic inference \citep{noskova2020gadma}.\\
@@ -532,7 +542,7 @@ following semantic versioning guidelines.
 
 \msprime &
     Coalescent simulation of Demes models, including command line
-    interface~\citep{kelleher2016efficient,kelleher2020coalescent}.\\
+    interface~\citep{kelleher2016efficient,kelleher2020coalescent,baumdicker2021-iu}.\\
 
 \stdpopsim &
     A community-maintained collection of empirical data for species
@@ -566,7 +576,7 @@ of a given simulator. Another approach that has been taken to
 simplify running such simulations is to provide an API in a
 scripting language such as Python or R, providing a flexible
 interface either to a built-in simulation
-engine~\citep{thornton2014cpp,kelleher2016efficient,haller2017flexible}
+engine~\citep{thornton2014cpp,thornton2019-nu,baumdicker2021-iu,kelleher2016efficient,haller2017flexible}
 % jk: are/were there other simulation frontends out there?
 or as a front end for other simulators~\citep{staab2016coala}.
 While APIs have many advantages and have grown in popularity in
