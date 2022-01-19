@@ -13,7 +13,7 @@ graph = demes.load("models/IM.yaml")
 w = 0.8 * size_max(graph)
 positions = dict(A=0, X=-w, Y=w)
 fig, ax = demesdraw.utils.get_fig_axes(aspect=1)
-ax = demesdraw.tubes(graph) #, ax=ax, positions=positions, seed=1, inf_ratio=0.4)
+ax = demesdraw.tubes(graph, ax=ax, positions=positions, seed=1, inf_ratio=0.4)
 ax.figure.savefig(
     "fig/IM.pdf",
     # Save with a transparent background.
