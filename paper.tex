@@ -244,12 +244,16 @@ specification for time units is in generations, although other time units are
 permitted, such as years, accompanied by the generation time.
 
 Population sizes are given as the number of individuals.
+We focus on the number of individuals as opposed to the number of genomes
+in order to not limit other software (need term -- "consumers"?) by placing potentially arbitrary
+restrictions on how the numbers of chromosomes, etc., vary amongst individuals.
 \jkcomment{As opposed to genomes. Why did we do this?}
 \aprcomment{With this, we might want to be able to specify ploidy in as
 a graph-level option, which defaults to 2. That would make the reasons
 behind this decision obvious then, I think.}
 \krtcomment{The number of genomes can be a non-obvious function of the number of individuals, too.
 Polymorphism for chromosome number, etc., are all real complications.}
+\krtcomment{We support limited aspects of the mating system--more on this below.}
 Sizes and mating system details are specified for each population within
 epochs. Epochs are contiguous time intervals that define
 the existence interval of the population. Each epoch specifies the population size
@@ -263,8 +267,29 @@ next by self-fertilisation or cloning of an individual. Cloning and selfing
 rates can take any value between zero and one, and if both are specified then
 the selfing rate is the probability an offspring is generated through
 self-fertilisation given it was produced sexually (i.e. with probability one
-minus the cloning rate). We omit any details regarding selection, as those would
-fall outside the scope of demographic model specification, but...
+minus the cloning rate). We omit any details regarding selection.
+Thus, the history of population size changes does not depend on mean fitnesses within
+a population nor on differences in mean fitness between populations.
+This indepedence of population size and selection is often called ``soft" selection \citep{christiansen1975hard}.
+
+List of thoughts to turn into a paragraph:
+
+\begin{enumerate}
+    \item Selection parameters may be arbitrarily complex.  Different fitness effects in different demes.
+          Variation over time.  Etc..
+          The specification would become unwieldy and perhaps limiting.
+    \item By allowing selfing and cloning, we allow many "standard" models to be considered with "no or little"
+          extra effort.
+    \item However, by parameterising selfing and cloning as we have, we are assuming that these properties of
+          populations at given times can be specified independently from the genetics.
+          In other words, mutations that cause selfing to "come and go" are not considered.
+          However, consuming software is free to ignore these parameters and model the genetics within
+          the framework of a soft selection model.
+    \item We don't view these as limitations. Rather, this is what most people are doing most of the time.
+          Just now we can finally try to do this part w/fewer errors.
+\end{enumerate}
+
+
 \aprcomment{If selection is placed on top of the demographic model, this implies
 that we are living in a soft selection world. Though sizes could just as easily
 be interpreted as carrying capacities in a hard selection model.}
@@ -406,6 +431,8 @@ specify parameter distributions or estimated confidence intervals
 for those parameters. While it is not difficult to imagine extending
 the specification in ways that would allow this, it's not immediately
 clear that the benefits are worth the increased parser complexity.
+
+\krtcomment{Aaron has done a bit of this non-static stuff in moments.  It may be useful to look over there?}
 
 \ggcomment{
 Possible reasons to advocate for non-static features are as follows.
