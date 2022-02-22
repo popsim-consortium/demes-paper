@@ -173,8 +173,9 @@ and the specific details of the simulator in question.
 
 Here we present ``Demes'', a data model and file format specification for
 complex demographic models developed by the PopSim Consortium. The Demes data
-model precisely defines key parameters of populations and their relationships
-over time in an extensible way, and provides a way to explicitly encode all
+model precisely defines the sizes of populations and the relationships
+between populations in terms of migrations over time,
+and provides a way to explicitly encode the
 information relevant to demography while avoiding repetition. This data model
 is implemented in the widely used YAML format~\citep{ben2009yaml}, which
 provides a good balance between human and machine readability. The
@@ -227,12 +228,15 @@ or ``demes'', by which we mean a grouping of individuals that is convenient
 for modelling \citep{gilmour_demes_1939,gilmour_deme_1955}.
 To avoid confusion with the name of the specification itself we will
 use the term ``population'' in this discussion, with the understanding that the
-terms are interchangeable for our purposes. Populations are defined as a
-collection of exchangeable individuals that exist for a specified period of
-time, following a well-defined set of rules regarding population sizes, mating
-systems, and so on. Ancestor/descendant relationships between populations can
-be defined, as well as continuous or instantaneous migration between coexisting
-populations.
+terms are interchangeable for our purposes.
+A population is defined as some collection of individuals that exists for
+some period of time, and has a well-defined size (i.e., number of individuals)
+during that time period. Individuals can move between populations
+either through ancestor-descendant relationships between the populations,
+or through processes of continuous or pulse migration.
+No other properties of the populations are specified in the model:
+we are concerned only with defining the populations, their sizes, and the
+movement of individuals between those populations.
 
 Population and event times are written as units in the past, so that time zero
 corresponds to the final generation or ``now'', and event times in the past are
@@ -256,6 +260,8 @@ Polymorphism for chromosome number, etc., are all real complications.}
 \krtcomment{We support limited aspects of the mating system--more on this below.}
 Sizes and mating system details are specified for each population within
 epochs. Epochs are contiguous time intervals that define
+
+Epochs are contiguous time intervals that define
 the existence interval of the population. Each epoch specifies the population size
 over that interval, which can be a constant value or function defined by start
 and end sizes that must remain positive.
@@ -348,6 +354,28 @@ but are much more human-readable.
 }
 \end{figure}
 
+This model is, by design, very limited. We do not specify any details of
+individuals or of the processes that happen \emph{within} populations,
+because such details are necessarily complicated, vary greatly by
+application, and any attempt to encompass such a broad range of biological
+processes is doomed to failure. An ``individual'' (i.e., a discrete
+organism) is an abstraction that should have a well defined interpretation
+in most cases, despite the endless creativity of biological reality.
+This narrow focus on individuals and their groupings into populations
+should ensure that the Demes standard is stable, and not subject to
+continual development as more and more elaborations of basic processes
+are added. We could never hope to fully encompass all the details
+of every possible simulation (including mating system, ploidy,
+genome sizes, recombination, mutation and gene conversion rates,
+selection coefficients, and so on) and so we clearly demarcate the
+role of the specification by including \emph{none} of them.
+Such details can be specified by existing mechanisms used by
+simulators. If they vary according to the demography (for example,
+we have different recombination maps across populations), then
+we can unambiguously define these by referring to the population
+identifiers and times defined by the Demes model. Rather than attempting
+to \emph{embed} this information into the demographic model, we
+can define it externally and refer \emph{to} the demography.
 
 \subsection*{High-level model specification}
 
