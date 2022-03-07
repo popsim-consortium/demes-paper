@@ -257,6 +257,32 @@ the existence interval of the population. Each epoch specifies the population si
 over that interval, which can be a constant value or function defined by start
 and end sizes that must remain positive.
 
+\krtcomment{The paragraph(s) below subsume(s)/replace(s) some of what appears in later pargraphs.
+	I'm not making an attempt yet to revise that later content--I think other authors should
+	weigh in.}
+
+\krtcomment{Aaron -- I have perhaps over-simplified the description of marginal allele frequency dynamics?}
+
+Within a population, we implicitly assume that allele frequency dynamics can
+be described by the Wright-Fisher model.  Briefly, generations are non-overlapping (all parents
+reproduce and die simultaneously) and the expected frequency (at birth) of the $i^{th}$ allele currently at frequency $p_i$
+one generation in the next generation is $p_iw_i/\bar{w}$, where $w_i$ and $\bar{w}$ are the marginal and
+mean fitnesses, respectively, properly weighted according to ancestry proportions. In this framework,
+a forward-time simulation of finite populations is equivalent to multinomial sampling of allele frequencies each
+generation (\citet[][pp 29-31]{burger2000-ul}, \citet[][pp 179-181]{crowkimura1970})
+and a backwards-time (coalescent) simulation follows the approximations described in \cite[][chapter 3]{wakeley2008-hd}.
+Further, this model assumes "soft" selection \citep{christiansen1975hard}, meaning that the dynamics of population sizes
+changes are \textit{independent} of the details of individual fitnesses.
+In the \texttt{Discussion}, we discuss alternative models compatible with this framework and outline the expectations for tools implementing
+them.
+A plethora of forwards and backwards time simulators currently implement this model (REFS).
+Each has their own unique method of specifying the details of selection and demography.
+The goal of \Demes\ is to provide a common method for the latter task.  
+
+\krtcomment{We need to revisit the paragraph(s) below.  We do not assume individuals are exchangeable, because we do not
+	require that all individuals have the same fitness. See, e.g., p 60 of Wakeley for why fitness == exchangeability
+	and why that is required for the standard coalescent.}
+
 Within a population, individuals are assumed to be exchangeable, but there are
 also parameters for nonrandom mating, such as selfing or cloning rates, which
 give the probability that offspring are generated from one generation to the
@@ -660,6 +686,9 @@ Thus, we hope that the Demes standard introduced here will be widely adopted
 by simulation and inference methods and be used for reporting results in
 publications, either as supplemental material or uploaded to a data
 repository in Demes format.
+
+\krtcomment{Here, we should say something about other models that people may wish to implement within the demes
+framework.}
 
 \bibliographystyle{plainnat}
 \bibliography{paper}
