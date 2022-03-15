@@ -36,7 +36,7 @@
 \newcommand{\ggcomment}[1]{{\textcolor{yellow!60!red}{GG: #1}}}
 \newcommand{\krtcomment}[1]{{\textcolor{purple}{KRT: #1}}}
 
-\usepackage{filecontents,catchfile}
+\usepackage{catchfile}
 \begin{filecontents*}{software-table.tex}
 \end{filecontents*}
 
@@ -192,7 +192,7 @@ expected output.
 The initial software ecosystem includes high-quality Python
 and C parser implementations, as well as utilities for verification and
 visualisation of Demes models, and has been implemented in several popular
-inference and simulation methods (Table~\ref{tab-software}).
+inference and simulation methods (Table~\ref{tab:software}).
 We hope that this data model and file format will be widely adopted
 by the community, such that users can expect to simulate directly
 from inferred models with little or no programming effort.
@@ -219,40 +219,114 @@ Below we provide a brief overview of the population genetics models
 that Demes supports and the components of the Demes infrastructure.
 We then highlight an example usage, including visualization and simulation
 of a multi-population demographic model.
-Detailed descriptions of the population genetic model, parsers, scope, and
+Detailed descriptions of the population genetics model, parsers, scope, and
 additional examples are given in the Appendix.
 
 \CatchFileDef{\softwaretable}{software-table.tex}{}
 \renewcommand{\arraystretch}{1.5}
 \begin{table}
-\begin{center}
-\begin{tabular}{lp{12cm}}
-\softwaretable
-\end{tabular}
-\end{center}
-\caption{\label{tab-software}
-Software support for Demes. We have included software infrastructure developed
-for working with Demes models (parsing, validation, visualisation, etc)
-as well as all known downstream software that implements the specification,
-at the time of writing.}
+    \begin{center}
+        \begin{tabular}{lp{12cm}}
+            \softwaretable
+        \end{tabular}
+    \end{center}
+    \caption{
+        \label{tab:software}
+        \textbf{Software support for Demes.}
+        We have included software infrastructure developed
+        for working with Demes models (parsing, validation,
+        visualisation, etc) as well as all known downstream 
+        software that implements the specification,
+        at the time of writing.
+    }
 \end{table}
 
+\aprcomment{I want to keep the subsections that follow short and punchy.
+Refer readers to the Appendix for details.}
 
-\subsection*{Population genetic model}
-1 paragraph
+\subsection*{Population genetics model}
 
-\subsection*{High level specification}
-1 paragraph
+Demographic models consist of one or more populations (or ``demes'') defined
+by their size histories and the time intervals of their existence.
+Individuals can move between populations based on their ancestor-descendant
+relationships (i.e., the topology) or by continuous or discrete migration events.
+The deomgraphic model itself omits information about genome biology, such as
+genome size and architecture, ploidy, and mutation and recombination rates.
+It also omits any information about selection operating within populations.
+Within populations, allele-frequency dynamics are implicitly assumed to
+follow the Wright-Fisher model, so that generations are discrete and
+non-overlapping and population sizes are independent of mean fitness
+(i.e., ``soft'' selection~\citep{christiansen1975hard}).
+While these restrictions preclude some population-genetic scenarios of
+interest, such as explicit spatial structure or
+\aprcomment{stochastic carrying-capacity models, or something like that},
+many current forwards- and backwards-in-time simulation software
+make these same assumptions, so that Demes is relevant to a range of
+widely-used simulators.
+In Appendix~\ref{sec:appendix-pop-gen-model}, we expand on these concepts
+and provide more details on the population genetics models supported by Demes.
+
+\subsection*{High-level specification}
+
+The high-level description of Demes models is focused on efficient human
+understanding and avoiding errors.
+We have adopted the widely used YAML format~\citep{ben2009yaml} as the
+primary interface for writing and interchangin demographic models
+(see Appendix~\ref{sec:appendix-spec} for details about our choice of
+YAML formatting for demographic models).
+Demographic models written in YAML format provide information about global
+features of the model (such as time units and generation times),
+populations (as ``demes'') and their existence intervals (as ``epochs''),
+and gene flow between populations
+(as continuous ``migrations'' or instantaneous ``pulse'' events)
+(e.g., Figures~\ref{fig:showcase}~and~\ref{fig:IM}).
+The high-level Demes specification encourages human understanding by avoiding
+redundancy in the description where possible and by providing a mechanism for
+specifying default values that are inherited hierarchically.
 
 \subsection*{Parsers}
-and languages. 1 paragraph
+
+While the high-level specification is designed for human readability and
+conciseness, the underlying data model suitable for software implementation
+is redundant and exhaustive. 
+Translation from the high-level specification to the low-level data model
+requires resolving heierarchically-defined default values and verifying
+relationships between populations and the validity of specified parameter
+values.
+Because this translation and validation requires significant
+programming effort, we define a standard software entity as part of the
+specification to perform this task (the parser),
+which is intended to be shared by programs that support Demes as an input.
+By having relatively few high-quality Demes parsers available as libraries
+(ideally one per programming language), we ensure consistency across simulation
+software in their implementation of Demes-specified models.
+We provide a reference implementation written in Python to resolve any
+potential ambiguities and to provide a helpful template for other
+implementations, as well as an extensive test suite of examples and the
+expected outputs.
+In addition, we have high-quality parser implementations in the Python and
+C languages (published under liberal open source licences), providing a
+solid foundation for the software ecosystem (Table~\ref{tab:software}).
+
+\aprcomment{redundancies with Appendix - that could be expanded and reworked a bit}
 
 \subsection*{The scope of Demes}
 
-\begin{itemize}
-    \item Static, instead of parameterized models (1 paragraph)
-    \item Population level instead of genomic features (1 paragraph)
-\end{itemize}
+The Demes specification is static by design -- we wish to unambiguously
+describe a demographic model with a concrete set of parameters.
+This simplicity means that we cannot directly specify parameter distributions
+or estimated confidence intervals for those parameters.
+While it is not difficult to imagine extending the specification in ways that
+would allow this (Appendix~\ref{sec:appendix-scope}), it is not immediately
+clear that the benefits are worth the increased parser complexity.
+
+Demes is also designed to interface with a large number of simulation and
+inference methods, so we have restricted the specification to only
+describe demographic features at the population level.
+The underlying discrete demographic structure is the common thread connecting
+many widely-used population genetic methods, so we have omitted many
+features of the underlying genome biology (as described above, and in
+Appendix~\ref{sec:appendix-scope}).
 
 \section*{Illustration: simulation using Demes}
 
@@ -264,6 +338,16 @@ and languages. 1 paragraph
     \item Compare SFS in each population
     \item The input YAML file should go in the Appendix
 \end{itemize}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics{fig/showcase}
+    \caption{
+        \textbf{Illustration and simulation using Demes.}
+        \aprcomment{Extended snippet and Tennessen YAML in the Appendix.}
+    }
+    \label{fig:showcase}
+\end{figure}
 
 \section*{Discussion}
 
@@ -300,7 +384,7 @@ of expressing such models is both labour intensive and fraught with errors.
 The proposed Demes standard is an attempt to bridge this gap
 between inference and simulation, and also to provide the foundations
 for a sustainable ecosystem of tools built around this data model.
-Table~\ref{tab-software} shows some initial infrastructure that we have
+Table~\ref{tab:software} shows some initial infrastructure that we have
 built as part of developing Demes, but many other useful tools
 can be envisaged that consume, transform, or produce this format.
 
@@ -489,26 +573,27 @@ individuals in a destination population by individuals with parents from a
 source population.
 
 \begin{figure}
-\begin{minipage}{0.44\textwidth}
-\begin{tcolorbox}
-\inputminted[fontsize=\scriptsize,linenos,numbersep=5pt]{yaml}{models/IM.yaml}
-\end{tcolorbox}
-\begin{tcolorbox}
-\includegraphics[width=\textwidth]{fig/IM}
-\end{tcolorbox}
-\end{minipage}\hfill
-\begin{minipage}{0.54\textwidth}
-\begin{tcolorbox}
-\inputminted[fontsize=\scriptsize,linenos,numbersep=5pt]{yaml}{models/IM-resolved.yaml}
-\end{tcolorbox}
-\end{minipage}\\
-\caption{\label{fig-example}
-Example isolation-with-migration Demes model. (A) The compact non-redundant
-representation expressed using YAML. (B) The same model in the fully-qualified
-form. (C) A visual representation of the model using \texttt{demesdraw}.
-The YAML descriptions in (A) and (B) correspond exactly to a JSON description,
-but are much more human-readable.
-}
+    \begin{minipage}{0.44\textwidth}
+        \begin{tcolorbox}
+            \inputminted[fontsize=\scriptsize,linenos,numbersep=5pt]{yaml}{models/IM.yaml}
+        \end{tcolorbox}
+        \begin{tcolorbox}
+            \includegraphics[width=\textwidth]{fig/IM}
+        \end{tcolorbox}
+    \end{minipage}\hfill
+    \begin{minipage}{0.54\textwidth}
+        \begin{tcolorbox}
+            \inputminted[fontsize=\scriptsize,linenos,numbersep=5pt]{yaml}{models/IM-resolved.yaml}
+        \end{tcolorbox}
+    \end{minipage}\\
+    \caption{
+        \label{fig:IM}
+        Example isolation-with-migration Demes model. (A) The compact non-redundant
+        representation expressed using YAML. (B) The same model in the fully-qualified
+        form. (C) A visual representation of the model using \texttt{demesdraw}.
+        The YAML descriptions in (A) and (B) correspond exactly to a JSON description,
+        but are much more human-readable.
+    }
 \end{figure}
 
 This model is, by design, very limited. We do not specify any details of
@@ -566,6 +651,8 @@ epoch. This also means that the first epoch of each population must specify the
 initial size.
 
 \aprcomment{not sure if this is sufficient here}
+
+\aprcomment{Need some information about defaults}
 
 \section{Parsers}\label{sec:appendix-parsers}
 
