@@ -19,3 +19,8 @@ If you want to work with the files on your local machine,
 you may find this
 [GitHub workflow](https://stdpopsim.readthedocs.io/en/latest/development.html#github-workflow)
 helpful.
+
+## Adding software that supports demes
+
+Please add your software to the ``software-table.tex`` file, following the
+format of other software already listed. These should be placed alphabetically.
