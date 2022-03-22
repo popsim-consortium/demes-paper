@@ -253,16 +253,23 @@ relationships (i.e., the topology) or by continuous or discrete migration events
 The deomgraphic model itself omits information about genome biology, such as
 genome size and architecture, ploidy, and mutation and recombination rates.
 It also omits any information about selection operating within populations.
-Within populations, allele-frequency dynamics are implicitly assumed to
+Within populations, allele-frequency dynamics are assumed to
 follow the Wright-Fisher model, so that generations are discrete and
 non-overlapping and population sizes are independent of mean fitness
 (i.e., ``soft'' selection~\citep{christiansen1975hard}).
 While these restrictions preclude some population-genetic scenarios of
-interest, such as explicit spatial structure or
+interest, such as continuous spatial structure
+\aprcomment{citations here, and revisit} or
 \aprcomment{stochastic carrying-capacity models, or something like that},
 many current forwards- and backwards-in-time simulation software
 make these same assumptions, so that Demes is relevant to a range of
 widely-used simulators.
+\jkcomment{I guess these are also the basic assumptions also shared by
+inference methods, which is important. Mabye another sentence here making this
+explicit, and listing a few different types of inference methods and giving
+citations? This is critical - we want to establish that Demes is the
+"middleware" between the inference methods and the simulators, and captures the
+basic assumptions made by them all.}
 In Appendix~\ref{sec:appendix-pop-gen-model}, we expand on these concepts
 and provide more details on the population genetics models supported by Demes.
 
