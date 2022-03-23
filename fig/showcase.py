@@ -26,7 +26,7 @@ def plot_model(ax, graph):
     demesdraw.tubes(
         graph,
         ax=ax,
-        num_lines_per_migration=3,
+        num_lines_per_migration=2,
         log_time=True,
         positions={"ancestral": 0, "AFR": -300000, "EUR": 300000},
     )
@@ -51,22 +51,26 @@ if __name__ == "__main__":
     # set up the figure
     fig = plt.figure(54321, figsize=(6.5, 3.0))
     fig.clf()
-    grid = (2, 10)
+    grid = (5, 10)
 
     # draw the graph using demesdraw
-    ax1 = plt.subplot2grid(grid, (0, 0), colspan=4, rowspan=2)
+    ax1 = plt.subplot2grid(grid, (0, 0), colspan=4, rowspan=5)
     plot_model(ax1, graph)
 
     # simulate data using msprime
     demog = msprime.Demography.from_demes(graph)
     L = 1e7
     r = 2e-8
-    # grr.. 1 sample is actually 2 samples
+    #
     samples = {"AFR": 20, "EUR": 20}
+    msprime_samples = [
+        msprime.SampleSet(n, ploidy=1, population=p) for p, n in samples.items()
+    ]
 
-    seed = 12345
+    seed = 1234567
     ts = msprime.sim_ancestry(
-        {p: s // 2 for p, s in samples.items()},
+        msprime_samples,
+        # {p: s // 2 for p, s in samples.items()},
         demography=demog,
         sequence_length=L,
         recombination_rate=r,
@@ -99,16 +103,17 @@ if __name__ == "__main__":
     moments_eur = fs.marginalize([0])
 
     # plot AFR SFS comparison
-    ax2 = plt.subplot2grid(grid, (0, 4), colspan=3)
+    ax2 = plt.subplot2grid(grid, (0, 4), colspan=3, rowspan=2)
     plot_sfs(ax2, moments_afr, msprime_afr)
     ax2.set_title("AFR frequency spectrum")
 
     # plot EUR SFS comparison
-    ax3 = plt.subplot2grid(grid, (0, 7), colspan=3)
+    ax3 = plt.subplot2grid(grid, (0, 7), colspan=3, rowspan=2)
     plot_sfs(ax3, moments_eur, msprime_eur, ylabel=False)
     ax3.set_title("EUR frequency spectrum")
+    ax3.sharey(ax2)
 
-    ax4 = plt.subplot2grid(grid, (1, 4), colspan=6)
+    ax4 = plt.subplot2grid(grid, (2, 4), colspan=6, rowspan=3)
     img = mpimg.imread("minted-snippet.png")
     yy, xx, _ = img.shape
     ax4.set_xlim(0, xx)
@@ -120,10 +125,10 @@ if __name__ == "__main__":
 
     fig.tight_layout()
     fig.subplots_adjust(wspace=1.0)
-    
+
     fig.text(0.01, 0.95, "A", fontsize=8)
     fig.text(0.40, 0.95, "B", fontsize=8)
     fig.text(0.71, 0.95, "C", fontsize=8)
-    fig.text(0.42, 0.42, "D", fontsize=8)
-    
+    fig.text(0.43, 0.45, "D", fontsize=8)
+
     plt.savefig("showcase.pdf")
