@@ -31,6 +31,7 @@
 \newcommand{\fwdpy}[0]{\texttt{fwdpy11}}
 \newcommand{\slim}[0]{\texttt{SLiM}}
 \newcommand{\gadma}[0]{\texttt{GADMA}}
+\newcommand{\tskit}[0]{\texttt{tskit}}
 
 \newcommand{\aprcomment}[1]{{\textcolor{blue}{APR: #1}}}
 \newcommand{\jkcomment}[1]{{\textcolor{red}{JK: #1}}}
@@ -335,17 +336,6 @@ Appendix~\ref{sec:appendix-scope}).
 
 \section*{Application: simulation using Demes}
 
-\aprcomment{Need a paragraph or two here, extolling the virtues of simulation with demes}
-
-\begin{itemize}
-    \item Multi-population model with migrations and/or pulses
-    \item Demesdraw
-    \item msprime simulation
-    \item moments simulation
-    \item Compare SFS in each population
-    \item The input YAML file should go in the Appendix
-\end{itemize}
-
 \begin{figure}[tb!]
     \centering
     \includegraphics{fig/showcase}
@@ -369,6 +359,35 @@ Appendix~\ref{sec:appendix-scope}).
     }
     \label{fig:showcase}
 \end{figure}
+
+Here, we highlight the interface between Demes and other software, including
+simulation and model illustration tools. Demes allows us to specify a
+demographic model a single time, which can be used as the input for a growing
+number of simulation software (Table~\ref{tab:software}). We implemented the
+human two-population demographic model from \citet{tennessen2012evolution}
+inferred from European and African-American sequencing data. This model (given
+in Demes format in Figure~\ref{fig:tennessen}) is parameterized by an ancestral
+population with an ancient growth, divergence into ``AFR'' and ``EUR'' that
+each have multiple-epoch size histories, and multiple epochs of continuous
+migration between the two branches (illustrated using \demesdraw\ in
+Figure~\ref{fig:showcase}A). The large final sizes (\(\approx 500,000\)
+individuals each) are one to three orders of magnitude larger than ancestral
+population sizes, reflecting the recent explosive population size increase in
+human populations.
+
+We used this model to simulate 20 haploid genome copies from each EUR and AFR
+at time zero (i.e., present day) to obtain the joint site-frequency spectrum
+(SFS), a summary of observed allele frequencies widely used in evolutionary
+inference
+\citep{bustamante2001directional,gutenkunst2009inferring,tennessen2012evolution,jouganous2017inferring,kamm2017efficient,kim2017inference}.
+We used \msprime\ \citep{baumdicker2021-iu} to simulate a large recombining
+region with the mutation rate assumed in \citet{tennessen2012evolution} and
+computed the observed SFS using \tskit\ \citep{ralph2020efficiently}. We
+compared that simulated SFS to its expectation computed using \moments\
+\citep{jouganous2017inferring} (Figure~\ref{fig:showcase}B,C). For both
+\msprime\ and \moments\ simulations, the same demographic model was used as
+input, avoiding the need to specify the complex demographic model multiple
+times using the unique API of each software.
 
 \section*{Discussion}
 
@@ -829,14 +848,15 @@ following semantic versioning guidelines.
         \inputminted[fontsize=\scriptsize,linenos,numbersep=5pt]{yaml}{models/tennessen.yml}
     \end{tcolorbox}
     \caption{
-        \textbf{The Tennessen et al. two-population demographic model in Demes format.}
+        \textbf{The \citet{tennessen2012evolution} two-population demographic model in Demes format.}
     }
     \label{fig:tennessen}
 \end{figure}
 
 \begin{figure}[h!]
     \begin{tcolorbox}
-        \inputminted[fontsize=\scriptsize,linenos,numbersep=5pt]{python}{models/tennessen-simulation.py}
+        % NOTE: line highlights may need adjusting after changing this code
+        \inputminted[fontsize=\scriptsize,linenos,numbersep=5pt,highlightlines={9,19,52}]{python}{models/tennessen-simulation.py}
     \end{tcolorbox}
     \caption{
         \textbf{Simulation of SFS for the Tennessen model.}
@@ -846,6 +866,7 @@ following semantic versioning guidelines.
         passed to \moments\ to computed the expected joint SFS.
         To compare the SFS in Figure~\ref{fig:showcase}, we \emph{marginalize} the
         joint SFS to obtain the single-population SFS for both AFR and EUR populations.
+        Lines interfacing \demes\ and other software are highlighted.
     }
     \label{fig:tennessen-simulation}
 \end{figure}
