@@ -24,6 +24,7 @@
 \newcommand{\msprime}[0]{\texttt{msprime}}
 \newcommand{\stdpopsim}[0]{\texttt{stdpopsim}}
 \newcommand{\demes}[0]{\texttt{demes}}
+\newcommand{\demesdraw}[0]{\texttt{demesdraw}}
 \newcommand{\Demes}[0]{\texttt{Demes}}
 \newcommand{\moments}[0]{\texttt{moments}}
 \newcommand{\dadi}[0]{\texttt{$\partial$a$\partial$i}}
@@ -241,9 +242,6 @@ additional examples are given in the Appendix.
     }
 \end{table}
 
-\aprcomment{I want to keep the subsections that follow short and punchy.
-Refer readers to the Appendix for details.}
-
 \subsection*{Population genetics model}
 
 Demographic models consist of one or more populations (or ``demes'') defined
@@ -335,7 +333,9 @@ many widely-used population genetic methods, so we have omitted many
 features of the underlying genome biology (as described above, and in
 Appendix~\ref{sec:appendix-scope}).
 
-\section*{Illustration: simulation using Demes}
+\section*{Application: simulation using Demes}
+
+\aprcomment{Need a paragraph or two here, extolling the virtues of simulation with demes}
 
 \begin{itemize}
     \item Multi-population model with migrations and/or pulses
@@ -346,12 +346,26 @@ Appendix~\ref{sec:appendix-scope}).
     \item The input YAML file should go in the Appendix
 \end{itemize}
 
-\begin{figure}[ht!]
+\begin{figure}[tb!]
     \centering
     \includegraphics{fig/showcase}
     \caption{
         \textbf{Illustration and simulation using Demes.}
-        \aprcomment{Extended snippet and Tennessen YAML in the Appendix.}
+        (A)
+        Using an inferred demographic model from \citet{tennessen2012evolution}
+        specified as a YAML in Demes format (Figure~\ref{fig:tennessen}), we
+        use \demesdraw\ to visualize the demographic model.
+        We then use \msprime\ to simulate genomic data for 20 genome copies
+        sampled from the two contemporary populations, and we use \moments\
+        to compute the expected joint site-frequency spectrum for the same
+        sample sizes (Figure~\ref{fig:tennessen-simulation}).
+        (B, C) We compare the single-population SFS in each population, showing
+        agreement between the simulation methods.
+        (D) Code snippets of the interactions between \demes\ and the simulation
+        software. An extended script to compute the SFS shown in (B) and (C) is
+        given in Figure~\ref{fig:tennessen-simulation}.
+        \aprcomment{There may be a better model to use here -- the massive
+        exponential growth really makes the rest of the history hard to see.}
     }
     \label{fig:showcase}
 \end{figure}
@@ -579,30 +593,6 @@ migration events specify the instantaneous replacement of a given fraction of
 individuals in a destination population by individuals with parents from a
 source population.
 
-\begin{figure}
-    \begin{minipage}{0.44\textwidth}
-        \begin{tcolorbox}
-            \inputminted[fontsize=\scriptsize,linenos,numbersep=5pt]{yaml}{models/IM.yaml}
-        \end{tcolorbox}
-        \begin{tcolorbox}
-            \includegraphics[width=\textwidth]{fig/IM}
-        \end{tcolorbox}
-    \end{minipage}\hfill
-    \begin{minipage}{0.54\textwidth}
-        \begin{tcolorbox}
-            \inputminted[fontsize=\scriptsize,linenos,numbersep=5pt]{yaml}{models/IM-resolved.yaml}
-        \end{tcolorbox}
-    \end{minipage}\\
-    \caption{
-        \label{fig:IM}
-        Example isolation-with-migration Demes model. (A) The compact non-redundant
-        representation expressed using YAML. (B) The same model in the fully-qualified
-        form. (C) A visual representation of the model using \texttt{demesdraw}.
-        The YAML descriptions in (A) and (B) correspond exactly to a JSON description,
-        but are much more human-readable.
-    }
-\end{figure}
-
 This model is, by design, very limited. We do not specify any details of
 individuals or of the processes that happen \emph{within} populations,
 because such details are necessarily complicated, vary greatly by
@@ -808,4 +798,57 @@ Demes version 1.0 is intended to provide a stable and minimal specification
 that is compatible with a wide range of simulators. To ensure consistency
 across implementations, the specification is versioned and we commit to
 following semantic versioning guidelines.
+
+
+\begin{figure}[h!]
+    \begin{minipage}{0.44\textwidth}
+        \begin{tcolorbox}
+            \inputminted[fontsize=\scriptsize,linenos,numbersep=5pt]{yaml}{models/IM.yaml}
+        \end{tcolorbox}
+        \begin{tcolorbox}
+            \includegraphics[width=\textwidth]{fig/IM}
+        \end{tcolorbox}
+    \end{minipage}\hfill
+    \begin{minipage}{0.54\textwidth}
+        \begin{tcolorbox}
+            \inputminted[fontsize=\scriptsize,linenos,numbersep=5pt]{yaml}{models/IM-resolved.yaml}
+        \end{tcolorbox}
+    \end{minipage}\\
+    \caption{
+        \label{fig:IM}
+        Example isolation-with-migration Demes model. (A) The compact non-redundant
+        representation expressed using YAML. (B) The same model in the fully-qualified
+        form. (C) A visual representation of the model using \texttt{demesdraw}.
+        The YAML descriptions in (A) and (B) correspond exactly to a JSON description,
+        but are much more human-readable.
+    }
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{tcolorbox}
+        \inputminted[fontsize=\scriptsize,linenos,numbersep=5pt]{yaml}{models/tennessen.yml}
+    \end{tcolorbox}
+    \caption{
+        \textbf{The Tennessen et al. two-population demographic model in Demes format.}
+    }
+    \label{fig:tennessen}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{tcolorbox}
+        \inputminted[fontsize=\scriptsize,linenos,numbersep=5pt]{python}{models/tennessen-simulation.py}
+    \end{tcolorbox}
+    \caption{
+        \textbf{Simulation of SFS for the Tennessen model.}
+        We first load the demographic model using \demes\ (as \texttt{graph}),
+        which can then be used by \msprime\ to create the demographic model used in
+        \texttt{msprime.sim\_ancestry()}. The same loaded graph can also be
+        passed to \moments\ to computed the expected joint SFS.
+        To compare the SFS in Figure~\ref{fig:showcase}, we \emph{marginalize} the
+        joint SFS to obtain the single-population SFS for both AFR and EUR populations.
+    }
+    \label{fig:tennessen-simulation}
+\end{figure}
+
+
 \end{document}
