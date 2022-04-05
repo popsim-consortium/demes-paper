@@ -129,7 +129,8 @@ a list of key parameters in tabular form and a discussion within the text.
 Unfortunately these descriptions are often ambiguous, and
 implementing the precise model inferred for later simulation
 is at best tedious and error prone~\citep{ragsdale2020lessons}
-and occasionally impossible because of missing information. \mhcomment{Maybe add a short, concrete example to convince readers of the problem?}
+and occasionally impossible because of missing information. 
+\mhcomment{Maybe add a short, concrete example to convince readers of the problem?}
 %\aprcomment{This feels tangential - maybe discussion}
 %The \stdpopsim\ project is a community-maintained catalog of species
 %information and demographic models designed to provide standardised
@@ -527,18 +528,28 @@ The goal of \Demes\ is to provide a common method for the latter task.
 \krtcomment{We need to revisit the paragraph(s) below.  We do not assume individuals are exchangeable, because we do not
 	require that all individuals have the same fitness. See, e.g., p 60 of Wakeley for why fitness == exchangeability
 	and why that is required for the standard coalescent.}
-\mhcomment{The `exchangeability' assumption also breaks down under different reproductive modes, since the sampling of the alleles affects coalescent times. For example, in a highly selfing species the coalescent time for two different alleles within an individual is much lower than two alleles from different individuals. I've tried to rewrite the below paragraph to update and clarify the reproduction parameters in line with the discussions on Github. Finally, 'rates' imply events occur as Poisson-like processes over continuous time, whereas the values used here instead define the \emph{fraction} of reproductions of each type. Shall we rename to selfing/clonal `fractions', or would that mess up the rest of the schema too much?}
+\mhcomment{The `exchangeability' assumption also breaks down under 
+	different reproductive modes, since the sampling of the alleles affects coalescent times. 
+	For example, in a highly selfing species the coalescent time for two different alleles 
+	within an individual is much lower than two alleles from different individuals. I've tried 
+	to rewrite the below paragraph to update and clarify the reproduction parameters in 
+	line with the discussions on Github. Finally, 'rates' imply events occur as Poisson-like 
+	processes over continuous time, whereas the values used here instead define the 
+	\emph{fraction} of reproductions of each type. Shall we rename to selfing/clonal `fractions',
+	 or would that mess up the rest of the schema too much?}
 
-Each population has a selfing rate and cloning rate assigned to it, where each denotes the probability that offspring are generated from one generation to the next by either self-fertilisation or cloning of an individual. More specifically, denote the clonal rate by $\sigma$ and the selfing rate by $S$. In each population a proportion of offspring $\sigma$ reproduce clonally, while $1-\sigma$ reproduce sexually. Within the sexually--reproducing offspring, $S$ were born via self--fertilisation while the rest were outcrossed. Hence $S$ and $\sigma$ can take any value between zero and one, but do not have to sum to one. See \citet{hartfield2016facsexcoal} for more details of the mathematical properties of these rates in a coalescent context. \mhcomment{If requested I can quickly draw up a schematic diagram to illustrate these partitions.} Note that even if $S$, $\sigma$ are set to zero then some residual selfing can occur due to sampling in the Wright--Fisher model.
-
-%Within a population, individuals are assumed to be exchangeable, but there are
-%also parameters for nonrandom mating, such as selfing or cloning rates, which
-%give the probability that offspring are generated from one generation to the
-%next by self-fertilisation or cloning of an individual. Cloning and selfing
-%rates can take any value between zero and one, and if both are specified then
-%the selfing rate is the probability an offspring is generated through
-%self-fertilisation given it was produced sexually (i.e. with probability one
-%minus the cloning rate). 
+Each population has a selfing rate and cloning rate assigned to it, where each denotes 
+the probability that offspring are generated from one generation to the next by either 
+self-fertilisation or cloning of an individual. More specifically, denote the clonal rate by 
+$\sigma$ and the selfing rate by $S$. In each population a proportion of offspring 
+$\sigma$ reproduce clonally, while $1-\sigma$ reproduce sexually. Within the 
+sexually--reproducing offspring, $S$ were born via self--fertilisation while the rest were 
+outcrossed. Hence $S$ and $\sigma$ can take any value between zero and one, but 
+do not have to sum to one. See \citet{hartfield2016facsexcoal} for more details of the 
+mathematical properties of these rates in a coalescent context. \mhcomment{If requested 
+I can quickly draw up a schematic diagram to illustrate these partitions.} Note that even if 
+$S$, $\sigma$ are set to zero then some residual selfing can occur due to sampling in 
+the Wright--Fisher model.
 
 We omit any details regarding selection.
 Thus, the history of population size changes does not depend on mean fitnesses within
