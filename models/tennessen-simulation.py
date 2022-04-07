@@ -41,6 +41,7 @@ msprime_eur = ts.allele_frequency_spectrum(
     polarised=True,
     span_normalise=False,
 )
+
 ####
 #### Compute expected SFS for sampled populations using moments
 ####
