@@ -476,47 +476,53 @@ contexts along with their types and permissible ranges.
 This schema, and its accompanying documentation,
 fully describe the entities in the model and their
 relationships and the required behaviour of implementations.
-Since the schema is definitive, we will not recapitulate the details
+Since the schema is definitive,
+\aprcomment{what exactly do we mean by ``definitive''?}
+we will not recapitulate the details
 here, but instead focus on the high level properties of the model and
 the rationale behind key design decisions.
 
-Below, we detail
-\begin{itemize}
-    \item The population genetics model in Section~\ref{sec:appendix-pop-gen-model}
-    \item The high-level model specification in Section~\ref{sec:appendix-spec}
-    \item The desired behaviour of Demes-format parsers in Section~\ref{sec:appendix-parsers}
-    \item And the intended scope of Demes in Section~\ref{sec:appendix-scope}
-\end{itemize}
+Below we detaail the population genetics model in 
+Appendix~\ref{sec:appendix-pop-gen-model},
+the high-level, human-readable model specification in
+Appendix~\ref{sec:appendix-spec}, demographic model parsers and their
+intended behaviour in Appendix~\ref{sec:appendix-parsers}, and the
+intended scope of Demes in Appendix~\ref{sec:appendix-scope}.
+The extended figures in Appendix~\ref{sec:appendix-figures} provides
+additional examples and illustrations of Demes usage.
 
-\section{Population genetics model details}\label{sec:appendix-pop-gen-model}
+\section{Population genetics model details}
+\label{sec:appendix-pop-gen-model}
 
 In Demes, demographic models consist of one or more interacting populations,
-or ``demes'', by which we mean a grouping of individuals that is convenient
-for modelling \citep{gilmour_demes_1939,gilmour_deme_1955}.
+or ``demes'', understood to be a collection of individuals that can be
+conveniently modelled using a defined set of rules and parameters
+\citep{gilmour_demes_1939,gilmour_deme_1955}.
 To avoid confusion with the name of the specification itself we will
 use the term ``population'' in this discussion, with the understanding that the
-terms are interchangeable for our purposes.
+terms are interchangeable.
 A population is defined as some collection of individuals that exists for
 some period of time, and has a well-defined size (i.e., number of individuals)
 during that time period. Individuals can move between populations
-either through ancestor-descendant relationships between the populations,
-or through processes of continuous or pulse migration.
-No other properties of the populations are specified in the model:
-we are concerned only with defining the populations, their sizes, and the
+either according to their ancestor-descendant relationships
+or through processes of continuous or pulse migrations.
+Few other properties of the populations are specified in the model:
+we are concerned primarily with defining the populations, their sizes, and the
 movement of individuals between those populations.
+\aprcomment{previous sentence changed to allow for selfing/cloning}
 
 Population and event times are written as units in the past, so that time zero
 corresponds to the final generation or ``now'', and event times in the past are
-values greater than zero with larger values for events that occur in the more
+values greater than zero with larger values corresponding to times in the more
 distant past. By having time units increase into the past, we avoid the need to
-choose an arbitrary point in history as ``time zero'', so that instead zero
-refers to ``now'' or the final generation of a simulation. A natural
+choose an arbitrary point in history as ``time zero''. A natural
 specification for time units is in generations, although other time units are
 permitted, such as years, accompanied by the generation time.
 
 Population sizes are given as numbers of individuals, and details
 such as ploidy levels are considered external to the model.
-We therefore focus on the number of individuals as opposed to the number of genomes.
+We therefore focus on the number of individuals as opposed
+to the number of genome copies.
 Sizes and mating system details are specified for each population within
 epochs.
 Epochs are contiguous time intervals that define
@@ -524,89 +530,102 @@ the existence interval of the population. Each epoch specifies the population si
 over that interval, which can be a constant value or function defined by start
 and end sizes that must remain positive.
 
-\krtcomment{The paragraph(s) below subsume(s)/replace(s) some of what appears in later pargraphs.
-	I'm not making an attempt yet to revise that later content--I think other authors should
-	weigh in.}
+%\krtcomment{The paragraph(s) below subsume(s)/replace(s) some of what appears in later pargraphs.
+%	I'm not making an attempt yet to revise that later content--I think other authors should
+%	weigh in.}
 
-\krtcomment{Aaron -- I have perhaps over-simplified the description of marginal allele frequency dynamics?}
+%\krtcomment{Aaron -- I have perhaps over-simplified the description of marginal allele frequency dynamics?}
 
 Within a population, we implicitly assume that allele frequency dynamics can
-be described by the Wright-Fisher model.  Briefly, generations are non-overlapping (all parents
-reproduce and die simultaneously) and the expected frequency (at birth) of the $i^{th}$ allele currently at frequency $p_i$
-one generation in the next generation is $p_iw_i/\bar{w}$, where $w_i$ and $\bar{w}$ are the marginal and
-mean fitnesses, respectively, properly weighted according to ancestry proportions. In this framework,
-a forward-time simulation of finite populations is equivalent to multinomial sampling of allele frequencies each
-generation (\citet[][pp 29-31]{burger2000-ul}, \citet[][pp 179-181]{crowkimura1970})
-and a backwards-time (coalescent) simulation follows the approximations described in \cite[][chapter 3]{wakeley2008-hd}.
-Further, this model assumes "soft" selection \citep{christiansen1975hard}, meaning that the dynamics of population sizes
+be described by the Wright-Fisher model.
+Briefly, generations are non-overlapping (all parents
+reproduce and die simultaneously) and the expected frequency (at birth)
+of the $i^{th}$ allele currently at frequency $p_i$
+one generation in the next generation is $p_iw_i/\bar{w}$,
+where $w_i$ and $\bar{w}$ are the marginal and
+mean fitnesses, respectively, properly weighted according to ancestry proportions.
+In this framework,
+a forward-time simulation of finite populations is equivalent
+to multinomial sampling of allele frequencies each
+generation (\citet[][pp 29-31]{burger2000-ul}, \citet[][pp 179-181]{crowkimura1970}),
+and a backwards-time (coalescent) simulation follows the approximations
+described in \cite[][chapter 3]{wakeley2008-hd}.
+Further, this model assumes "soft" selection \citep{christiansen1975hard},
+meaning that the dynamics of population sizes
 changes are \textit{independent} of the details of individual fitnesses.
-In the \texttt{Discussion}, we discuss alternative models compatible with this framework and outline the expectations for tools implementing
-them.
-A plethora of forwards and backwards time simulators currently implement this model (REFS).
+% In the \texttt{Discussion}, we discuss alternative models compatible
+% with this framework and outline the expectations for tools implementing
+% them.
+\aprcomment{As such, this model excludes scenarios such as ``hard selection,''
+in which population sizes are dependent on a population's mean fitness, or
+stochastic fluctuations in population size, such as defining ``carrying capacities''.}
+Many forwards and backwards time simulators currently implement this model
+\citep[e.g.,][\aprcomment{and more\dots?}]{hudson2002generating,gutenkunst2009inferring,excoffier2011fastsimcoal,jouganous2017inferring,haller2019slim,thornton2019-nu}.
 Each has their own unique method of specifying the details of selection and demography.
 The goal of \Demes\ is to provide a common method for the latter task.  
 
-\krtcomment{We need to revisit the paragraph(s) below.  We do not assume individuals are exchangeable, because we do not
-	require that all individuals have the same fitness. See, e.g., p 60 of Wakeley for why fitness == exchangeability
-	and why that is required for the standard coalescent.}
-\mhcomment{The `exchangeability' assumption also breaks down under 
-	different reproductive modes, since the sampling of the alleles affects coalescent times. 
-	For example, in a highly selfing species the coalescent time for two different alleles 
-	within an individual is much lower than two alleles from different individuals. I've tried 
-	to rewrite the below paragraph to update and clarify the reproduction parameters in 
-	line with the discussions on Github. Finally, 'rates' imply events occur as Poisson-like 
-	processes over continuous time, whereas the values used here instead define the 
-	\emph{fraction} of reproductions of each type. Shall we rename to selfing/clonal `fractions',
-	 or would that mess up the rest of the schema too much?}
+% \krtcomment{
+%     We need to revisit the paragraph(s) below.
+%     We do not assume individuals are exchangeable, because we do not
+% 	require that all individuals have the same fitness.
+%     See, e.g., p 60 of Wakeley for why fitness == exchangeability
+% 	and why that is required for the standard coalescent.
+% }
+% \mhcomment{The `exchangeability' assumption also breaks down under 
+% 	different reproductive modes, since the sampling of the alleles
+%     affects coalescent times. 
+% 	For example, in a highly selfing species the coalescent time for two different alleles 
+% 	within an individual is much lower than two alleles from different individuals.
+%     I've triedto rewrite the below paragraph to update and clarify
+%     the reproduction parameters in line with the discussions on Github.
+%     Finally, 'rates' imply events occur as Poisson-like 
+% 	processes over continuous time, whereas the values used here instead define the 
+% 	\emph{fraction} of reproductions of each type.
+%     Shall we rename to selfing/clonal `fractions',
+% 	or would that mess up the rest of the schema too much?
+% }
 
-Each population has a selfing rate and cloning rate assigned to it, where each denotes 
-the probability that offspring are generated from one generation to the next by either 
-self-fertilisation or cloning of an individual. More specifically, denote the clonal rate by 
-$\sigma$ and the selfing rate by $S$. In each population a proportion of offspring 
-$\sigma$ reproduce clonally, while $1-\sigma$ reproduce sexually. Within the 
-sexually--reproducing offspring, $S$ were born via self--fertilisation while the rest were 
-outcrossed. Hence $S$ and $\sigma$ can take any value between zero and one, but 
-can sum to more than one. See \citet{hartfield2016facsexcoal} for more details of the 
-mathematical properties of these rates in a coalescent context. \mhcomment{If requested 
-I can quickly draw up a schematic diagram to illustrate these partitions.} 
+Each population has an assigned selfing rate and cloning rate, where each defines
+the probability that offspring are generated from one generation to the next by either
+self-fertilisation or cloning of an individual.
+More specifically, for a given epoch within a population denote the clonal rate by
+$\sigma$ and the selfing rate by $S$.
+$S$ and $\sigma$ can take any value between zero and one and
+can sum to more than one.
+Each generation a proportion of offspring
+$\sigma$ are expected to be generated through clonal reproduction,
+while $1-\sigma$ are expected to arise through sexual reproduction.
+Within the sexually-reproduced offspring,
+$S$ are born via self-fertilisation while the rest
+have parents drawn at random from the previous generation.
+Depending on the simulation software, this random drawing of parent may occur
+either with or without replacement. When drawing occurs with replacement, a small
+amount of ``residual'' selfing is expected, so that the realized selfing probability
+is $(1-\sigma)(S + (1-S)/N)$ instead of $(1-\sigma)S$ (so that even with $\sigma=0$
+and $S=0$, selfing may still occur with probability $1/N$).
+Simulation software that allow variable rates of selfing are expected to clearly
+document the expected behaviour.
 
-We omit any details regarding selection.
-Thus, the history of population size changes does not depend on mean fitnesses within
-a population nor on differences in mean fitness between populations.
-This indepedence of population size and
-selection is often called ``soft" selection \citep{christiansen1975hard}.
+By allowing the definition of selfing and cloning probabilities, we allow many 
+standard models to be defined.
+However, by parameterising selfing and cloning as we have, we assume that these
+properties of populations can be specified independently from the genetics.
+In other words, mutations that cause selfing probabilities to fluctuate within
+an epoch are not considered.
+\aprcomment{
+    Do we still want to say something along these lines?
+    ``However, consuming software is free to ignore these parameters
+    and model the genetics within
+    the framework of a soft selection model.
+    We don't view these as limitations. Rather, this is what most people
+    are doing most of the time.
+    Just now we can finally try to do this part w/fewer errors.''
+}
+More details of the mathematical properties of selfing and cloning rates
+in a coalescent context can be found in \citet{hartfield2016facsexcoal}.
 
-List of thoughts to turn into a paragraph:
-
-\begin{enumerate}
-    \item Selection parameters may be arbitrarily complex.  Different fitness effects in different demes.
-          Variation over time.  Etc..
-          The specification would become unwieldy and perhaps limiting.
-    \item By allowing selfing and cloning, we allow many "standard" models to be considered with "no or little"
-          extra effort. \mhcomment{Plus something on how programs deal with residual selfing.}
-    \item However, by parameterising selfing and cloning as we have, we are assuming that these properties of
-          populations at given times can be specified independently from the genetics.
-          In other words, mutations that cause selfing to "come and go" are not considered.
-          However, consuming software is free to ignore these parameters and model the genetics within
-          the framework of a soft selection model.
-    \item We don't view these as limitations. Rather, this is what most people are doing most of the time.
-          Just now we can finally try to do this part w/fewer errors.
-\end{enumerate}
-
-
-\aprcomment{If selection is placed on top of the demographic model, this implies
-that we are living in a soft selection world. Though sizes could just as easily
-be interpreted as carrying capacities in a hard selection model.}
-\krtcomment{We are firmly in the soft selection world here.  The connection to hard selection
-requires some other strong assumptions that will sometimes be met, and sometimes not.
-For example, if the mean fitnesses are approximately equal across demes, then a hard selection
-model could be similar to a soft selection model.  Relevant literature to dig up: Felsenstein's review,
-which will lead to other stuff.}
-
-\jkcomment{More detail here. Also, why only selfing and cloning, why not selection
-coefficients and whatnot?}
-\krtcomment{Selection is a can of worms: scaling of diploid genotype fitnesses will differ between tools.
-The possibility of "GxE" ("different s for same genotype in different demes") can lead to quadratic complexity.}
+\mhcomment{If requested
+I can quickly draw up a schematic diagram to illustrate these partitions.}
 
 A population may have one
 or more ancestors, which are other populations that exist at the population's
@@ -629,7 +648,7 @@ migration events specify the instantaneous replacement of a given fraction of
 individuals in a destination population by individuals with parents from a
 source population.
 
-This model is, by design, very limited. We do not specify any details of
+This model is, by design, very limited. We do not specify any further details of
 individuals or of the processes that happen \emph{within} populations,
 because such details are necessarily complicated, vary greatly by
 application, and any attempt to encompass such a broad range of biological
@@ -637,7 +656,7 @@ processes is doomed to failure. An ``individual'' (i.e., a discrete
 organism) is an abstraction that should have a well defined interpretation
 in most cases.
 This narrow focus on individuals and their groupings into populations
-should ensure that the Demes standard is stable, and not subject to
+should ensure that the \Demes\ standard is stable, and not subject to
 continual development as more and more elaborations of basic processes
 are added. We could never hope to fully encompass all the details
 of every possible simulation (including ploidy,
@@ -835,6 +854,8 @@ that is compatible with a wide range of simulators. To ensure consistency
 across implementations, the specification is versioned and we commit to
 following semantic versioning guidelines.
 
+\section{Extended data and figures}
+\label{sec:appendix-figures}
 
 \begin{figure}[h!]
     \begin{minipage}{0.44\textwidth}
