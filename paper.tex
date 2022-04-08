@@ -269,7 +269,7 @@ widely-used simulators.
 inference methods, which is important. Mabye another sentence here making this
 explicit, and listing a few different types of inference methods and giving
 citations? This is critical - we want to establish that Demes is the
-"middleware" between the inference methods and the simulators, and captures the
+``middleware'' between the inference methods and the simulators, and captures the
 basic assumptions made by them all.}
 In Appendix~\ref{sec:appendix-pop-gen-model}, we expand on these concepts
 and provide more details on the population genetics models supported by Demes.
@@ -505,7 +505,7 @@ A population is defined as some collection of individuals that exists for
 some period of time, and has a well-defined size (i.e., number of individuals)
 during that time period. Individuals can move between populations
 either according to their ancestor-descendant relationships
-or through processes of continuous or pulse migrations.
+or through processes involving migrations.
 Few other properties of the populations are specified in the model:
 we are concerned primarily with defining the populations, their sizes, and the
 movement of individuals between those populations.
@@ -550,7 +550,7 @@ to multinomial sampling of allele frequencies each
 generation (\citet[][pp 29-31]{burger2000-ul}, \citet[][pp 179-181]{crowkimura1970}),
 and a backwards-time (coalescent) simulation follows the approximations
 described in \cite[][chapter 3]{wakeley2008-hd}.
-Further, this model assumes "soft" selection \citep{christiansen1975hard},
+Further, this model assumes ``soft'' selection \citep{christiansen1975hard},
 meaning that the dynamics of population sizes
 changes are \textit{independent} of the details of individual fitnesses.
 % In the \texttt{Discussion}, we discuss alternative models compatible
@@ -620,6 +620,11 @@ an epoch are not considered.
     We don't view these as limitations. Rather, this is what most people
     are doing most of the time.
     Just now we can finally try to do this part w/fewer errors.''
+}
+\krtcomment{
+    I think we want a section in the Discussion outlining some obvious things
+    that people can do w/demes that are sitting "just outside" the strict
+    specification: hard selection, etc..
 }
 More details of the mathematical properties of selfing and cloning rates
 in a coalescent context can be found in \citet{hartfield2016facsexcoal}.
