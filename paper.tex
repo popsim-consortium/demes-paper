@@ -477,18 +477,17 @@ This schema, and its accompanying documentation,
 fully describe the entities in the model and their
 relationships and the required behaviour of implementations.
 Since the schema is definitive,
-\aprcomment{what exactly do we mean by ``definitive''?}
 we will not recapitulate the details
 here, but instead focus on the high level properties of the model and
 the rationale behind key design decisions.
 
-Below we detaail the population genetics model in 
+Below we detail the population genetics model in 
 Appendix~\ref{sec:appendix-pop-gen-model},
 the high-level, human-readable model specification in
 Appendix~\ref{sec:appendix-spec}, demographic model parsers and their
 intended behaviour in Appendix~\ref{sec:appendix-parsers}, and the
 intended scope of Demes in Appendix~\ref{sec:appendix-scope}.
-The extended figures in Appendix~\ref{sec:appendix-figures} provides
+The extended figures in Appendix~\ref{sec:appendix-figures} provide
 additional examples and illustrations of Demes usage.
 
 \section{Population genetics model details}
@@ -545,9 +544,8 @@ and end sizes that must remain positive.
 Within a population, we implicitly assume that allele frequency dynamics can
 be described by the Wright-Fisher model.
 Briefly, generations are non-overlapping (all parents
-reproduce and die simultaneously) and the expected frequency (at birth)
-of the $i^{th}$ allele currently at frequency $p_i$
-one generation in the next generation is $p_iw_i/\bar{w}$,
+reproduce and die simultaneously), and for allele $i$ currently at frequency $p_i$,
+its frequency in the next generation (at birth) is expected to be $p_iw_i/\bar{w}$,
 where $w_i$ and $\bar{w}$ are the marginal and
 mean fitnesses, respectively, properly weighted according to ancestry proportions.
 In this framework,
