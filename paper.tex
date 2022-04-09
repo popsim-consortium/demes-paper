@@ -511,6 +511,8 @@ we are concerned primarily with defining the populations, their sizes, and the
 movement of individuals between those populations.
 \aprcomment{previous sentence changed to allow for selfing/cloning}
 
+\subsection{Time units}
+
 Population and event times are written as units in the past, so that time zero
 corresponds to the final generation or ``now'', and event times in the past are
 values greater than zero with larger values corresponding to times in the more
@@ -518,6 +520,8 @@ distant past. By having time units increase into the past, we avoid the need to
 choose an arbitrary point in history as ``time zero''. A natural
 specification for time units is in generations, although other time units are
 permitted, such as years, accompanied by the generation time.
+
+\subsection{Sizes and epochs}
 
 Population sizes are given as numbers of individuals, and details
 such as ploidy levels are considered external to the model.
@@ -535,6 +539,8 @@ and end sizes that must remain positive.
 %	weigh in.}
 
 %\krtcomment{Aaron -- I have perhaps over-simplified the description of marginal allele frequency dynamics?}
+
+\subsection{Population dynamics}
 
 Within a population, we implicitly assume that allele frequency dynamics can
 be described by the Wright-Fisher model.
@@ -586,6 +592,8 @@ The goal of \Demes\ is to provide a common method for the latter task.
 % 	or would that mess up the rest of the schema too much?
 % }
 
+\subsection{Selfing and cloning}
+
 Each population has an assigned selfing rate and cloning rate, where each defines
 the probability that offspring are generated from one generation to the next by either
 self-fertilisation or cloning of an individual.
@@ -632,6 +640,8 @@ in a coalescent context can be found in \citet{hartfield2016facsexcoal}.
 
 \mhcomment{If requested
 I can quickly draw up a schematic diagram to illustrate these partitions.}
+
+\subsection{Relationships between populations}
 
 A population may have one
 or more ancestors, which are other populations that exist at the population's
