@@ -450,6 +450,11 @@ repository in Demes format.
 \krtcomment{Here, we should say something about other models that people may wish to implement within the demes
 framework.}
 
+\krtcomment{
+    I think we want a section in the Discussion outlining some obvious things
+    that people can do w/demes that are sitting "just outside" the strict
+    specification: hard selection, etc..
+}
 
 \bibliographystyle{genetics}
 \bibliography{paper}
@@ -508,7 +513,6 @@ or through processes involving migrations.
 Few other properties of the populations are specified in the model:
 we are concerned primarily with defining the populations, their sizes, and the
 movement of individuals between those populations.
-\aprcomment{previous sentence changed to allow for selfing/cloning}
 
 \subsection{Time units}
 
@@ -541,7 +545,7 @@ and end sizes that must remain positive.
 
 \subsection{Population dynamics}
 
-Within a population, we implicitly assume that allele frequency dynamics can
+Within a population, we assume that allele frequency dynamics can
 be described by the Wright-Fisher model.
 Briefly, generations are non-overlapping (all parents
 reproduce and die simultaneously), and for allele $i$ currently at frequency $p_i$,
@@ -558,14 +562,12 @@ and \citet[][chapter 3]{wakeley2008-hd}.
 Further, this model assumes ``soft'' selection \citep{christiansen1975hard},
 meaning that the dynamics of population sizes
 changes are \textit{independent} of the details of individual fitnesses.
-% In the \texttt{Discussion}, we discuss alternative models compatible
-% with this framework and outline the expectations for tools implementing
-% them.
-\aprcomment{As such, this model excludes scenarios such as ``hard selection,''
+As such, this model excludes scenarios such as ``hard selection,''
 in which population sizes are dependent on a population's mean fitness, or
-stochastic fluctuations in population size, such as defining ``carrying capacities''.}
+stochastic fluctuations in population size, such as interpreting
+population sizes as ``carrying capacities''.
 Many forwards and backwards time simulators currently implement this model
-\citep[e.g.,][\aprcomment{and more\dots?}]{hudson2002generating,gutenkunst2009inferring,excoffier2011fastsimcoal,jouganous2017inferring,haller2019slim,thornton2019-nu}.
+\citep[e.g.,][]{hudson2002generating,gutenkunst2009inferring,excoffier2011fastsimcoal,kelleher2016efficient,jouganous2017inferring,haller2019slim,thornton2019-nu}.
 Each has their own unique method of specifying the details of selection and demography.
 The goal of \Demes\ is to provide a common method for the latter task.  
 
@@ -609,7 +611,8 @@ Depending on the simulation software, this random drawing of parent may occur
 either with or without replacement. When drawing occurs with replacement, a small
 amount of ``residual'' selfing is expected, so that the realized selfing probability
 is $(1-\sigma)(S + (1-S)/N)$ instead of $(1-\sigma)S$ (so that even with $\sigma=0$
-and $S=0$, selfing may still occur with probability $1/N$).
+and $S=0$, selfing may still occur with probability $1/N$), although
+this effect is negligible in large populations \citep{nordborg1997coalescent}
 Simulation software that allow variable rates of selfing are expected to clearly
 document the expected behaviour.
 
@@ -619,20 +622,6 @@ However, by parameterising selfing and cloning as we have, we assume that these
 properties of populations can be specified independently from the genetics.
 In other words, mutations that cause selfing probabilities to fluctuate within
 an epoch are not considered.
-\aprcomment{
-    Do we still want to say something along these lines?
-    ``However, consuming software is free to ignore these parameters
-    and model the genetics within
-    the framework of a soft selection model.
-    We don't view these as limitations. Rather, this is what most people
-    are doing most of the time.
-    Just now we can finally try to do this part w/fewer errors.''
-}
-\krtcomment{
-    I think we want a section in the Discussion outlining some obvious things
-    that people can do w/demes that are sitting "just outside" the strict
-    specification: hard selection, etc..
-}
 More details of the mathematical properties of selfing and cloning rates
 in a coalescent context can be found in \citet{hartfield2016facsexcoal}.
 
