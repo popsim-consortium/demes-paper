@@ -101,7 +101,7 @@ and C, and showcase initial support in a number of simulators and inference
 methods.
 \end{abstract}
 
-
+\aprcomment{Note: Need to standardize use of ``demes'' vs ``Demes'' vs \Demes.}
 \section*{Introduction}
 
 The ever-increasing amount of genetic sequencing data from genetically and
@@ -665,7 +665,6 @@ are added. We could never hope to fully encompass all the details
 of every possible simulation (including ploidy,
 genome sizes, recombination, mutation and gene conversion rates,
 selection coefficients, and so on) and so we clearly demarcate the
-% FIXME Not quite true here, we're including selfing and cloning rate
 role of the specification by including \emph{none} of them.
 Such details can be specified by existing mechanisms used by
 simulators. If they vary according to the demography (for example,
@@ -680,8 +679,8 @@ can define it externally and refer \emph{to} the demography.
 The high-level description of Demes models is focused on the efficiency of
 human understanding and the avoidance of errors. We have adopted the widely
 used YAML format~\citep{ben2009yaml} as the recommended means of interchanging
-Demes models (see Figure~\ref{fig-example} for examples). YAML is a data
-serialisation language with an emphasis on simplicity, and interoperates well
+Demes models (e.g., Figures~\ref{fig:IM}~and~\ref{fig:tennessen}). YAML is a data
+serialisation language with an emphasis on simplicity and which interoperates well
 with JSON (indeed, YAML 1.2 is a superset of JSON). We chose YAML over JSON
 because although JSON is an excellent format for data interchange, it is
 ill-suited for human understanding or manipulation. We also considered other
@@ -695,7 +694,7 @@ to use JSON directly if they wish (e.g., for greater efficiency).
 Structurally, the high-level Demes specification encourages human understanding
 by avoiding redundancy in the description where possible and by providing a
 mechanism for specifying default values that are inherited hierarchically.
-Figure~\ref{fig-example} shows an example Demes model expressed in both the
+Figure~\ref{fig:IM} shows an example Demes model expressed in both the
 high and low-level forms (both in terms of YAML syntax). For values that repeat
 across fields, defaults may be used to implicitly assign default values to
 fields of the given type.  A default is superseded by an explicitly provided
@@ -704,10 +703,6 @@ progression of time. For example, if an epoch \texttt{start\_size} is not
 provided, it is assumed to be equal to the \texttt{end\_size} of the previous
 epoch. This also means that the first epoch of each population must specify the
 initial size.
-
-\aprcomment{not sure if this is sufficient here}
-
-\aprcomment{Need some information about defaults}
 
 \section{Parsers}\label{sec:appendix-parsers}
 
@@ -727,14 +722,14 @@ in their details (harming the software ecosystem).
 %  - SCRM uses different options for -ema command.
 We therefore define
 a standard software entity as part of the specification (the parser),
-which performs this task, and which can be shared by programs that
+which performs this task and can be shared by programs that
 support demes as an input. By having relatively few high-quality Demes
 parsers available as libraries (ideally, one per programming language),
 the probability of divergences from the standard is greatly reduced.
 
 The Demes specification precisely defines the required behaviour of parsers,
 which translate the high-level specifications into unambiguous low-level
-representations where all parameters have been assigned values and data
+representations where values have been assigned to all parameters and data
 constraints have been checked. The output is formally defined as JSON, but in
 practice parsers output an object model that is suitable for the particular
 programming language and that can be used directly by the implementing program.
@@ -744,8 +739,6 @@ implementations, as well as an extensive test suite of examples and the
 expected outputs. In addition, we have high-quality parser implementations in
 the Python and C languages (published under liberal open source licences),
 providing a solid foundation for the software ecosystem.
-
-\aprcomment{wrapped below section about parsers to here}
 
 \section{Scope of the specification}
 \label{sec:appendix-scope}
