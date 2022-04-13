@@ -565,7 +565,7 @@ changes are \textit{independent} of the details of individual fitnesses.
 As such, this model excludes scenarios such as ``hard selection,''
 in which population sizes are dependent on a population's mean fitness, or
 stochastic fluctuations in population size, such as interpreting
-population sizes as ``carrying capacities''.
+population sizes as carrying capacities.
 Many forwards and backwards time simulators currently implement this model
 \citep[e.g.,][]{hudson2002generating,gutenkunst2009inferring,excoffier2011fastsimcoal,kelleher2016efficient,jouganous2017inferring,haller2019slim,thornton2019-nu}.
 Each has their own unique method of specifying the details of selection and demography.
@@ -746,35 +746,39 @@ providing a solid foundation for the software ecosystem.
 \subsection{Static models, not parameterised models}
 \label{sec:appendix-static}
 
-\jkcomment{This section is very rough.}
-
 % https://github.com/popsim-consortium/demes-paper/issues/3
 
-The Demes specification is static by design---we wish to
-unambiguously describe a demographic model with a concrete set
+The Demes specification is static by design--we wish to
+unambiguously describe a demographic model defined by a concrete set
 of parameters. This simplicity means that we cannot directly
 specify parameter distributions or estimated confidence intervals
 for those parameters. While it is not difficult to imagine extending
-the specification in ways that would allow this, it's not immediately
-clear that the benefits are worth the increased parser complexity.
+the specification in ways that would allow this, this would greatly
+increase parser complexity and require limiting choices to be made.
+Instead, we have opted to restrict Demes to static model descriptions,
+although allowing parameterized distributions or parameter ranges 
+is an direction of possible future work.
 
-\krtcomment{Aaron has done a bit of this non-static stuff in moments.  It may be useful to look over there?}
+%\krtcomment{
+%    Aaron has done a bit of this non-static stuff in moments.
+%    It may be useful to look over there?
+%}
 
-\ggcomment{
-Possible reasons to advocate for non-static features are as follows.
-\begin{enumerate}
-\item Specifying prior distributions of parameters for an ABC.
-\item Specifying upper and lower bounds of parameters and inter-parameter
-      constraints for input to an optimisation-based inference.
-\item Specifying joint distribution, or confidence intervals, for the output of
-      an inference procedure.
-\item Simulating from some arbitrary joint distribution that was inferred
-      previously. E.g. using an ABC posterior distribution of models to
-      train a neural network.
-\item Extending someone else's static model to reinfer parameters,
-      or add new parameters.
-\end{enumerate}
-}
+%\ggcomment{
+%Possible reasons to advocate for non-static features are as follows.
+%\begin{enumerate}
+%\item Specifying prior distributions of parameters for an ABC.
+%\item Specifying upper and lower bounds of parameters and inter-parameter
+%      constraints for input to an optimisation-based inference.
+%\item Specifying joint distribution, or confidence intervals, for the output of
+%      an inference procedure.
+%\item Simulating from some arbitrary joint distribution that was inferred
+%      previously. E.g. using an ABC posterior distribution of models to
+%      train a neural network.
+%\item Extending someone else's static model to reinfer parameters,
+%      or add new parameters.
+%\end{enumerate}
+%}
 
 The parameters of
 demographic models are typically tightly coupled, and cases in which
@@ -785,8 +789,8 @@ the posterior. While writing out a large number of Demes models in
 YAML format may seem inefficient, it can in fact be a compact
 way to describe these distributions.
 For example, consider a one-population model with piecewise-constant sizes over
-20 epochs which has $\sim$~40 free parameters---the \texttt{start\_size} and
-\texttt{end\_time} values for each epoch. Supposing we sample 50,000 models
+20 epochs which has $\sim$~40 free parameters: the \texttt{start\_size} and
+\texttt{end\_time} values for each epoch. If we sample 50,000 models
 from the posterior distribution, the resulting multi-document YAML file is
 45~MiB.
 This format compresses down to 8.4~MiB when gzipped or 6.2~MiB
@@ -798,15 +802,15 @@ Similarly, one might be interested in running simulations in which
 the demographic model parameters are drawn from a distribution, e.g.,
 in ABC inference~\citep{beaumont2002approximate}.
 Other inference procedures based on optimising a loss function
-\citep{gutenkunst2009inferring,kamm2017efficient,jouganous2017inferring}
-(\ggcomment{more refs? MCMC? neural networks?})
+\citep{gutenkunst2009inferring,kamm2017efficient,jouganous2017inferring,ragsdale2019models,excoffier2021fastsimcoal2}
+%(\ggcomment{more refs? MCMC? neural networks?})
 need users to specify parameter bounds,
-and possibly non-linear constraints between parameters.
+and possibly non-linear or conditional constraints between parameters.
 Indeed, the choice of how to parameterise a model could be important for
 some inference methods (e.g. absolute times versus relative times between events).
 
-Implementing the many distributions of interest, and supporting a general
-way to describe a model's free parameters, would greatly increase the
+Implementing the many distributions of interest and supporting a general
+way to describe a model's free parameters would greatly increase the
 complexity of parsers, with relatively limited benefit to most users.
 It's unlikely that Demes could be made sufficiently
 flexible without considerable effort to implement many features of
@@ -814,13 +818,16 @@ general-purpose programming languages, such as variables, arithmetic,
 and flow control.
 Such use cases are therefore better served by writing model-generating
 functions in an existing programming language, for example
-using the Demes Python API.
-To modify an existing static Demes model, perhaps to infer new parameters,
-this would unfortunately require reimplementing the model.
-However, there exist many templating solutions for YAML and JSON that are
-specifically designed for extending static data in arbitrarily complex
-(\ggcomment{refs: YTT, Jsonnet, CUE, Dhall}),
-offering intriguing possibilities.
+using the Demes Python API (e.g., as implemented in \moments\
+\citep{jouganous2017inferring,ragsdale2019models}).
+%To modify an existing static Demes model, perhaps to infer new parameters,
+%this would unfortunately require reimplementing the model.
+As an intriguing possibility for developments in this direction,
+there exist many templating solutions for YAML and JSON that are
+specifically designed for extending static data in arbitrarily complex ways
+(e.g., \texttt{YTT}, \texttt{Jsonnet}, \texttt{CUE}, and \texttt{Dhall}).
+%\citep{ytt,jsonnet,cue,dhall}.
+%(\ggcomment{refs: YTT, Jsonnet, CUE, Dhall}).
 
 
 \subsection{Population-level features, not genome features}
@@ -832,19 +839,16 @@ demographic features at the population level. As the underlying discrete
 demographic structure is the common thread connecting many widely used
 population genetic methods, many features of underlying genome biology are
 omitted. Most notably, mutation and recombination rates are left unspecified
-(though they can be encoded as metadata in the data structure). Genome ploidy
-is left ambiguous, and selection and dominance models are absent. Using a Demes
-model, which specifies deterministic population sizes, as the demographic input
-for simulation using software that allows for selection implies that selection
-is \emph{soft}, that is, genome fitnesses are rescaled relative to the mean
-population fitness \citep{christiansen1975hard}. It is possible to instead
-interpret population sizes as carrying capacities, allowing for a model of
-\emph{hard} selection. However, this should not be understood as the default
-interpretation of population sizes, which conventionally specifies a
-deterministic number of individuals. Finally, as Demes assumes exchangeability
-of individuals within populations, it doesn't provide a way to define geographic
-spatial structure within populations.
+(though they can be encoded as metadata in the data structure), as are
+sequence length or annotations or genomic features.
+Genome ploidy is left ambiguous, and selection and dominance models are absent. 
+We also omit information about the sampling of individuals, as we view
+the demographic history as independent of the sampling of individuals.
+It is therefore left up to simulation and inference tools how to define
+genomic parameters and sampling strategies, as each software will have its
+own set of constraints and relevant input parameters.
 
+In conclusion,
 Demes version 1.0 is intended to provide a stable and minimal specification
 that is compatible with a wide range of simulators. To ensure consistency
 across implementations, the specification is versioned and we commit to
