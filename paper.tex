@@ -101,7 +101,6 @@ and C, and showcase initial support in a number of simulators and inference
 methods.
 \end{abstract}
 
-\aprcomment{Note: Need to standardize use of ``demes'' vs ``Demes'' vs \Demes.}
 \section*{Introduction}
 
 The ever-increasing amount of genetic sequencing data from genetically and
@@ -109,7 +108,8 @@ geographically diverse species and populations has allowed us to infer complex
 demography and study life history at fine scales.
 An integral component to such population genetics studies is simulation.
 Software to either simulate whole genome
-sequences~\citep{thornton2014cpp,thornton2019-nu,staab2015scrm,baumdicker2021-iu,kelleher2016efficient,haller2019slim}
+sequences~\citep{thornton2014cpp,thornton2019-nu,staab2015scrm,
+baumdicker2021-iu,kelleher2016efficient,haller2019slim}
 or informative summary statistics of
 diversity~\citep{gutenkunst2009inferring,kamm2017efficient,jouganous2017inferring}
 have enabled the increasing complexity of genomic studies, with several software
@@ -131,18 +131,8 @@ Unfortunately these descriptions are often ambiguous, and
 implementing the precise model inferred for later simulation
 is at best tedious and error prone~\citep{ragsdale2020lessons}
 and occasionally impossible because of missing information. 
-\mhcomment{Maybe add a short, concrete example to convince readers of the problem?}
-%\aprcomment{This feels tangential - maybe discussion}
-%The \stdpopsim\ project is a community-maintained catalog of species
-%information and demographic models designed to provide standardised
-%population genetic simulations~\citep{adrion2020community}.
-%The development process for adding demographic models to
-%\stdpopsim\ tries to avoid errors in model implementation by requiring two
-%independent implementations of each model
-%to be equivalent. While this process is
-%robust and has uncovered both significant
-%errors~\citep{ragsdale2020lessons} and ambiguities in
-%published models, it is labour intensive.
+% \mhcomment{Maybe add a short, concrete example to convince readers of the problem?}
+% APR: I think this is ok here.
 Instead, it would be far better if published results were reported
 in an unambiguous standardised format that could be provided
 directly as input to simulators.
@@ -157,16 +147,17 @@ is to make simulations more realistic.
 Simulation methods take three broad approaches to specifying
 the demographic model to simulate,
 using either a command line
-interface~\citep[e.g.][]{hudson2002generating,kern2016discoal},
+interface~\citep[e.g.,][]{hudson2002generating,kern2016discoal},
 a custom input file
-format~\citep[e.g.][]{guillaume2006nemo,excoffier2011fastsimcoal,shlyakhter2014cosi2},
+format~\citep[e.g.,][]{guillaume2006nemo,excoffier2011fastsimcoal,shlyakhter2014cosi2},
 or an Application Programming Interface (API) to allow
-models be defined programmatically~\citep[e.g.][]{
-thornton2014cpp,thornton2019-nu,baumdicker2021-iu,kelleher2016efficient,becheler2019quetzal,haller2019slim}.
+models be defined programmatically~\citep[e.g.,][]{
+thornton2014cpp,thornton2019-nu,baumdicker2021-iu,kelleher2016efficient,
+becheler2019quetzal,haller2019slim}.
 Command line interfaces are a concise way of expressing
 demographic models, and the syntax defined by \ms~\citep{hudson2002generating}
 is used by a number of different
-simulators~\citep[e.g.][]{ewing2010msms,chen2009fast,staab2015scrm},
+simulators~\citep[e.g.,][]{ewing2010msms,chen2009fast,staab2015scrm},
 and the POPDemog visualisation software~\citep{zhou2018popdemog}.
 However, this conciseness means that models of even intermediate complexity
 are difficult for humans to understand, making errors highly likely.
@@ -177,7 +168,7 @@ and the details of the demographic models are not separated
 from other simulation parameters.
 The APIs used by individual simulators to define demographic models are also
 not appropriate as an interchange standard because of the dependency on both
-the programming language involved,
+the programming language involved
 and the specific details of the simulator in question.
 
 Here we present ``Demes'', a data model and file format specification for
@@ -238,9 +229,9 @@ additional examples are given in the Appendix.
         \label{tab:software}
         \textbf{Software support for Demes.}
         We have included software infrastructure developed
-        for working with Demes models (parsing, validation,
-        visualisation, etc) as well as all known downstream 
-        software that implements the specification,
+        for working with Demes models (such as parsing, validation,
+        and visualisation) as well as downstream 
+        software that implement the specification,
         at the time of writing.
     }
 \end{table}
@@ -251,7 +242,7 @@ Demographic models consist of one or more populations (or ``demes'') defined
 by their size histories and the time intervals of their existence.
 Individuals can move between populations based on their ancestor-descendant
 relationships (i.e., the topology) or by continuous or discrete migration events.
-The deomgraphic model itself omits information about genome biology, such as
+The demographic model itself omits information about genome biology, such as
 genome size and architecture, ploidy, and mutation and recombination rates.
 It also omits any information about selection operating within populations.
 Within populations, allele-frequency dynamics are assumed to
@@ -260,17 +251,18 @@ non-overlapping and population sizes are independent of mean fitness
 (i.e., ``soft'' selection~\citep{christiansen1975hard}).
 While these restrictions preclude some population-genetic scenarios of
 interest, such as continuous spatial structure
-\aprcomment{citations here, and revisit} or
-\aprcomment{stochastic carrying-capacity models, or something like that},
+\citep{wright1943isolation,barton2002neutral,ringbauer2017inferring,battey2020space}
+or stochastic population size dynamics
+\citep{nunney1993assessing,orr2014population},
 many current forwards- and backwards-in-time simulation software
 make these same assumptions, so that Demes is relevant to a range of
 widely-used simulators.
-\jkcomment{I guess these are also the basic assumptions also shared by
-inference methods, which is important. Mabye another sentence here making this
-explicit, and listing a few different types of inference methods and giving
-citations? This is critical - we want to establish that Demes is the
-``middleware'' between the inference methods and the simulators, and captures the
-basic assumptions made by them all.}
+The basic assumptions of discrete populations connected by instantaneous or continuous
+migrations are also shared by many inference methods
+\citep[e.g.,][]{gutenkunst2009inferring,gravel2012population,kamm2017efficient,
+jouganous2017inferring,ragsdale2019models,excoffier2021fastsimcoal2}.
+Demes therefore serves as ``middleware'' between inference methods and simulation
+software, capturing common assumptions shared across implemented software.
 In Appendix~\ref{sec:appendix-pop-gen-model}, we expand on these concepts
 and provide more details on the population genetics models supported by Demes.
 
@@ -316,8 +308,6 @@ In addition, we have high-quality parser implementations in the Python and
 C languages (published under liberal open source licences), providing a
 solid foundation for the software ecosystem (Table~\ref{tab:software}).
 
-\aprcomment{redundancies with Appendix - that could be expanded and reworked a bit}
-
 \subsection*{The scope of Demes}
 
 The Demes specification is static by design -- we wish to unambiguously
@@ -327,6 +317,17 @@ or estimated confidence intervals for those parameters.
 While it is not difficult to imagine extending the specification in ways that
 would allow this (Appendix~\ref{sec:appendix-scope}), it is not immediately
 clear that the benefits are worth the increased parser complexity.
+
+\aprcomment{I think this belongs here, just one or two sentences:}
+
+\krtcomment{Here, we should say something about other models that people may wish to implement within the demes
+framework.}
+
+\krtcomment{
+    I think we want a section in the Discussion outlining some obvious things
+    that people can do w/demes that are sitting "just outside" the strict
+    specification: hard selection, etc..
+}
 
 Demes is also designed to interface with a large number of simulation and
 inference methods, so we have restricted the specification to only
@@ -346,18 +347,18 @@ Appendix~\ref{sec:appendix-scope}).
         (A)
         Using an inferred demographic model from \citet{tennessen2012evolution}
         specified as a YAML in Demes format (Figure~\ref{fig:tennessen}), we
-        use \demesdraw\ to visualize the demographic model.
-        We then use \msprime\ to simulate genomic data for 20 genome copies
-        sampled from the two contemporary populations, and we use \moments\
+        used \demesdraw\ to visualize the demographic model (note the recent
+            exponential growth resulting in present-day population sizes that
+        greatly exceed those in the past).
+        We then used \msprime\ to simulate genomic data for 20 genome copies
+        sampled from the two contemporary populations, and we used \moments\
         to compute the expected joint site-frequency spectrum for the same
         sample sizes (Figure~\ref{fig:tennessen-simulation}).
-        (B, C) We compare the single-population SFS in each population, showing
+        (B, C) We compared the single-population SFS in each population, showing
         agreement between the simulation methods.
         (D) Code snippets of the interactions between \demes\ and the simulation
         software. An extended script to compute the SFS shown in (B) and (C) is
         given in Figure~\ref{fig:tennessen-simulation}.
-        \aprcomment{There may be a better model to use here -- the massive
-        exponential growth really makes the rest of the history hard to see.}
     }
     \label{fig:showcase}
 \end{figure}
@@ -381,10 +382,11 @@ We used this model to simulate 20 haploid genome copies from each EUR and AFR
 at time zero (i.e., present day) to obtain the joint site-frequency spectrum
 (SFS), a summary of observed allele frequencies widely used in evolutionary
 inference
-\citep{bustamante2001directional,gutenkunst2009inferring,tennessen2012evolution,jouganous2017inferring,kamm2017efficient,kim2017inference}.
-The Demes model (Figure~\ref{fig:showcase}A~and~\ref{fig:tennessen}) was
+\citep{bustamante2001directional,gutenkunst2009inferring,tennessen2012evolution,
+jouganous2017inferring,kamm2017efficient,kim2017inference}.
+The Demes model (Figures~\ref{fig:showcase}A~and~\ref{fig:tennessen}) was
 provided as the input demography to \msprime\ \citep{baumdicker2021-iu} to
-simulate a large recombining region with the mutation rate assumed in
+simulate a large recombining region under the mutation rate assumed in
 \citet{tennessen2012evolution}, and we computed the observed SFS using \tskit\
 \citep{ralph2020efficiently}. Using the same Demes model as input to \moments\
 \citep{jouganous2017inferring}, we computed the expectation of the joint SFS
@@ -397,7 +399,7 @@ demographic model multiple times using the unique API of each software.
 
 The difficulty of describing complex demographic models
 for population genetic simulations has long been acknowledged
-~\citep[][e.g.]{antao2007modeler4simcoal2}, % jk - any older refs for this?
+~\citep[e.g.,][]{antao2007modeler4simcoal2}, % jk - any older refs for this?
 and a number of different methods have been proposed to
 make such simulations more accessible and less error prone.
 Several Graphical User Interface (GUI) and visualisation
@@ -410,7 +412,8 @@ of a given simulator. Another approach that has been taken to
 simplify running such simulations is to provide an API in a
 scripting language such as Python or R, providing a flexible
 interface either to a built-in simulation
-engine~\citep{thornton2014cpp,thornton2019-nu,baumdicker2021-iu,kelleher2016efficient,haller2017flexible}
+engine~\citep{thornton2014cpp,thornton2019-nu,baumdicker2021-iu,
+kelleher2016efficient,haller2017flexible}
 % jk: are/were there other simulation frontends out there?
 or as a front end for other simulators~\citep{staab2016coala}.
 While APIs have many advantages and have grown in popularity in
@@ -433,7 +436,7 @@ built as part of developing Demes, but many other useful tools
 can be envisaged that consume, transform, or produce this format.
 
 Reproducibility is a significant problem throughout the
-sciences~\citep{baker20161} and various measures have been
+sciences~\citep{baker20161}, and various measures have been
 proposed to increase the likelihood of researchers being
 able to replicate results in the
 literature~\citep{munafo2017manifesto}. The most basic requirement
@@ -446,15 +449,6 @@ Thus, we hope that the Demes standard introduced here will be widely adopted
 by simulation and inference methods and be used for reporting results in
 publications, either as supplemental material or uploaded to a data
 repository in Demes format.
-
-\krtcomment{Here, we should say something about other models that people may wish to implement within the demes
-framework.}
-
-\krtcomment{
-    I think we want a section in the Discussion outlining some obvious things
-    that people can do w/demes that are sitting "just outside" the strict
-    specification: hard selection, etc..
-}
 
 \bibliographystyle{genetics}
 \bibliography{paper}
@@ -723,7 +717,7 @@ in their details (harming the software ecosystem).
 We therefore define
 a standard software entity as part of the specification (the parser),
 which performs this task and can be shared by programs that
-support demes as an input. By having relatively few high-quality Demes
+support Demes as an input. By having relatively few high-quality Demes
 parsers available as libraries (ideally, one per programming language),
 the probability of divergences from the standard is greatly reduced.
 
