@@ -11,7 +11,7 @@ demes:
   - start_size: 14474
     end_time: 51000
 - name: AFR
-  description: TODO.. population used
+  description: African Americans
   ancestors: [ancestral]
   epochs:
   - start_size: 14474
@@ -19,7 +19,7 @@ demes:
   - end_time: 0
     end_size: 432125
 - name: EUR
-  description: TODO.. population used
+  description: European Americans
   ancestors: [ancestral]
   epochs:
   - start_size: 1861

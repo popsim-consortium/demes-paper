@@ -1,2 +1,4 @@
 demes
 demesdraw
+msprime
+git+https://bitbucket.org/simongravel/moments.git
