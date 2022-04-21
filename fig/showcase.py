@@ -46,7 +46,7 @@ def plot_sfs(ax, fs_moments, fs_msprime, ylabel=True):
 
 if __name__ == "__main__":
     # load the graph
-    graph = demes.load("../models/tennessen.yml")
+    graph = demes.load("../models/tennessen.yaml")
 
     # set up the figure
     fig = plt.figure(54321, figsize=(6.5, 3.0))

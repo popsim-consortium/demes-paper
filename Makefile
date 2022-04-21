@@ -1,4 +1,12 @@
-DEPS=paper.tex paper.bib models/IM.yaml models/IM-resolved.yaml fig/IM.pdf
+DEPS=\
+	paper.tex \
+	paper.bib \
+	software-table.tex \
+	models/IM.yaml \
+	models/IM-resolved.yaml \
+	models/tennessen.yaml \
+	fig/IM.pdf \
+	fig/showcase.pdf
 
 paper.pdf: $(DEPS)
 	pdflatex -shell-escape paper.tex

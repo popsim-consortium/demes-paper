@@ -1,12 +1,12 @@
 import demes
-import msprime, tskit
+import msprime
 import moments
 
 ####
 #### Import the demographic model using demes, set up samples
 ####
 
-graph = demes.load("tennessen.yml")
+graph = demes.load("tennessen.yaml")
 samples = {"AFR": 20, "EUR": 20}
 
 ####
