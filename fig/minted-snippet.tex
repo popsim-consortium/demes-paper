@@ -11,7 +11,7 @@
 \begin{minted}[numbersep=5pt]{python}
 import demes, msprime, moments
 # load the demographic model and specify sample sizes
-model = demes.load("tennessen.yml")
+model = demes.load("tennessen.yaml")
 samples = {"AFR": 20, "EUR": 20}
 # import model as msprime demography and simulate ancestry
 demography = msprime.Demography.from_demes(model)
