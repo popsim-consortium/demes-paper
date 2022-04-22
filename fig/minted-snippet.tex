@@ -1,0 +1,24 @@
+\documentclass{article}
+\usepackage{fullpage}
+\usepackage{minted}
+\usepackage{tcolorbox}
+\usepackage{etoolbox}
+\BeforeBeginEnvironment{minted}{\begin{tcolorbox}}%
+\AfterEndEnvironment{minted}{\end{tcolorbox}}%
+
+\begin{document}
+
+\begin{minted}[numbersep=5pt]{python}
+import demes, msprime, moments
+# load the demographic model and specify sample sizes
+model = demes.load("tennessen.yaml")
+samples = {"AFR": 20, "EUR": 20}
+# import model as msprime demography and simulate ancestry
+demography = msprime.Demography.from_demes(model)
+ts = msprime.sim_ancestry(
+    [msprime.SampleSet(n, ploidy=1, population=p) for p, n in samples.items()],
+    demography=demography)
+# compute the expected joint SFS using moments
+sfs = moments.Spectrum.from_demes(model, samples=samples)
+\end{minted}
+
