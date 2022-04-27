@@ -101,6 +101,9 @@ and C, and showcase initial support in a number of simulators and inference
 methods.
 
 \ggcomment{We don't showcase Demes output from any inference software.}
+\aprcomment{You could say that ``showcase'' also refers to the table that
+includes demes support in inference software, not just the illustration
+in the main text.}
 \end{abstract}
 
 \section*{Introduction}
@@ -289,8 +292,6 @@ specifying default values that are inherited hierarchically.
 
 \subsection*{Parsers}
 
-\ggcomment{TODO: deduplicate this section and Appendix~\ref{sec:appendix-parsers}}
-
 While the high-level specification is designed for human readability and
 conciseness, the underlying data model suitable for software implementation
 is redundant and exhaustive. 
@@ -302,20 +303,15 @@ Because this translation and validation requires significant
 programming effort, we define a standard software entity as part of the
 specification to perform this task (the parser),
 which is intended to be shared by programs that support Demes as an input.
-By having relatively few high-quality Demes parsers available as libraries
-(ideally one per programming language), we ensure consistency across simulation
+By maintaining high-quality Demes parsers available as libraries,
+we ensure consistency across simulation
 software in their implementation of Demes-specified models.
-We provide a reference implementation written in Python to resolve any
-potential ambiguities and to provide a helpful template for other
-implementations, as well as an extensive test suite of examples and the
-expected outputs.
-In addition, we have high-quality parser implementations in the Python and
-C languages (published under liberal open source licences), providing a
-solid foundation for the software ecosystem (Table~\ref{tab:software}).
+In addition to a reference implementation written in Python,
+we provide high-quality parser implementations in the Python and
+C languages (Table~\ref{tab:software}, and discussed in
+Appendix~\ref{sec:appendix-parsers}).
 
 \subsection*{The scope of Demes}
-
-\ggcomment{TODO: deduplicate this section and Appendix~\ref{sec:appendix-scope}}
 
 The Demes specification is static by design---we wish to unambiguously
 describe a demographic model with a concrete set of parameters.
@@ -324,25 +320,19 @@ or estimated confidence intervals for those parameters.
 While it is not difficult to imagine extending the specification in ways that
 would allow this (Appendix~\ref{sec:appendix-scope}), it is not immediately
 clear that the benefits are worth the increased parser complexity.
-
-\aprcomment{I think this belongs here, just one or two sentences:}
-
-\krtcomment{Here, we should say something about other models that people may wish to implement within the demes
-framework.}
-
-\krtcomment{
-    I think we want a section in the Discussion outlining some obvious things
-    that people can do w/demes that are sitting "just outside" the strict
-    specification: hard selection, etc..
-}
+It is important to note, however, that Demes may be used in applications that
+include additional population genetic processes outside of what is explicitly
+modelled in the specification, such as interpreting population sizes as
+carrying capacities, implementations of \emph{hard} selection, or layering more
+complicated mating or spatial structure. The Demes specification therefore
+provides a basic model that can be elaborated on where necessary.
 
 Demes is also designed to interface with a large number of simulation and
 inference methods, so we have restricted the specification to only
 describe demographic features at the population level.
 The underlying discrete demographic structure is the common thread connecting
 many widely-used population genetic methods, so we have omitted many
-features of the underlying genome biology (as described above, and in
-Appendix~\ref{sec:appendix-scope}).
+features of the underlying genome biology (Appendix~\ref{sec:appendix-scope}).
 
 \section*{Application: simulation using Demes}
 
@@ -539,12 +529,6 @@ the existence interval of the population. Each epoch specifies the population si
 over that interval, which can be a constant value or function defined by start
 and end sizes that must remain positive.
 
-%\krtcomment{The paragraph(s) below subsume(s)/replace(s) some of what appears in later pargraphs.
-%	I'm not making an attempt yet to revise that later content--I think other authors should
-%	weigh in.}
-
-%\krtcomment{Aaron -- I have perhaps over-simplified the description of marginal allele frequency dynamics?}
-
 \subsection{Population dynamics}
 
 Within a population, we assume that allele frequency dynamics can
@@ -572,27 +556,6 @@ Many forwards and backwards time simulators currently implement this model
 \citep[e.g.,][]{hudson2002generating,gutenkunst2009inferring,excoffier2011fastsimcoal,kelleher2016efficient,jouganous2017inferring,haller2019slim,thornton2019-nu}.
 Each has their own unique method of specifying the details of selection and demography.
 The goal of \Demes\ is to provide a common method for the latter task.  
-
-% \krtcomment{
-%     We need to revisit the paragraph(s) below.
-%     We do not assume individuals are exchangeable, because we do not
-% 	require that all individuals have the same fitness.
-%     See, e.g., p 60 of Wakeley for why fitness == exchangeability
-% 	and why that is required for the standard coalescent.
-% }
-% \mhcomment{The `exchangeability' assumption also breaks down under 
-% 	different reproductive modes, since the sampling of the alleles
-%     affects coalescent times. 
-% 	For example, in a highly selfing species the coalescent time for two different alleles 
-% 	within an individual is much lower than two alleles from different individuals.
-%     I've triedto rewrite the below paragraph to update and clarify
-%     the reproduction parameters in line with the discussions on Github.
-%     Finally, 'rates' imply events occur as Poisson-like 
-% 	processes over continuous time, whereas the values used here instead define the 
-% 	\emph{fraction} of reproductions of each type.
-%     Shall we rename to selfing/clonal `fractions',
-% 	or would that mess up the rest of the schema too much?
-% }
 
 \subsection{Selfing and cloning}
 
@@ -625,10 +588,11 @@ properties of populations can be specified independently from the genetics.
 In other words, mutations that cause selfing probabilities to fluctuate within
 an epoch are not considered.
 More details of the mathematical properties of selfing and cloning rates
-in a coalescent context can be found in \citet{hartfield2016facsexcoal}.
+in a coalescent context can be found in
+\citet{nordborg1997coalescent,hartfield2016facsexcoal}.
 
-\mhcomment{If requested
-I can quickly draw up a schematic diagram to illustrate these partitions.}
+%\mhcomment{If requested
+%I can quickly draw up a schematic diagram to illustrate these partitions.}
 
 \subsection{Relationships between populations}
 
@@ -748,39 +712,14 @@ providing a solid foundation for the software ecosystem.
 \subsection{Static models, not parameterised models}
 \label{sec:appendix-static}
 
-% https://github.com/popsim-consortium/demes-paper/issues/3
-
-The Demes specification is static by design--we wish to
-unambiguously describe a demographic model defined by a concrete set
-of parameters. This simplicity means that we cannot directly
-specify parameter distributions or estimated confidence intervals
-for those parameters. While it is not difficult to imagine extending
-the specification in ways that would allow this, this would greatly
-increase parser complexity and require limiting choices to be made.
-Instead, we have opted to restrict Demes to static model descriptions,
-although allowing parameterized distributions or parameter ranges 
-is an direction of possible future work.
-
-%\krtcomment{
-%    Aaron has done a bit of this non-static stuff in moments.
-%    It may be useful to look over there?
-%}
-
-%\ggcomment{
-%Possible reasons to advocate for non-static features are as follows.
-%\begin{enumerate}
-%\item Specifying prior distributions of parameters for an ABC.
-%\item Specifying upper and lower bounds of parameters and inter-parameter
-%      constraints for input to an optimisation-based inference.
-%\item Specifying joint distribution, or confidence intervals, for the output of
-%      an inference procedure.
-%\item Simulating from some arbitrary joint distribution that was inferred
-%      previously. E.g. using an ABC posterior distribution of models to
-%      train a neural network.
-%\item Extending someone else's static model to reinfer parameters,
-%      or add new parameters.
-%\end{enumerate}
-%}
+The Demes specification is designed to describe demographic
+models defined by a fixed set of model parameters.
+As described in the main text, it does not include
+information about estimated confidence intervals or the joint distribution
+of parameter values.
+While we have opted to restrict Demes to static model descriptions,
+allowing parameterized distributions or parameter ranges 
+is a direction of possible future work.
 
 The parameters of
 demographic models are typically tightly coupled, and cases in which
@@ -881,6 +820,7 @@ following semantic versioning guidelines.
         form. (C) A visual representation of the model using \texttt{demesdraw}.
         The YAML descriptions in (A) and (B) correspond exactly to a JSON description,
         but are much more human-readable.
+        \aprcomment{Need figure panel labels.}
     }
 \end{figure}
 
@@ -889,7 +829,13 @@ following semantic versioning guidelines.
         \inputminted[fontsize=\scriptsize,linenos,numbersep=5pt]{yaml}{models/tennessen.yaml}
     \end{tcolorbox}
     \caption{
-        \textbf{The \citet{tennessen2012evolution} two-population demographic model in Demes format.}
+        \textbf{The \citet{tennessen2012evolution} two-population
+        demographic model in Demes format.}
+        This model includes a single ancestral population that expands in
+        size in the past, followed by divergence between AFR- and EUR-labeled
+        populations. The two-population phase of the model includes multiple
+        epochs of varying size, and rapid exponential growth over the past
+        five thousand years in each population.
     }
     \label{fig:tennessen}
 \end{figure}
