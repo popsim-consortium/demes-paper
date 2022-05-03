@@ -29,6 +29,7 @@ def plot_model(ax, graph):
         num_lines_per_migration=2,
         log_time=True,
         positions={"ancestral": 0, "AFR": -300000, "EUR": 300000},
+        seed=11111,
     )
     ax.set_ylim(top=1e6)
 
