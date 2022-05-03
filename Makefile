@@ -26,6 +26,9 @@ paper.dvi: $(DEPS)
 fig/IM.pdf: drawfig.py models/IM.yaml
 	python3 drawfig.py
 
+fig/showcase.pdf: fig/showcase.py fig/minted-snippet.tex
+	cd fig && $(MAKE) showcase.pdf
+
 resolve: models/IM.yaml
 	#python -c \
 	#	"import sys, demes; print(demes.dumps(demes.load(sys.argv[1]), simplified=False))" \
@@ -44,6 +47,9 @@ clean:
 	rm -f *.blg *.bbl
 	rm -f *.eps *.[1-9]
 	rm -f src/*.mpx *.mpx
+	rm -fr _minted-paper
+	cd fig && $(MAKE) clean
 
 mrproper:
 	rm -f *.ps *.pdf
+	cd fig && $(MAKE) mrproper
