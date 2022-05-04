@@ -99,11 +99,6 @@ simplicity and clarity.
 We provide thoroughly tested implementations of Demes parsers in Python
 and C, and showcase initial support in a number of simulators and inference
 methods.
-
-\ggcomment{We don't showcase Demes output from any inference software.}
-\aprcomment{You could say that ``showcase'' also refers to the table that
-includes demes support in inference software, not just the illustration
-in the main text.}
 \end{abstract}
 
 \section*{Introduction}
@@ -135,14 +130,14 @@ a list of key parameters in tabular form and a discussion within the text.
 Unfortunately these descriptions are often ambiguous, and
 implementing the precise model inferred for later simulation
 is at best tedious and error prone~\citep{ragsdale2020lessons}
-and occasionally impossible because of missing information. 
+and occasionally impossible because of missing information.
 % \mhcomment{Maybe add a short, concrete example to convince readers of the problem?}
 % APR: I think this is ok here.
 Instead, it would be far better if published results were reported
 in an unambiguous standardised format that could be provided
 directly as input to simulators.
 
-Simulation is a core tool in population genetics, and a
+Simulation is a core tool in population genetics, and
 many methods have been developed over the past three
 decades~\citep{carvajal2008simulation,liu2008survey,
 arenas2012simulation,yuan2012overview,hoban2012computer}.
@@ -165,7 +160,7 @@ is used by a number of different
 simulators~\citep[e.g.,][]{ewing2010msms,chen2009fast,staab2015scrm},
 and the POPDemog visualisation software~\citep{zhou2018popdemog}.
 However, this conciseness means that models of even intermediate complexity
-are difficult for humans to understand, making errors highly likely.
+are difficult for humans to understand, making errors likely.
 Input parameter file formats for simulators allow the model specification
 to be less terse and allow for documentation in the form of comments.
 However, there is no standard format shared across simulators,
@@ -235,7 +230,7 @@ additional examples are given in the Appendix.
         \textbf{Software support for Demes.}
         We have included software infrastructure developed
         for working with Demes models (such as parsing, validation,
-        and visualisation) as well as downstream 
+        and visualisation) as well as downstream
         software that implement the specification,
         at the time of writing.
     }
@@ -246,7 +241,7 @@ additional examples are given in the Appendix.
 Demographic models consist of one or more populations (or ``demes'') defined
 by their size histories and the time intervals of their existence.
 Individuals can move between populations based on their ancestor-descendant
-relationships (i.e., the topology) or by continuous or discrete migration events.
+relationships  or by continuous or discrete migration events.
 The demographic model itself omits information about genome biology, such as
 genome size and architecture, ploidy, and mutation and recombination rates.
 It also omits any information about selection operating within populations.
@@ -279,7 +274,7 @@ understanding and avoiding errors.
 We have adopted the widely used YAML format~\citep{ben2009yaml} as the
 primary interface for writing and interchanging demographic models
 (see Appendix~\ref{sec:appendix-spec} for details about our choice of
-YAML formatting for demographic models).
+YAML).
 Demographic models written in YAML format provide information about global
 features of the model (such as time units and generation times),
 populations (as ``demes'') and their existence intervals (as ``epochs''),
@@ -294,7 +289,7 @@ specifying default values that are inherited hierarchically.
 
 While the high-level specification is designed for human readability and
 conciseness, the underlying data model suitable for software implementation
-is redundant and exhaustive. 
+is redundant and exhaustive.
 Translation from the high-level specification to the low-level data model
 requires resolving hierarchically-defined default values and verifying
 relationships between populations and the validity of specified parameter
@@ -304,8 +299,8 @@ programming effort, we define a standard software entity as part of the
 specification to perform this task (the parser),
 which is intended to be shared by programs that support Demes as an input.
 By maintaining high-quality Demes parsers available as libraries,
-we ensure consistency across simulation
-software in their implementation of Demes-specified models.
+we ensure consistency across simulation and inference
+software.
 In addition to a reference implementation written in Python,
 we provide high-quality parser implementations in the Python and
 C languages (Table~\ref{tab:software}, and discussed in
@@ -323,16 +318,9 @@ clear that the benefits are worth the increased parser complexity.
 It is important to note, however, that Demes may be used in applications that
 include additional population genetic processes outside of what is explicitly
 modelled in the specification, such as interpreting population sizes as
-carrying capacities, implementations of \emph{hard} selection, or layering more
+carrying capacities, implementations of hard selection, or layering more
 complicated mating or spatial structure. The Demes specification therefore
 provides a basic model that can be elaborated on where necessary.
-
-Demes is also designed to interface with a large number of simulation and
-inference methods, so we have restricted the specification to only
-describe demographic features at the population level.
-The underlying discrete demographic structure is the common thread connecting
-many widely-used population genetic methods, so we have omitted many
-features of the underlying genome biology (Appendix~\ref{sec:appendix-scope}).
 
 \section*{Application: simulation using Demes}
 
@@ -360,7 +348,7 @@ features of the underlying genome biology (Appendix~\ref{sec:appendix-scope}).
     \label{fig:showcase}
 \end{figure}
 
-Here, we highlight the interface between Demes and other software, including
+Here, we highlight the interaction between Demes and other software, including
 simulation and model illustration tools. Demes allows us to specify a
 demographic model which can be used as the input for a growing
 number of simulation packages (Table~\ref{tab:software}). We implemented the
@@ -478,7 +466,7 @@ we will not recapitulate the details
 here, but instead focus on the high level properties of the model and
 the rationale behind key design decisions.
 
-Below we detail the population genetics model in 
+Below we detail the population genetics model in
 Appendix~\ref{sec:appendix-pop-gen-model},
 the high-level, human-readable model specification in
 Appendix~\ref{sec:appendix-spec}, demographic model parsers and their
@@ -555,7 +543,7 @@ population sizes as carrying capacities.
 Many forwards and backwards time simulators currently implement this model
 \citep[e.g.,][]{hudson2002generating,gutenkunst2009inferring,excoffier2011fastsimcoal,kelleher2016efficient,jouganous2017inferring,haller2019slim,thornton2019-nu}.
 Each has their own unique method of specifying the details of selection and demography.
-The goal of \Demes\ is to provide a common method for the latter task.  
+The goal of \Demes\ is to provide a common method for the latter task.
 
 \subsection{Selfing and cloning}
 
@@ -581,7 +569,7 @@ this effect is negligible in large populations \citep{nordborg1997coalescent}
 Simulation software that allow variable rates of selfing are expected to clearly
 document the expected behaviour.
 
-By allowing the definition of selfing and cloning probabilities, we allow many 
+By allowing the definition of selfing and cloning probabilities, we allow many
 standard models to be defined.
 However, by parameterising selfing and cloning as we have, we assume that these
 properties of populations can be specified independently from the genetics.
@@ -718,7 +706,7 @@ As described in the main text, it does not include
 information about estimated confidence intervals or the joint distribution
 of parameter values.
 While we have opted to restrict Demes to static model descriptions,
-allowing parameterized distributions or parameter ranges 
+allowing parameterized distributions or parameter ranges
 is a direction of possible future work.
 
 The parameters of
