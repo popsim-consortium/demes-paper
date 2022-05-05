@@ -116,26 +116,22 @@ have enabled the increasing complexity of genomic studies, with several software
 packages capable handling large sample sizes, many interacting populations, and
 deviations from panmictic random-mating assumptions.
 This ability to infer and simulate such complex demographic scenarios, however,
-has highlighted a major shortcoming in community standards.
-The fragmented landscape of different approaches to describing demographic
+has highlighted a major shortcoming in community standards:
+the fragmented landscape of different ways to describe demographic
 models makes it difficult to compare inferences made by different methods
 and to reliably simulate from previously inferred models.
-
-Inference methods for demography usually output a set of
-text files which describe the inferred model,
-and nearly all methods use different file formats.
 Inference results are typically reported in publications
 via a combination of visual depiction,
 a list of key parameters in tabular form and a discussion within the text.
 Unfortunately these descriptions are often ambiguous, and
 implementing the precise model inferred for later simulation
-is at best tedious and error prone~\citep{ragsdale2020lessons}
+is at best tedious and error prone~\citep{adrion2020community,ragsdale2020lessons},
 and occasionally impossible because of missing information.
 % \mhcomment{Maybe add a short, concrete example to convince readers of the problem?}
 % APR: I think this is ok here.
-Instead, it would be far better if published results were reported
-in an unambiguous standardised format that could be provided
-directly as input to simulators.
+% Instead, it would be far better if published results were reported
+% in an unambiguous standardised format that could be provided
+% directly as input to simulators.
 
 Simulation is a core tool in population genetics, and
 many methods have been developed over the past three
@@ -157,19 +153,20 @@ becheler2019quetzal,haller2019slim,thornton2019-nu,baumdicker2021-iu}.
 Command line interfaces are a concise way of expressing
 demographic models, and the syntax defined by \ms~\citep{hudson2002generating}
 is used by a number of different
-simulators~\citep[e.g.,][]{ewing2010msms,chen2009fast,staab2015scrm},
-and the POPDemog visualisation software~\citep{zhou2018popdemog}.
+simulators~\citep[e.g.,][]{ewing2010msms,chen2009fast,staab2015scrm}.
 However, this conciseness means that models of even intermediate complexity
 are difficult for humans to understand, making errors likely.
 Input parameter file formats for simulators allow the model specification
 to be less terse and allow for documentation in the form of comments.
-However, there is no standard format shared across simulators,
-and the details of the demographic models are not separated
-from other simulation parameters.
-The APIs used by individual simulators to define demographic models are also
-not appropriate as an interchange standard because of the dependency on both
-the programming language involved
-and the specific details of the simulator in question.
+Several Graphical User Interface (GUI) and visualisation
+methods have been developed, which greatly facilitate
+interpretation~\citep{mailund2005coasim,antao2007modeler4simcoal2,
+parreira_spams_2009,ewing2010msms,parobek_skelesim_2017,zhou2018popdemog}.
+However, these methods
+currently have little traction as they are all either directly coupled
+to an internal simulation method or to the  syntax of a specific simulator.
+There is currently no way in which demographic models inferred by
+different packages can be can be simulated or visualised by downstream software.
 
 Here we present ``Demes'', a data model and file format specification for
 complex demographic models developed by the
@@ -381,32 +378,6 @@ demographic model was used as input, avoiding the need to specify the complex
 demographic model multiple times using the unique API of each software.
 
 \section*{Discussion}
-
-The difficulty of describing complex demographic models
-for population genetic simulations has long been acknowledged
-~\citep[e.g.,][]{antao2007modeler4simcoal2}, % jk - any older refs for this?
-and a number of different methods have been proposed to
-make such simulations more accessible and less error prone.
-Several Graphical User Interface (GUI) and visualisation
-methods have been developed, which greatly facilitate
-interpretation~\citep{mailund2005coasim,antao2007modeler4simcoal2,
-parreira_spams_2009,ewing2010msms,parobek_skelesim_2017,zhou2018popdemog}.
-However, these methods
-currently have little traction as they are all either directly coupled
-to an internal simulation method or to the specific syntax
-of a given simulator. Another approach that has been taken to
-simplify running such simulations is to provide an API in a
-scripting language such as Python or R, providing a flexible
-interface either to a built-in simulation
-engine~\citep{thornton2014cpp,hernandez_sfs_code_2015,kelleher2016efficient,
-haller2017flexible,thornton2019-nu,baumdicker2021-iu}
-% jk: are/were there other simulation frontends out there?
-or as a front end for other simulators~\citep{staab2016coala}.
-While APIs have many advantages and have grown in popularity in
-recent years, the demographic model descriptions are tied
-to the details of both the underlying simulation engines
-and the programming language in question.
-
 Stable and healthy software ecosystems require standard interchange
 formats, allowing for the development of high-quality and long-lasting
 tools that produce and consume the standard.
