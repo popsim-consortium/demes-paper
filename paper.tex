@@ -202,17 +202,21 @@ However, for the simplicity of software working with the Demes model
 (and the avoidance of programming error, or divergence in
 interpretations of the specification) it is preferable to have an explicit
 representation, in which all relevant values are readily available.
-Thus, Demes is composed of three entities: the high-level, human-readable
-model specification; the low-level, fully-qualified model
-specification; and the parser, which is responsible for transforming the former
+Thus, Demes is composed of three entities:
+the Human Data Model (HDM) designed for human readability;
+the Machine Data Model (MDM) designed for programmatic input and processing;
+and the parser, which is responsible for transforming the former
 into the latter.
 
 Below we provide a brief overview of the population genetics models
 that Demes supports and the components of the Demes infrastructure.
 We then highlight an example usage, including visualization and simulation
 of a multi-population demographic model.
-Detailed descriptions of the population genetics model, parsers, scope, and
+More detailed descriptions of the population genetics model, parsers, scope, and
 additional examples are given in the Appendix.
+Complete technical details of the MDM and HDM, and the responsibilities
+of the parser are provided in the online Demes specification
+(\url{https://popsim-consortium.github.io/demes-spec-docs/}).
 
 \CatchFileDef{\softwaretable}{software-table.tex}{}
 \renewcommand{\arraystretch}{1.5}
@@ -252,9 +256,8 @@ interest, such as continuous spatial structure
 ringbauer2017inferring,battey2020space}
 or stochastic population size dynamics
 \citep{nunney1993assessing,orr2014population},
-many current forwards- and backwards-in-time simulation software
-make these same assumptions, so that Demes is relevant to a range of
-widely-used simulators.
+many current forwards- and backwards-in-time simulators
+make these same assumptions.
 The basic assumptions of discrete populations connected by instantaneous or continuous
 migrations are also shared by many inference methods
 \citep[e.g.,][]{gutenkunst2009inferring,gravel2012population,kamm2017efficient,
@@ -264,9 +267,9 @@ software, capturing common assumptions shared across implemented software.
 In Appendix~\ref{sec:appendix-pop-gen-model}, we expand on these concepts
 and provide more details on the population genetics models supported by Demes.
 
-\subsection*{High-level specification}
+\subsection*{Human Data Model}
 
-The high-level description of Demes models is focused on efficient human
+The Demes Human Data Model (HDM) is focused on efficient human
 understanding and avoiding errors.
 We have adopted the widely used YAML format~\citep{ben2009yaml} as the
 primary interface for writing and interchanging demographic models
@@ -278,16 +281,17 @@ populations (as ``demes'') and their existence intervals (as ``epochs''),
 and gene flow between populations
 (as continuous ``migrations'' or instantaneous ``pulse'' events)
 (e.g., Figures~\ref{fig:showcase}~and~\ref{fig:IM}).
-The high-level Demes specification encourages human understanding by avoiding
+The HDM encourages human understanding by avoiding
 redundancy in the description where possible and by providing a mechanism for
 specifying default values that are inherited hierarchically.
 
 \subsection*{Parsers}
 
-While the high-level specification is designed for human readability and
+While the HDM is designed for human readability and
 conciseness, the underlying data model suitable for software implementation
+(the Machine Data Model, or MDM)
 is redundant and exhaustive.
-Translation from the high-level specification to the low-level data model
+Translation from the HDM to the MDM
 requires resolving hierarchically-defined default values and verifying
 relationships between populations and the validity of specified parameter
 values.
@@ -300,7 +304,7 @@ we ensure consistency across simulation and inference
 software.
 In addition to a reference implementation written in Python,
 we provide high-quality parser implementations in the Python and
-C languages (Table~\ref{tab:software}, and discussed in
+C languages (Table~\ref{tab:software}, as discussed in
 Appendix~\ref{sec:appendix-parsers}).
 
 \subsection*{The scope of Demes}
@@ -358,9 +362,9 @@ migration between the two branches (illustrated using \demesdraw\ in
 Figure~\ref{fig:showcase}A). The large final sizes (\(\approx 500,000\)
 individuals each) are one to three orders of magnitude larger than ancestral
 population sizes, reflecting the recent explosive population size increase in
-human populations.
+humans.
 
-We used this model to simulate 20 haploid genome copies from each EUR and AFR
+We used this model to simulate 20 haploid genome copies from EUR and AFR
 at time zero (i.e., present day) to obtain the joint site-frequency spectrum
 (SFS), a summary of observed allele frequencies widely used in evolutionary
 inference
@@ -373,9 +377,12 @@ simulate a large recombining region under the mutation rate assumed in
 \citep{ralph2020efficiently}. Using the same Demes model as input to \moments\
 \citep{jouganous2017inferring}, we computed the expectation of the joint SFS
 and compared to the \msprime\ simulated data (Figure~\ref{fig:showcase}B,C).
-To reiterate, for both \msprime\ and \moments\ simulations, the same
-demographic model was used as input, avoiding the need to specify the complex
-demographic model multiple times using the unique API of each software.
+Figure~\ref{fig:showcase}D shows the code required to run the
+simulations in \msprime\ and \moments, and demonstrates that
+precisely the same input model, without modification, was provided to both packages.
+Such interoperability is a major gain for researchers, which we
+hope will become the expected norm as more packages adopt the Demes
+format.
 
 \section*{Discussion}
 Stable and healthy software ecosystems require standard interchange
@@ -404,8 +411,7 @@ precision in the published model descriptions means that it is difficult
 to replicate analyses, or reproduce those models for later simulation.
 Thus, we hope that the Demes standard introduced here will be widely adopted
 by simulation and inference methods and be used for reporting results in
-publications, either as supplemental material or uploaded to a data
-repository in Demes format.
+publications, either as supplemental material or uploaded to a data repository.
 
 \bibliographystyle{genetics}
 \bibliography{paper}
