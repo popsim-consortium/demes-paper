@@ -23,22 +23,23 @@
 % does, and how it implements demes.
 
 \dadi &
-       Simulate SFS from Demes models, infer demographic history and distributions of fitness effects~\citep{gutenkunst2009inferring}.
+   Optimizes parameters in models of demographic history and distributions of fitness effects using SFS~\citep{gutenkunst2009inferring}. Can simulate SFS from Demes models.
     \\
-
+    
+\demesslim &
+    Loads Demes models into the \slim\ forward simulator \citep{haller2019slim}.\\
+    
 \fwdpy &
-    Forward-time Wright-Fisher simulation \citep{thornton2014cpp,thornton2019-nu}.\\
+   Simulates the Wright-Fisher model forward in time \citep{thornton2014cpp,thornton2019-nu}. Demes is the preferred format for specifying a demographic model.\\
 
 \gadma &
-    Demographic inference \citep{noskova2020gadma}.\\
+    Infers models of demographic history \citep{noskova2020gadma}. Outputs Demes models and visualizations. \\
 
 \moments &
-    Compute expected diversity statistics (SFS, LD) and perform
-    demographic inference using summary statistics
-    \citep{jouganous2017inferring,ragsdale2019models}.\\
+    Optimizes parameters in models of demographic history using SFS and linkage disequilibrium statistics
+    \citep{jouganous2017inferring,ragsdale2019models}. Models to be optimized can be specified in Demes.\\
 
 \msprime &
-    Coalescent simulation of Demes models, including command line
-    interface~\citep{kelleher2016efficient,kelleher2020coalescent,baumdicker2021-iu}.\\
+    Simulates population genetic models using tree sequences~\citep{kelleher2016efficient,kelleher2020coalescent,baumdicker2021-iu}. Demographic history models can be specified using Demes.\\
 
 \bottomrule   
