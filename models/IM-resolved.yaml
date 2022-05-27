@@ -1,9 +1,13 @@
-description: "Two-deme isolation-with-migration model."
+description: Two-deme isolation-with-migration model.
 time_units: generations
+generation_time: 1
+doi: []
 demes:
 - name: A
-  description: "The ancestral deme"
+  description: The ancestral deme
   start_time: .inf
+  ancestors: []
+  proportions: []
   epochs:
   - end_time: 100
     start_size: 1000
@@ -12,7 +16,7 @@ demes:
     selfing_rate: 0
     cloning_rate: 0
 - name: X
-  description: "First descendant deme."
+  description: First descendant deme.
   start_time: 100
   ancestors: [A]
   proportions: [1]
@@ -24,7 +28,7 @@ demes:
     selfing_rate: 0
     cloning_rate: 0
 - name: Y
-  description: "Second descendant deme."
+  description: Second descendant deme.
   start_time: 100
   ancestors: [A]
   proportions: [1]
@@ -42,13 +46,8 @@ demes:
     selfing_rate: 0
     cloning_rate: 0
 migrations:
-- source: X
-  dest: Y
-  start_time: 100
-  end_time: 0
-  rate: 0.0001
-- source: Y
-  dest: X
-  start_time: 100
-  end_time: 0
-  rate: 0.0001
+- {source: X, dest: Y, start_time: 100, end_time: 0,
+  rate: 0.0001}
+- {source: Y, dest: X, start_time: 100, end_time: 0,
+  rate: 0.0001}
+pulses: []
