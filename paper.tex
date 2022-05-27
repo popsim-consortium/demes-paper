@@ -89,7 +89,7 @@ dozens of parameters to fully describe. There is currently
 no standard format to define such models, significantly
 hampering  progress in the field. In particular, the important
 task of translating the model descriptions in published
-work into input suitable for population genetic simulators is labour intensive
+work into input suitable for population genetic simulators is labor intensive
 and error prone.
 We propose the Demes data model and file format,
 built on widely used technologies,
@@ -138,7 +138,7 @@ Simulation is a core tool in population genetics, and
 many methods have been developed over the past three
 decades~\citep{carvajal2008simulation,liu2008survey,
 arenas2012simulation,yuan2012overview,hoban2012computer}.
-Simulations are based on highly idealised population models,
+Simulations are based on highly idealized population models,
 and one of the key uses of inferred demographic histories
 is to make simulations more realistic.
 Simulation methods take three broad approaches to specifying
@@ -159,7 +159,7 @@ However, this conciseness means that models of even intermediate complexity
 are difficult for humans to understand, making errors likely.
 Input parameter file formats for simulators allow the model specification
 to be less terse and allow for documentation in the form of comments.
-Several Graphical User Interface (GUI) and visualisation
+Several Graphical User Interface (GUI) and visualization
 methods have been developed, which greatly facilitate
 interpretation~\citep{mailund2005coasim,antao2007modeler4simcoal2,
 parreira_spams_2009,ewing2010msms,parobek_skelesim_2017,zhou2018popdemog}.
@@ -167,7 +167,7 @@ However, these methods
 currently have little traction as they are all either directly coupled
 to an internal simulation method or to the  syntax of a specific simulator.
 There is currently no way in which demographic models inferred by
-different packages can be simulated or visualised by downstream software.
+different packages can be simulated or visualized by downstream software.
 
 Here we present ``Demes'', a data model and file format specification for
 complex demographic models developed by the
@@ -178,13 +178,13 @@ information relevant to demography while avoiding repetition.
 This data model is implemented in the widely used YAML
 format~\citep{ben2009yaml}, which provides a good balance between human
 and machine readability.
-The specification precisely defines the required behaviour of implementations,
+The specification precisely defines the required behavior of implementations,
 ensuring that there is no ambiguity of interpretation, and includes both a
 reference implementation and an extensive suite of test examples and their
 expected output.
 The initial software ecosystem includes high-quality Python
 and C parser implementations, as well as utilities for verification and
-visualisation of Demes models, and has been implemented in several popular
+visualization of Demes models, and has been implemented in several popular
 inference and simulation methods (Table~\ref{tab:software}).
 We hope that this data model and file format will be widely adopted
 by the community, such that users can expect to simulate directly
@@ -232,7 +232,7 @@ of the parser are provided in the online Demes specification
         \textbf{Software support for Demes.}
         We have included software infrastructure developed
         for working with Demes models (such as parsing, validation,
-        and visualisation) as well as downstream
+        and visualization) as well as downstream
         software that implement the specification,
         at the time of writing.
     }
@@ -319,7 +319,7 @@ would allow this (Appendix~\ref{sec:appendix-scope}), it is not immediately
 clear that the benefits are worth the increased parser complexity.
 It is important to note, however, that Demes may be used in applications that
 include additional population genetic processes outside of what is explicitly
-modelled in the specification, such as interpreting population sizes as
+modeled in the specification, such as interpreting population sizes as
 carrying capacities, implementations of hard selection, or layering more
 complicated mating or spatial structure. The Demes specification therefore
 provides a basic model that can be elaborated on where necessary.
@@ -391,8 +391,8 @@ formats, allowing for the development of high-quality and long-lasting
 tools that produce and consume the standard.
 Demographic models are a key part of population genetics research,
 and to date the transfer of inferred models to downstream simulations
-has been ad-hoc, and conversions between the many different ways
-of expressing such models is both labour intensive and fraught with errors.
+has been \textit{ad-hoc}, and conversions between the many different ways
+of expressing such models is both labor intensive and fraught with errors.
 The proposed Demes standard is an attempt to bridge this gap
 between inference and simulation, and also to provide the foundations
 for a sustainable ecosystem of tools built around this data model.
@@ -406,7 +406,7 @@ proposed to increase the likelihood of researchers being
 able to replicate results in the
 literature~\citep{munafo2017manifesto}. The most basic requirement
 for reproducibility is that we must be able to state precisely what
-the result in question is. The lack of standardisation in how
+the result in question is. The lack of standardization in how
 complex demographic models are communicated today, and the lack of
 precision in the published model descriptions means that it is difficult
 to replicate analyses, or reproduce those models for later simulation.
@@ -439,7 +439,7 @@ online specification document
 (\url{https://popsim-consortium.github.io/demes-spec-docs/}).
 This specification rigorously defines the data model,
 fully describing the entities and their
-relationships, and the required behaviour of implementations.
+relationships, and the required behavior of implementations.
 Since the online specification is definitive,
 we will not recapitulate the details
 here, but instead focus on the high level properties of the model and
@@ -449,7 +449,7 @@ Below we detail the population genetics model in
 Appendix~\ref{sec:appendix-pop-gen-model},
 the high-level, human-readable model specification in
 Appendix~\ref{sec:appendix-spec}, demographic model parsers and their
-intended behaviour in Appendix~\ref{sec:appendix-parsers}, and the
+intended behavior in Appendix~\ref{sec:appendix-parsers}, and the
 intended scope of Demes in Appendix~\ref{sec:appendix-scope}.
 The extended figures in Appendix~\ref{sec:appendix-figures} provide
 additional examples and illustrations of Demes usage.
@@ -459,7 +459,7 @@ additional examples and illustrations of Demes usage.
 
 In Demes, demographic models consist of one or more interacting populations,
 or ``demes'', understood to be a collection of individuals that can be
-conveniently modelled using a defined set of rules and parameters
+conveniently modeled using a defined set of rules and parameters
 \citep{gilmour_demes_1939,gilmour_deme_1955}.
 To avoid confusion with the name of the specification itself we will
 use the term ``population'' in this discussion, with the understanding that the
@@ -528,7 +528,7 @@ The goal of Demes is to provide a common method for the latter task.
 
 Each population has an assigned selfing rate and cloning rate, where each defines
 the probability that offspring are generated from one generation to the next by either
-self-fertilisation or cloning of an individual.
+self-fertilization or cloning of an individual.
 More specifically, for a given epoch within a population denote the clonal rate by
 $\sigma$ and the selfing rate by $S$.
 $S$ and $\sigma$ can take any value between zero and one and
@@ -537,7 +537,7 @@ Each generation a proportion of offspring
 $\sigma$ are expected to be generated through clonal reproduction,
 while $1-\sigma$ are expected to arise through sexual reproduction.
 Within the sexually-reproduced offspring,
-$S$ are born via self-fertilisation while the rest
+$S$ are born via self-fertilization while the rest
 have parents drawn at random from the previous generation.
 Depending on the simulator, this random drawing of parent may occur
 either with or without replacement. When drawing occurs with replacement, a small
@@ -546,7 +546,7 @@ is $(1-\sigma)(S + (1-S)/N)$ instead of $(1-\sigma)S$ (so that even with $\sigma
 and $S=0$, selfing may still occur with probability $1/N$), although
 this effect is negligible in large populations \citep{nordborg1997coalescent}.
 Simulators that allow variable rates of selfing are expected to clearly
-document the expected behaviour.
+document the expected behavior.
 
 By allowing the definition of selfing and cloning probabilities, we allow many
 standard models to be defined.
@@ -591,8 +591,8 @@ The Demes Human Data Model (HDM) is focused on the efficiency of
 human understanding and the avoidance of errors. We have adopted the widely
 used YAML format~\citep{ben2009yaml} as the recommended means of interchanging
 Demes models (e.g., Figures~\ref{fig:IM}~and~\ref{fig:tennessen}). YAML is a data
-serialisation language with an emphasis on simplicity and which interoperates well
-with JSON (indeed, YAML 1.2 is a superset of JSON). We chose YAML over JSON
+serialization language with an emphasis on simplicity and which interoperates well
+with JSON (indeed, YAML 1.2 is a super set of JSON). We chose YAML over JSON
 because although JSON is an excellent format for data interchange, it is
 ill-suited for human understanding or manipulation. We also considered other
 declarative data exchange formats such as TOML,
@@ -640,7 +640,7 @@ support Demes as an input. By having relatively few high-quality Demes
 parsers available as libraries (ideally, one per programming language),
 the probability of divergences from the standard is greatly reduced.
 
-The Demes specification precisely defines the required behaviour of parsers,
+The Demes specification precisely defines the required behavior of parsers,
 which translate a model described in the HDM into the MDM, where values have been
 assigned to all parameters and data
 constraints have been checked. The output is formally defined as JSON, but in
@@ -650,7 +650,7 @@ We provide a reference implementation written in Python to resolve any
 potential ambiguities and to provide a helpful template for other
 implementations, as well as an extensive test suite of examples and the
 expected outputs. In addition, we have high-quality parser implementations in
-the Python and C languages (published under liberal open source licences),
+the Python and C languages (published under liberal open source licenses),
 providing a solid foundation for the software ecosystem.
 
 \section{Scope of the specification}
@@ -692,7 +692,7 @@ Other inference procedures based on optimising a loss function
 %(\ggcomment{more refs? MCMC? neural networks?})
 need users to specify parameter bounds,
 and possibly non-linear or conditional constraints between parameters.
-Indeed, the choice of how to parameterise a model could be important for
+Indeed, the choice of how to parameterize a model could be important for
 some inference methods (e.g. absolute times versus relative times between events).
 
 Implementing the many distributions of interest and supporting a general
