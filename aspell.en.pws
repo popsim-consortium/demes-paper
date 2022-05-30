@@ -1,12 +1,14 @@
-personal_ws-1.1 en 39 
+personal_ws-1.1 en 46
 APIs
 GADMA
 GG
+HDM
 JK
 JSON
 LD
 LZMA
 MCMC
+MDM
 MiB
 POPDemog
 PopSim
@@ -14,6 +16,7 @@ Reproducibility
 SFS
 SLiM
 TOML
+Tennessen
 YAML
 catalog
 dadi
@@ -26,7 +29,10 @@ fwdpy
 genomic
 gzipped
 msprime
+multinomial
+panmictic
 panmixia
+parameterizing
 parsers
 piecewise
 ploidy
@@ -38,3 +44,4 @@ selfing
 stdpopsim
 superset
 templating
+tex
