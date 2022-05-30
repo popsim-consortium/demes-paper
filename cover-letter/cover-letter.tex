@@ -1,73 +1,53 @@
-\documentclass[11pt]{article}
-\usepackage[round]{natbib}
+\documentclass{letter}
 
-\usepackage{fullpage}
-\usepackage{url}
+\signature{Jerome Kelleher}
 
-\usepackage{parskip}
-\setlength{\parindent}{0em}
-\setlength{\parskip}{2ex}
-\pagenumbering{gobble}
-
-\usepackage[hang,flushmargin]{footmisc}
-\usepackage[document]{ragged2e}
-
+\address{Big Data Institute\\University of Oxford\\UK}
 \begin{document}
 
-Editors-in-Chief\hfill\today\\
-\emph{Genetics}
+\begin{letter}{GENETICS}
 
-Dear Editors:
+\opening{Dear Editors,}
 
-We are pleased to submit our manuscript “Demes: a standard format for
-demographic models” for your consideration for publication in \emph{Genetics}
-as a Communications article.
+I am writing on behalf of my coauthors to submit our manuscript entitled
+\emph{Demes: a standard format for demographic models}
+for consideration for publication in GENETICS
+as a ``Methods, Technology, and Resources'' Communications article.
 
-The estimation and simulation of demographic models is central in population
-genetics and genomics studies. Realistic demographic models are crucial for
-downstream inferences of selection and genome biology, while understanding
-species histories is itself a primary goal of the field. The amount of genomic
-data and sophistication of inference and simulation tools now allow for the
-estimation of increasingly complex demographic models, often involving dozens
-of parameters with many interacting components.
-
-However, this growing model complexity has revealed major hurdles to community
+The estimation and simulation of demographic models is central to population
+genetics and genomics studies.
+With ever-growing datasets and recent improvements in simulation efficiency,
+demographic models of interest can now involve dozens of parameters.
+This growing model complexity has revealed major hurdles to community
 goals of replicability, robustness, and communication of
-results, e.g.\footnote{Ragsdale, Aaron P., et al. ``Lessons learned from bugs in
+results\footnote{Ragsdale, Aaron P., et al. ``Lessons learned from bugs in
 models of human history.'' \emph{The American Journal of Human Genetics}
-107.4 (2020): 583-588.}. These shortcomings have two primary causes: (1)
+107.4 (2020): 583-588.}.
+These shortcomings have two primary causes: (1)
 simulation and inference tools each have their own format for describing
 demographic models, so that errors are common when translating input between
-software, and (2) there are no agreed-upon guidelines for reporting demographic
-models, so that published results are typically difficult to reconstruct and
-are often presented with missing information.
+software; and (2) there are no agreed-upon guidelines for reporting demographic
+models, so that published results are difficult to reconstruct and
+often presented with missing information.
 
-Here, we present a solution to each of these issues. Demes defines a precise
+Here we present a solution to these issues. Demes defines a precise
 and user-friendly format for demographic model specification, and we include a
 suite of tools in multiple widely used programming languages for defining,
 manipulating, and validating demographic models. Already, Demes has been
 incorporated into popular simulation and inference tools, with growing support
-among population genetics simulation developers.
-
-From a user’s perspective, Demes-supported tools greatly reduce programming
-burden and the possibility for errors and provide a concise and readable format
-for sharing results. In addition to describing Demes, we showcase the
-simplicity of specifying a multi-population model, which is used to illustrate
-the model, simulate sampled genomes using \emph{msprime}, and compare to
-expected patterns of diversity using \emph{moments}. Crucially, this requires
-only a single specification of the demographic model, avoiding the need to
-implement the model multiple time in different input formats.
+among population genetics tool developers.
 
 We foresee Demes gaining wide use in the field, as it improves replicability of
-published demographic inference results, allows interchange between a growing
-number of simulation software and programming languages, and reduces potential
-for user error and frustration of complex model implementation. Demes provides
+published demographic inference results, allows interchange between
+simulation and inference packages, and reduces potential
+for user error. Demes provides
 a link between multiple popular population genetics simulation and inference
-tools, including many that were published in \emph{Genetics} that maintain a
-healthy community of users and developers. This project and paper should
-therefore be of interest to readers of \emph{Genetics}.
+tools, including many that were published in GENETICS that maintain a
+healthy community of users and contibutors. We believe that this manuscript
+will therefore
+be of substantial interest to readers of GENETICS.
 
-Sincerely,\\
-XXX, on behalf of all authors
+\closing{Sincerely,}
 
+\end{letter}
 \end{document}
