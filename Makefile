@@ -30,13 +30,9 @@ fig/showcase.pdf: fig/showcase.py fig/minted-snippet.tex
 	cd fig && $(MAKE) showcase.pdf
 
 resolve: models/IM.yaml
-	#python -c \
-	#	"import sys, demes; print(demes.dumps(demes.load(sys.argv[1]), simplified=False))" \
-	#	models/IM.yaml > models/IM-resolved.yaml
-	# Use demes-c resolver. Omit the yaml leader/footer with sed.
-	../demes-c/resolve models/IM.yaml \
-		| sed -e '/^---$$/d' -e '/^\.\.\.$$/d' \
-		> models/IM-resolved.yaml
+	#python -m demes parse models/IM.yaml > models/IM-resolved.yaml
+	# Use demes-c resolver.
+	../demes-c/resolve models/IM.yaml > models/IM-resolved.yaml
 
 .PHONY: spellcheck
 spellcheck: aspell.conf

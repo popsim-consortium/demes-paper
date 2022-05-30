@@ -5,6 +5,10 @@
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{amsmath}
+\usepackage[labelformat=simple]{subcaption}
+
+% Use upper case letters for subfigure captions.
+\renewcommand{\thesubfigure}{\Alph{subfigure}}
 
 \usepackage[newfloat]{minted}
 \usepackage{tcolorbox}
@@ -748,27 +752,35 @@ description of the demography.
 
 \begin{figure}[h!]
     \begin{minipage}{0.44\textwidth}
+    \begin{subfigure}{\textwidth}
+    \caption{}
         \begin{tcolorbox}
             \inputminted[fontsize=\scriptsize,linenos,numbersep=5pt]{yaml}{models/IM.yaml}
         \end{tcolorbox}
+    \end{subfigure}
+    \begin{subfigure}{\textwidth}
+    \caption{}
         \begin{tcolorbox}
             \includegraphics[width=\textwidth]{fig/IM}
         \end{tcolorbox}
+    \end{subfigure}
     \end{minipage}\hfill
     \begin{minipage}{0.54\textwidth}
+    \begin{subfigure}{\textwidth}
+    \caption{}
         \begin{tcolorbox}
             \inputminted[fontsize=\scriptsize,linenos,numbersep=5pt]{yaml}{models/IM-resolved.yaml}
         \end{tcolorbox}
+    \end{subfigure}
     \end{minipage}\\
     \caption{
         \label{fig:IM}
         Example isolation-with-migration Demes model. (A) The Human Data Model
-        representation expressed using YAML. (B) The same model in the
-        Machine Data Model form.
-        (C) A visual representation of the model using \texttt{demesdraw}.
-        The YAML descriptions in (A) and (B) correspond exactly to a JSON description,
+        representation expressed using YAML.
+        (B) A visual representation of the model using \texttt{demesdraw}.
+        (C) The same model in the Machine Data Model form.
+        The YAML descriptions in (A) and (C) correspond exactly to a JSON description,
         but are much more human-readable.
-        \aprcomment{Need figure panel labels.}
     }
 \end{figure}
 
