@@ -9,7 +9,12 @@ DEPS=\
 	fig/showcase.pdf
 
 paper.pdf: $(DEPS)
-	latexmk -shell-escape paper.tex
+	pdflatex -shell-escape paper.tex
+	bibtex paper
+	pdflatex -shell-escape paper.tex
+	pdflatex -shell-escape paper.tex
+	# This works better for some people:
+	# latexmk -shell-escape paper.tex
 
 paper.ps: paper.dvi
 	dvips paper
