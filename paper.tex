@@ -163,7 +163,7 @@ However, this conciseness means that models of even intermediate complexity
 are difficult for humans to understand, making errors likely.
 Input parameter file formats for simulators allow the model specification
 to be less terse and allow for documentation in the form of comments.
-Several Graphical User Interface (GUI) and visualization
+Several graphical user interfaces  and visualization
 methods have been developed, which greatly facilitate
 interpretation~\citep{mailund2005coasim,antao2007modeler4simcoal2,
 parreira_spams_2009,ewing2010msms,parobek_skelesim_2017,zhou2018popdemog}.
@@ -192,7 +192,7 @@ visualization of Demes models, and has been implemented in several popular
 inference and simulation methods (Table~\ref{tab:software}).
 We hope that this data model and file format will be widely adopted
 by the community, such that users can expect to simulate directly
-from inferred models with little programming effort.
+from inferred models with little to no programming effort.
 
 
 \section*{Demes}
@@ -268,9 +268,9 @@ migrations are also shared by many inference methods
 \citep[e.g.,][]{gutenkunst2009inferring,gravel2012population,kamm2017efficient,
 jouganous2017inferring,ragsdale2019models,excoffier2021fastsimcoal2}.
 Demes therefore serves as ``middleware'' between inference methods and simulation
-software, capturing common assumptions shared across implemented software.
-In Appendix~\ref{sec:appendix-pop-gen-model}, we expand on these concepts
-and provide more details on the population genetics models supported by Demes.
+software, capturing these common assumptions.
+Appendix~\ref{sec:appendix-pop-gen-model} provides more details on the
+population genetics models supported by Demes.
 
 \subsection*{Human Data Model}
 
@@ -303,7 +303,7 @@ values.
 Because this translation and validation requires significant
 programming effort, we define a standard software entity as part of the
 specification to perform this task (the parser),
-which is intended to be shared by programs that support Demes as an input.
+which is intended to be shared by programs that support Demes as input.
 By maintaining high-quality Demes parsers available as libraries,
 we ensure consistency across simulation and inference
 software.
