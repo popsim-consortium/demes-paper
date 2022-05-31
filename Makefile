@@ -39,6 +39,7 @@ resolve: models/IM.yaml
 .PHONY: spellcheck
 spellcheck: aspell.conf
 	aspell --conf ./aspell.conf --check paper.tex
+	aspell --conf ./aspell.conf --check software-table.tex
 
 clean:
 	rm -f *.log *.dvi *.aux
