@@ -1,0 +1,7 @@
+Demographic models of increasing complexity are being inferred and simulated,
+yet there is no agreed upon data format for describing 
+these models. We present the Demes specification, a data model and file format
+definition which provides both a human-readable and machine-parsable
+description of complex demographies, built on standard technologies. We provide
+thoroughly tested software components using this specification, 
+and demonstrate Demes support in several popular simulation and inference methods.
