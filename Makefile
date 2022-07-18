@@ -8,6 +8,8 @@ DEPS=\
 	fig/IM.pdf \
 	fig/showcase.pdf
 
+all: paper.pdf response-to-reviewers.pdf
+
 paper.pdf: $(DEPS)
 	pdflatex -shell-escape paper.tex
 	bibtex paper
@@ -52,3 +54,16 @@ clean:
 mrproper:
 	rm -f *.ps *.pdf
 	cd fig && $(MAKE) mrproper
+
+
+review-diff.tex: paper.tex
+	latexdiff reviewed-paper.tex paper.tex > review-diff.tex
+
+review-diff.pdf: review-diff.tex
+	pdflatex review-diff.tex
+	pdflatex review-diff.tex
+	bibtex review-diff
+	pdflatex review-diff.tex
+
+response-to-reviewers.pdf: response-to-reviewers.tex
+	pdflatex $<
