@@ -75,20 +75,175 @@ in turn.
 \reviewersection
 
 \begin{point}
-stuff
+This manuscript presents the Demes data model and related libraries ecosystem.
+I have been using it for some time and was happy to review the paper as I find
+it really useful, intuitive and well designed (as are a lot of tools developed
+by those authors and the whole community of the popsim consortium and tskit).
+The main usage I have for it at the moment was to switch effortlessly between
+msprime and SLiM using the same demographic model, loved that. But as described
+in the paper, it has a lot of other qualities. Overall, this format is a really
+useful addition to the field and which I hope will be largely adopted.
+
+I don't have much to add to this manuscript other than a few comments that I
+hope will help answer a few questions that other readers could have. My main
+comment below is that an example of the YAML format should be included in the
+main text.
 \end{point}
 \begin{reply}
-responds
+TODO
+\end{reply}
+
+\begin{point}
+I usually like when there is a link to the software directly in the abstract
+ in those kind of papers, it avoids scrolling through it as links are
+sometimes in different places in those type of manuscripts.
+\end{point}
+\begin{reply}
+TODO
+\end{reply}
+
+\begin{point}
+I suggest including the example of the YAML format in the main text.
+This is too sad that the center piece of this paper has been relegated to the appendix :(
+Show us how easy it is to understand the model from the YAML format!
+Maybe FigA2 is a bit too long, but FigA1 A and B could work well.
+\end{point}
+\begin{reply}
+TODO
+\end{reply}
+
+\begin{point}
+A fair question that could be asked by any potential user could be: Are there
+  versions to this data format? There is no version argument in the YAML file,
+what if the format changes in the future? How would my model format would be
+recognized by the parser? I get that it is designed with stability in mind and
+it is done well, but we've seen formats change for other things through time
+(e.g. in bioinformatics) to adapt to new usage.
+\end{point}
+\begin{reply}
+TODO
+\end{reply}
+
+\begin{point}
+There might be the need to specify how the initialization time of the whole
+  model is dealt with. This is kind of straightforward when thinking about
+coalescent models for people used to it. But not for forward-time simulations.
+Especially that in your examples there are no start\_time for the first
+population. This might be hard for some users to wrap their head around.
+\end{point}
+\begin{reply}
+TODO
+\end{reply}
+
+\begin{point}
+p2 you discuss the defaults of CLI and input parameter formats but not of
+  APIs. It could be said that APIs require some learning (of both the interface
+and the given programming language for users not used to it). Learning a new
+API each time you change simulator is also time consuming.
+\end{point}
+\begin{reply}
+TODO
+\end{reply}
+
+\begin{point}
+p2 "YAML format" you could specify that it is a data serialization language
+\end{point}
+\begin{reply}
+TODO
+\end{reply}
+
+\begin{point}
+p12 "time units is in generations" you could precise it is the default value here, if it is?
+\end{point}
+\begin{reply}
+TODO
+\end{reply}
+
+\begin{point}
+p12 "such as years, accompanied by the generation time". Might be worth
+  detailing that it is needed as simulators work with generations and not
+years, so there needs to be some kind of conversion.
+\end{point}
+\begin{reply}
+TODO
+\end{reply}
+
+\begin{point}
+p12 "function defined by start and end sizes" You should detail here what are
+  the models of population expansion available and what is the default. Linear,
+exponential, etc.?
+\end{point}
+\begin{reply}
+TODO
+\end{reply}
+
+\begin{point}
+p12 "S are born via [...]" missing that S is a proportion
+\end{point}
+\begin{reply}
+TODO
+\end{reply}
+
+\begin{point}
+p13-14 "Other implicit values [...]" until end of paragraph, this part with
+  the example could be worth integrating into the main text as this is a major
+thing to understand about the data model in my opinion.
+\end{point}
+\begin{reply}
+TODO
+\end{reply}
+
+\begin{point}
+Section A3: you could also detail that having common parsers allows for
+  consistent and informative error messages when it comes to missing values or
+issues in formatting.
+\end{point}
+\begin{reply}
+TODO
+\end{reply}
+
+\begin{point}
+p15 what's the difference between "genome annotations" and "sequence annotations"?
+\end{point}
+\begin{reply}
+TODO
+\end{reply}
+
+\textit{Random thoughts I had while reading the paper, to discuss (or not)}
+
+\begin{point}
+I wondered if such format couldn't be used as a way to increase (spoken)
+  language inclusivity. I guess it would be fairly easy to have dictionaries
+including multiple translations for each keyword of the format in the parser.
+That way you could write your model in Japanese or Spanish and it could still
+be read without issue.
+\end{point}
+\begin{reply}
+TODO
+\end{reply}
+
+\begin{point}
+Do you think such plain text format also provide a better substrate for
+versionning demographic models? Could be mentioned.
+\end{point}
+\begin{reply}
+TODO
 \end{reply}
 
 \reviewersection
 
 \begin{point}
-STUFF
+
 \end{point}
 \begin{reply}
-Response
+TODO
 \end{reply}
 
+\begin{point}
+
+\end{point}
+\begin{reply}
+TODO
+\end{reply}
 
 \end{document}
