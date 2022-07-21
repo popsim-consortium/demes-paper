@@ -11,6 +11,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{lipsum} % to generate some filler text
 \usepackage{fullpage}
+\usepackage{url}
 
 % import Eq and Section references from the main manuscript where needed
 % \usepackage{xr}
@@ -122,7 +123,12 @@ it is done well, but we've seen formats change for other things through time
 (e.g. in bioinformatics) to adapt to new usage.
 \end{point}
 \begin{reply}
-TODO
+
+We have had an issue open for this for some time (\url{https://github.com/popsim-consortium/demes-spec/issues/20}).
+The current plan is to add a variable for this when the spec hits version 1.0, which is planned to coincide
+with this publication.
+Files omitting a spec version will assume to default to 1.0.
+
 \end{reply}
 
 \begin{point}
@@ -133,7 +139,17 @@ Especially that in your examples there are no start\_time for the first
 population. This might be hard for some users to wrap their head around.
 \end{point}
 \begin{reply}
-TODO
+
+    Random thoughts from KT:
+
+    The forward time case is pretty easy: find the most ancient
+    thing with a finite time (events and deme start times), and
+    that's your reference point.  A burn-in time pushes that backwards.
+    
+    This was straightforward in fwdpy11 and KT has some additional tools
+    "this close" to release to automate the process (for the case of integer-sized
+    clicks in time).
+
 \end{reply}
 
 \begin{point}
@@ -226,7 +242,14 @@ That way you could write your model in Japanese or Spanish and it could still
 be read without issue.
 \end{point}
 \begin{reply}
-TODO
+
+The field names in a YAML file are variables, not words \textit{per se}.
+Thus, allowing different inputs for the field names is like having code trying
+to understand different names for the same piece of data.
+While it would be useful to allow users to generate files with variable names
+that are not English words, and in character sets other than Latin, those files would
+require additional conversion into the variable/value format defined by \textit{demes}.
+We feel that such conversion is beyond the scope of this project.
 
 \end{reply}
 
