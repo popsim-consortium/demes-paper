@@ -12,6 +12,7 @@
 \usepackage{lipsum} % to generate some filler text
 \usepackage{fullpage}
 \usepackage{url}
+\usepackage{xcolor}
 
 % import Eq and Section references from the main manuscript where needed
 % \usepackage{xr}
@@ -46,6 +47,8 @@
 \newcommand{\shortreply}[2][]{\medskip \noindent \begin{sf}\textbf{Reply}:\  #2
     \ifthenelse{\equal{#1}{}}{}{ \hfill \footnotesize (#1)}%
     \medskip \end{sf}}
+
+\newcommand{\ggcomment}[1]{{\textcolor{yellow!60!red}{GG: #1}}}
 
 \begin{document}
 
@@ -101,7 +104,14 @@ I usually like when there is a link to the software directly in the abstract
 sometimes in different places in those type of manuscripts.
 \end{point}
 \begin{reply}
-TODO
+
+We agree that this is a useful practice.
+However, in our case there are several software packages that are directly
+and indirectly related to the Demes format as summarized in Table 1.
+We have instead added a link to the specification documentation in the abstract.
+This documentation includes a tutorial introduction for users to learn
+how to write a Demes YAML file, and a detailed specification that developers
+may consult when implementing Demes support in their own sofware.
 \end{reply}
 
 \begin{point}
@@ -166,14 +176,16 @@ TODO
 p2 "YAML format" you could specify that it is a data serialization language
 \end{point}
 \begin{reply}
-TODO
+
+We have updated the text to include this point.
 \end{reply}
 
 \begin{point}
 p12 "time units is in generations" you could precise it is the default value here, if it is?
 \end{point}
 \begin{reply}
-TODO
+
+There is no default value for the time units. This must be specified explicitly.
 \end{reply}
 
 \begin{point}
@@ -182,8 +194,8 @@ p12 "such as years, accompanied by the generation time". Might be worth
 years, so there needs to be some kind of conversion.
 \end{point}
 \begin{reply}
-TODO
 
+We have updated the text to include this point.
 \end{reply}
 
 \begin{point}
@@ -194,6 +206,11 @@ exponential, etc.?
 \begin{reply}
 TODO
 
+\ggcomment{
+Well, we *could* include lots more detail, but I think we want to be clear
+that the manuscript isn't intended to completely document everything---that's
+what the spec is for.
+}
 \end{reply}
 
 \begin{point}
@@ -230,6 +247,8 @@ p15 what's the difference between "genome annotations" and "sequence annotations
 \begin{reply}
 TODO
 
+\ggcomment{These sound like synonyms to me too.
+Can "sequence annotations" be deleted, or is this a distinct thing?}
 \end{reply}
 
 \textit{Random thoughts I had while reading the paper, to discuss (or not)}
@@ -258,8 +277,12 @@ Do you think such plain text format also provide a better substrate for
 versionning demographic models? Could be mentioned.
 \end{point}
 \begin{reply}
-TODO
 
+While plain-text formats are ideally suited for use with version control
+systems such as git, almost all competing/custom formats are also
+plain text and thus share this property. However, Demes models are more
+clearly separated from code and CLI directives, which may make model
+changes more obvious when reviewing change requests such as git pull requests.
 \end{reply}
 
 \reviewersection
@@ -313,7 +336,51 @@ possibilities would be great, but personally I would just remove the HDM
 format, and add some of its nice features to the MDM (e.g. defaults)
 \end{point}
 \begin{reply}
-TODO
+
+\ggcomment{Anything here we should clarify in the manuscript?}
+
+We've spent considerable effort trying to anticipate ways in which users
+could create erroneous demographic models. By design the Demes spec
+makes many classes of model misspecification impossible to write,
+requires errors be raised when models are ambiguous,
+and explicitly documents the required behavior for edge cases.
+We honestly believe that the Demes format is easier to write
+and interpret than the status quo.
+However, we agree that there are some aspects of the HDM that will be
+confusing for new users.
+
+The HDM was explicitly designed to be a less-strict version of the MDM,
+and our initial approach was to simply allow the omission of some fields
+when there was an obvious default.
+The result is that an MDM model is a valid HDM model (but not vice versa),
+so users are free to be more explicit in any part of a model.
+
+We provide the following resources to assist users when writing models.
+\begin{itemize}
+\item
+The Demes tutorial
+(\url{https://popsim-consortium.github.io/demes-spec-docs/main/tutorial.html})
+is a gentle introduction to writing Demes models.
+It covers 99\% of anticipated uses and assumes very little about the
+reader's knowledge of population genetics.
+\item
+The C and Python parsers have command line interfaces that take HDM as
+input and can output an MDM.
+So if a user is in doubt about the interpretation of some aspect of the HDM,
+then they can easily check how their model will be interpreted.
+\item
+Demes models can be visualised using DemesDraw
+(\url{https://github.com/grahamgower/demesdraw}),
+which provides a sketch of how demes are related and their relative sizes.
+\end{itemize}
+
+Finally, there is no requirement for simulation software to include
+an HDM to MDM parser. As an example, the demes-slim
+(\url{https://github.com/grahamgower/demes-slim/})
+converter only accepts MDM models (and only in JSON format).
+It thus relies on users converting HDM models using an
+external parser, which is a small inconvenience for a large gain
+in interoperability.
 
 \end{reply}
 
@@ -328,7 +395,45 @@ for both the time definition and the demographic definition of epochs (maybe
 begin with the more recent epochs and finish with the more ancient ones).
 \end{point}
 \begin{reply}
-TODO
+
+\ggcomment{Anything here we should clarify in the manuscript?}
+
+We apreciate that the timescale we've chosen may at first be jarring
+because it uses backwards-time values with forwards-time language.
+But defining the timescale was fundamental choice that we didn't take lightly.
+All decisions about Demes are publicly recored in github issues,
+pull requests, and code experiments. Two discussions relevant to the
+timescale are
+\url{https://github.com/popsim-consortium/demes-python/issues/2}
+and
+\url{https://github.com/popsim-consortium/demes-python/issues/11}.
+
+To summarise:
+\begin{itemize}
+\item
+"backwards time" language is confusing when talking about migrations
+(does one mean migrating individuals, or coalescent lineages moving
+between demes?)
+\item
+Anchoring time in the past and having time values increase towards
+the present would require that users manually translate from "years ago".
+This is tedious and error prone.
+\item
+"Now" is a natural time anchor.
+\item
+There is no perfect choice, but we must make a choice.
+Supporting multiple timescales was considered, but this would be a
+substantial undertaking without a clear benefit.
+\end{itemize}
+
+On a more practical note, changing how the timescale is defined
+at this stage of the Demes project would require substantial changes
+to all of the Demes software and documentation.
+
+\ggcomment{
+Translation of models to forwards time simulators...
+Refer to KT's comment above?
+}
 
 \end{reply}
 \begin{point}
@@ -366,6 +471,11 @@ that applies?
 \begin{reply}
 TODO
 
+\ggcomment{
+Check the spec to see if this is clear there.
+Then refer to the spec.
+}
+
 \end{reply}
 \begin{point}
 p. 14. Parsers. It is a good idea to provide HDM to MDM parsers, but I note
@@ -379,6 +489,18 @@ with start\_time.
 \begin{reply}
 TODO
 
+\ggcomment{
+\begin{itemize}
+\item
+We provide parsers, so the simulation software doesn't have to
+write this. Thus parsers are shared between simulators.
+\item
+The parser does validation too.
+\item
+A simulator can choose to only accept MDM models.
+\end{itemize}
+}
+
 \end{reply}
 \begin{point}
 p. 16: migration section might become hard to read when there are more than a
@@ -391,6 +513,11 @@ dest, start\_time, end\_time, rate\} And then just entering values: \{ X, Y, 100
 \begin{reply}
 TODO
 
+\ggcomment{
+Say something about sparse versus dense.
+Then refer to our docs so that we don't have to copy/paste the docs in the manuscript.
+}
+
 \end{reply}
 \begin{point}
 p. 17 : Whole HDM model is looking strange for a naive user, with a lot of
@@ -400,6 +527,10 @@ is start time infinity by default for ancestral population?
 \begin{reply}
 TODO
 
+\ggcomment{
+Refer to our docs so that we don't have to copy/paste the docs in the manuscript.
+}
+
 \end{reply}
 \begin{point}
 AFR and EUR have no starting times, which suggests that they are created when
@@ -408,6 +539,10 @@ ANC at different times?
 \end{point}
 \begin{reply}
 TODO
+
+\ggcomment{
+Refer to our docs so that we don't have to copy/paste the docs in the manuscript.
+}
 
 \end{reply}
 \begin{point}
@@ -419,6 +554,10 @@ AFR and EUR would have been created at different times?
 \begin{reply}
 TODO
 
+\ggcomment{
+Refer to our docs so that we don't have to copy/paste the docs in the manuscript.
+}
+
 \end{reply}
 \begin{point}
 It is good to have a standard way of specifying a given demographic scenario,
@@ -427,6 +566,10 @@ be simulated, and to link it to the demography.
 \end{point}
 \begin{reply}
 TODO
+
+\ggcomment{
+Not sure what this means, exactly? Likely beyond the scope of Demes.
+}
 
 \end{reply}
 \begin{point}
