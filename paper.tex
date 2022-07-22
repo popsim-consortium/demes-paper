@@ -107,6 +107,8 @@ simplicity and clarity.
 We provide thoroughly tested implementations of Demes parsers in Python
 and C, and showcase initial support in several simulators and inference
 methods.
+An introduction to the file format and a detailed specification are available at:\\
+\url{https://popsim-consortium.github.io/demes-spec-docs/}.
 \end{abstract}
 
 \section*{Introduction}
@@ -183,8 +185,8 @@ The Demes data model precisely defines the sizes and relationships
 of populations, and it provides a way to explicitly encode the
 information relevant to demography while avoiding repetition.
 This data model is implemented in the widely used YAML
-format~\citep{ben2009yaml}, which provides a good balance between human
-and machine readability.
+format~\citep{ben2009yaml}, which is a data serialization language that
+provides a good balance between human and machine readability.
 The specification precisely defines the required behavior of implementations,
 ensuring that there is no ambiguity of interpretation, and includes both a
 reference implementation and an extensive suite of test examples and their
@@ -493,7 +495,8 @@ values greater than zero with larger values corresponding to times in the more
 distant past. By having time units increase into the past, we avoid the need to
 choose an arbitrary point in history as ``time zero''. A natural
 specification for time units is in generations, although other time units are
-permitted, such as years, accompanied by the generation time.
+permitted, such as years, accompanied by the generation time
+so that downstream software may convert times into generations as required.
 
 \subsection{Sizes and epochs}
 
