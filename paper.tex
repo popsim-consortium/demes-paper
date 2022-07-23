@@ -290,10 +290,45 @@ features of the model (such as time units and generation times),
 populations (as ``demes'') and their existence intervals (as ``epochs''),
 and gene flow between populations
 (as continuous ``migrations'' or instantaneous ``pulse'' events)
-(e.g., Figures~\ref{fig:showcase}~and~\ref{fig:IM}).
+(e.g., Figures~\ref{fig:IM}~and~\ref{fig:showcase}).
 The HDM encourages human understanding by avoiding
 redundancy in the description where possible and by providing a mechanism for
 specifying default values that are inherited hierarchically.
+
+\subsection*{Example: an isolation with migration model}
+
+\ggcomment{Add some text here describing the YAML in Figure \ref{fig:IM}.}
+
+\begin{figure}[h!]
+    \begin{minipage}{0.45\textwidth}
+    \begin{subfigure}{\textwidth}
+    \caption{}
+        \begin{tcolorbox}[equal height group=IM]
+            \inputminted[fontsize=\scriptsize,numbersep=5pt]{yaml}{models/IM.yaml}
+        \end{tcolorbox}
+    \end{subfigure}
+    \end{minipage}\hfill%
+%
+    \begin{minipage}{0.50\textwidth}
+    \begin{subfigure}{\textwidth}
+    \caption{}
+        \begin{tcolorbox}[equal height group=IM, boxsep=0pt]
+            \includegraphics[width=\textwidth]{fig/IM}
+        \end{tcolorbox}
+    \end{subfigure}
+    \end{minipage}\\
+
+    \caption{
+        \label{fig:IM}
+        Example isolation-with-migration Demes model. (A) The Human Data Model
+        representation expressed using YAML.
+        (B) A visual representation of the model using \texttt{demesdraw}.
+        The same model in the Machine Data Model form is provided in
+        Figure~\ref{fig:IM-MDM}.
+        The YAML descriptions in (A) and Figure~\ref{fig:IM-MDM} correspond
+        exactly to a JSON description, but are much more human-readable.
+    }
+\end{figure}
 
 \subsection*{Parsers}
 
@@ -762,42 +797,22 @@ description of the demography.
 \label{sec:appendix-figures}
 
 \begin{figure}[h!]
-    \begin{minipage}{0.44\textwidth}
-    \begin{subfigure}{\textwidth}
-    \caption{}
-        \begin{tcolorbox}
-            \inputminted[fontsize=\scriptsize,linenos,numbersep=5pt]{yaml}{models/IM.yaml}
-        \end{tcolorbox}
-    \end{subfigure}
-    \begin{subfigure}{\textwidth}
-    \caption{}
-        \begin{tcolorbox}
-            \includegraphics[width=\textwidth]{fig/IM}
-        \end{tcolorbox}
-    \end{subfigure}
-    \end{minipage}\hfill
-    \begin{minipage}{0.54\textwidth}
-    \begin{subfigure}{\textwidth}
-    \caption{}
-        \begin{tcolorbox}
-            \inputminted[fontsize=\scriptsize,linenos,numbersep=5pt]{yaml}{models/IM-resolved.yaml}
-        \end{tcolorbox}
-    \end{subfigure}
-    \end{minipage}\\
+    \begin{tcolorbox}
+        \inputminted[fontsize=\scriptsize,numbersep=5pt]{yaml}{models/IM-resolved.yaml}
+    \end{tcolorbox}
     \caption{
-        \label{fig:IM}
-        Example isolation-with-migration Demes model. (A) The Human Data Model
-        representation expressed using YAML.
-        (B) A visual representation of the model using \texttt{demesdraw}.
-        (C) The same model in the Machine Data Model form.
-        The YAML descriptions in (A) and (C) correspond exactly to a JSON description,
-        but are much more human-readable.
+        \label{fig:IM-MDM}
+        Isolation-with-migration example model from Figure~\ref{fig:IM}
+        in Machine Data Model (MDM) form.
+        The MDM form of the model is complete and explicit, but contains
+        much redundant information that is omitted in the Human Data Model
+        (HDM) form.
     }
 \end{figure}
 
 \begin{figure}[h!]
     \begin{tcolorbox}
-        \inputminted[fontsize=\scriptsize,linenos,numbersep=5pt]{yaml}{models/tennessen.yaml}
+        \inputminted[fontsize=\scriptsize,numbersep=5pt]{yaml}{models/tennessen.yaml}
     \end{tcolorbox}
     \caption{
         \textbf{The \citet{tennessen2012evolution} two-population
@@ -814,7 +829,7 @@ description of the demography.
 \begin{figure}[h!]
     \begin{tcolorbox}
         % NOTE: line highlights may need adjusting after changing this code
-        \inputminted[fontsize=\scriptsize,linenos,numbersep=5pt,highlightlines={9,19,52}]{python}{models/tennessen-simulation.py}
+        \inputminted[fontsize=\scriptsize,numbersep=5pt,highlightlines={9,19,52}]{python}{models/tennessen-simulation.py}
     \end{tcolorbox}
     \caption{
         \textbf{Simulation of SFS for the Tennessen model.}

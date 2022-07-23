@@ -3,7 +3,8 @@ description:
   Two-deme isolation-with-migration model.
 time_units: generations
 defaults:
-  epoch: {start_size: 1000}
+  epoch:
+    start_size: 1000
 demes:
   - name: A
     description: The ancestral deme
@@ -16,7 +17,8 @@ demes:
     description: Second descendant deme.
     ancestors: [A]
     epochs:
-      - {end_time: 50}
-      - {end_size: 3000}
+      - end_time: 50
+      - end_size: 3000
 migrations:
-  - {demes: [X, Y], rate: 1e-4}
+  - demes: [X, Y]
+    rate: 1e-4
