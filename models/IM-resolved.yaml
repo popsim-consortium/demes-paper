@@ -3,51 +3,57 @@ time_units: generations
 generation_time: 1
 doi: []
 demes:
-- name: A
-  description: The ancestral deme
-  start_time: .inf
-  ancestors: []
-  proportions: []
-  epochs:
-  - end_time: 100
-    start_size: 1000
-    end_size: 1000
-    size_function: constant
-    selfing_rate: 0
-    cloning_rate: 0
-- name: X
-  description: First descendant deme.
-  start_time: 100
-  ancestors: [A]
-  proportions: [1]
-  epochs:
-  - end_time: 0
-    start_size: 1000
-    end_size: 1000
-    size_function: constant
-    selfing_rate: 0
-    cloning_rate: 0
-- name: Y
-  description: Second descendant deme.
-  start_time: 100
-  ancestors: [A]
-  proportions: [1]
-  epochs:
-  - end_time: 50
-    start_size: 1000
-    end_size: 1000
-    size_function: constant
-    selfing_rate: 0
-    cloning_rate: 0
-  - end_time: 0
-    start_size: 1000
-    end_size: 3000
-    size_function: exponential
-    selfing_rate: 0
-    cloning_rate: 0
+  - name: A
+    description: The ancestral deme
+    start_time: .inf
+    ancestors: []
+    proportions: []
+    epochs:
+      - end_time: 100
+        start_size: 1000
+        end_size: 1000
+        size_function: constant
+        selfing_rate: 0
+        cloning_rate: 0
+  - name: X
+    description: First descendant deme.
+    start_time: 100
+    ancestors: [A]
+    proportions: [1]
+    epochs:
+      - end_time: 0
+        start_size: 1000
+        end_size: 1000
+        size_function: constant
+        selfing_rate: 0
+        cloning_rate: 0
+  - name: Y
+    description: Second descendant deme.
+    start_time: 100
+    ancestors: [A]
+    proportions: [1]
+    epochs:
+      - end_time: 50
+        start_size: 1000
+        end_size: 1000
+        size_function: constant
+        selfing_rate: 0
+        cloning_rate: 0
+      - end_time: 0
+        start_size: 1000
+        end_size: 3000
+        size_function: exponential
+        selfing_rate: 0
+        cloning_rate: 0
 migrations:
-- {source: X, dest: Y, start_time: 100, end_time: 0,
-  rate: 0.0001}
-- {source: Y, dest: X, start_time: 100, end_time: 0,
-  rate: 0.0001}
+  - source: X
+    dest: Y
+    start_time: 100
+    end_time: 0
+    rate: 0.0001
+  - source: Y
+    dest: X
+    start_time: 100
+    end_time: 0
+    rate: 0.0001
 pulses: []
