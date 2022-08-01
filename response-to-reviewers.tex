@@ -26,6 +26,9 @@
 \newcounter{point}[reviewer]
 \setcounter{point}{0}
 
+% Import this last to avoid mysterious errors.
+\usepackage[implicit=false]{hyperref}
+
 % This refines the format of how the reviewer/point reference will appear.
 \renewcommand{\thepoint}{\thereviewer.\arabic{point}}
 
@@ -106,9 +109,9 @@ sometimes in different places in those type of manuscripts.
 \begin{reply}
 
 We agree that this is a useful practice.
-However, in our case there are several software packages that are directly
-and indirectly related to the Demes format as summarized in Table 1.
-We have instead added a link to the specification documentation in the abstract.
+In our case there are several software packages that are directly
+and indirectly related to the Demes format as summarized in Table 1,
+so we have instead added a link to the specification documentation in the abstract.
 This documentation includes a tutorial introduction for users to learn
 how to write a Demes YAML file, and a detailed specification that developers
 may consult when implementing Demes support in their own sofware.
@@ -155,15 +158,19 @@ population. This might be hard for some users to wrap their head around.
 \end{point}
 \begin{reply}
 
-    Random thoughts from KT:
+We thank the reviewer for bringing this omission to our attention.
+It's important that different forward simulators use the same strategy
+for converting from times in the past (as used by Demes) into their
+corresponding values when using a forwards-time convention.
+The trick is to find the oldest non-infinite time in the model
+and use this as the forwards-time reference point, suitably adjusted
+for a burn-in. This same trick is used by DemesDraw for the model diagrams.
+We have added a section to the specification detailing how this
+conversion should be done
+(\url{https://github.com/popsim-consortium/demes-spec/pull/159}),
+and added a brief description to the "Time units" section in the manuscript's
+appendix.
 
-    The forward time case is pretty easy: find the most ancient
-    thing with a finite time (events and deme start times), and
-    that's your reference point.  A burn-in time pushes that backwards.
-    
-    This was straightforward in fwdpy11 and KT has some additional tools
-    "this close" to release to automate the process (for the case of integer-sized
-    clicks in time).
 
 \end{reply}
 
@@ -174,7 +181,8 @@ and the given programming language for users not used to it). Learning a new
 API each time you change simulator is also time consuming.
 \end{point}
 \begin{reply}
-TODO
+
+We have updated the text to include this point.
 \end{reply}
 
 \begin{point}
@@ -191,6 +199,8 @@ p12 "time units is in generations" you could precise it is the default value her
 \begin{reply}
 
 There is no default value for the time units. This must be specified explicitly.
+We mention that the time units field is mandatory in the new Example section
+that describes the new Figure 1.
 \end{reply}
 
 \begin{point}
@@ -342,6 +352,8 @@ format, and add some of its nice features to the MDM (e.g. defaults)
 \end{point}
 \begin{reply}
 
+We thank the reviewer for the useful feedback, and for relaying their
+experience.
 We've spent considerable effort trying to anticipate ways in which users
 could create erroneous demographic models. By design the Demes spec
 makes many classes of model misspecification impossible to write,
@@ -405,14 +417,19 @@ begin with the more recent epochs and finish with the more ancient ones).
 \end{point}
 \begin{reply}
 
-\ggcomment{Anything here we should clarify in the manuscript?}
+We thank the reviewer for the critical feedback and suggestions.
+On a practical note, changing how the timescale is defined
+at this stage of the Demes project would require substantial changes
+to all of the Demes software and documentation.
 
-We apreciate that the timescale we've chosen may at first be jarring
-because it uses backwards-time values with forwards-time language.
-But defining the timescale was fundamental choice that we didn't take lightly.
-All decisions about Demes are publicly recored in github issues,
-pull requests, and code experiments. Two discussions relevant to the
-timescale are
+We appreciate that the timescale we've chosen may at first be jarring
+because Demes time values increase towards the past, but Demes uses
+forwards-time language and ordering conventions.
+Defining the timescale was a fundamental choice that we didn't take lightly.
+All decisions about Demes are publicly recorded in github issues,
+pull requests, and many experiments in both writing models and implementing
+Demes-related software.
+Two discussions relevant to the timescale are
 \url{https://github.com/popsim-consortium/demes-python/issues/2}
 and
 \url{https://github.com/popsim-consortium/demes-python/issues/11}.
@@ -435,14 +452,28 @@ Supporting multiple timescales was considered, but this would be a
 substantial undertaking without a clear benefit.
 \end{itemize}
 
-On a more practical note, changing how the timescale is defined
-at this stage of the Demes project would require substantial changes
-to all of the Demes software and documentation.
+Demes uses forwards-time conventions in many places, such as for
+"source" and "dest" migration fields (migrants leave a "source"
+deme and have offspring in a "dest" deme),
+epoch ordering (from the past towards the present),
+and a deme must be listed in the input file before its
+descendant demes.
+This latter requirement means that older demes are listed first and that
+demes are topologically sorted according to ancestry relationships.
+Most non-trivial models of biological relevance are treelike with one
+"root" deme that stretches back in time towards infinity.
+The ordering in Demes naturally aligns with how rooted trees are typically drawn:
+top-down as in computer science (\ggcomment{cite Knuth, vol 1, section 2.3}),
+or left-to-right as in phylogenetics
+(\ggcomment{cite Felsenstein, Inferring Phylogenies, chapter 34}).
 
-\ggcomment{
-Translation of models to forwards time simulators...
-Refer to KT's comment above?
-}
+Finally, we note that reviewer 2 also raised the issue of how times should
+be interpreted in a forwards-in-time simulator.
+We have added a section to the specification that describes this,
+and added a paragraph to the "Time units" section of the manuscript's
+appendix which gives backwards-time and forwards-time interpretations
+for infinite time values.
+
 
 \end{reply}
 \begin{point}

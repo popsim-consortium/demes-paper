@@ -166,7 +166,10 @@ is used by several
 simulators~\citep[e.g.,][]{ewing2010msms,chen2009fast,staab2015scrm}.
 However, this conciseness means that models of even intermediate complexity
 are difficult for humans to understand, making errors likely.
-Input parameter file formats for simulators allow the model specification
+APIs are more verbose, but require a substantial time investment to
+learn, and are tied to a specific tool, so this knowledge is not portable
+to other simulators.
+Like APIs, input parameter file formats for simulators allow the model specification
 to be less terse and allow for documentation in the form of comments.
 Several graphical user interfaces  and visualization
 methods have been developed, which greatly facilitate
@@ -174,7 +177,7 @@ interpretation~\citep{mailund2005coasim,antao2007modeler4simcoal2,
 parreira_spams_2009,ewing2010msms,parobek_skelesim_2017,zhou2018popdemog}.
 However, these methods
 currently have little traction as they are all either directly coupled
-to an internal simulation method or to the  syntax of a specific simulator.
+to an internal simulation method or to the syntax of a specific simulator.
 There is currently no way in which demographic models inferred by
 different packages can be simulated or visualized by downstream software.
 
@@ -334,9 +337,10 @@ Models typically start with a concise description, followed by the mandatory
 \texttt{time\_units} field.
 This model uses the \texttt{defaults} section to provide a default \texttt{start\_size}
 of 1000 individuals for each epoch of each deme.
-There are three demes in the model, an ancestral deme named ``A'' which ceases
-to exist at 100 generations ago, and demes ``X'' and ``Y'' that derive their
-ancestry from ``A'' at this time.
+There are three demes in the model, an ancestral deme named ``A'' which exists
+arbitrarily far back into the past then ceases to exist at 100 generations ago,
+and demes ``X'' and ``Y'' that derive their
+ancestry from A when A goes extinct.
 Demes A and X have only one epoch, in which the population sizes are
 constant, whereas deme Y has two epochs. Deme Y's second epoch has a different
 \texttt{end\_size} than its \texttt{start\_size}, which indicates the size
@@ -558,11 +562,19 @@ movement of individuals between those populations.
 Population and event times are written as units in the past, so that time zero
 corresponds to the final generation or ``now'', and event times in the past are
 values greater than zero with larger values corresponding to times in the more
-distant past. By having time units increase into the past, we avoid the need to
+distant past. By having time values increase into the past, we avoid the need to
 choose an arbitrary point in history as ``time zero''. A natural
 specification for time units is in generations, although other time units are
 permitted, such as years, accompanied by the generation time
 so that downstream software may convert times into generations as required.
+
+There must be at least one population with an infinite \texttt{start\_time}.
+An infinite start time may be interpreted differently depending on the simulator.
+In a coalescent setting, there is no upper bound for the coalescent time
+of lineages in this population.
+In a forwards-time setting, the interval of time between infinity and
+the oldest non-infinite model time (i.e. the ``first event") is approximated
+by the simulator's burn-in phase.
 
 \subsection{Sizes and epochs}
 
@@ -691,11 +703,12 @@ HDM and Machine Data Model (MDM) forms (both in terms of YAML syntax).
 For values that repeat
 across fields, defaults may be used to implicitly assign default values to
 fields of the given type.  A default is superseded by an explicitly provided
-value if given. Other implicit values are inherited naturally following the
+value if given. Size values are inherited naturally following the
 progression of time. For example, if an epoch \texttt{start\_size} is not
-provided, it is assumed to be equal to the \texttt{end\_size} of the previous
+provided (neither directly, nor via a defaults section),
+it is assumed to be equal to the \texttt{end\_size} of the previous
 epoch. This also means that the first epoch of each population must specify the
-initial size.
+initial size (or it must be provided in a defaults section).
 
 \section{Parsers}\label{sec:appendix-parsers}
 
