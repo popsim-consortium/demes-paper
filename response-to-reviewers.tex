@@ -162,13 +162,13 @@ We thank the reviewer for bringing this omission to our attention.
 It's important that different forward simulators use the same strategy
 for converting from times in the past (as used by Demes) into their
 corresponding values when using a forwards-time convention.
-The trick is to find the oldest non-infinite time in the model
+The technique is to find the oldest non-infinite time in the model
 and use this as the forwards-time reference point, suitably adjusted
-for a burn-in. This same trick is used by DemesDraw for the model diagrams.
+for a burn-in. This same approach is used by DemesDraw for the model diagrams.
 We have added a section to the specification detailing how this
 conversion should be done
 (\url{https://github.com/popsim-consortium/demes-spec/pull/159}),
-and added a brief description to the "Time units" section in the manuscript's
+and added a brief description to the ``Time units'' section in the manuscript's
 appendix.
 
 
@@ -437,15 +437,15 @@ and
 To summarise:
 \begin{itemize}
 \item
-"backwards time" language is confusing when talking about migrations
+``Backwards time'' language is confusing when talking about migrations
 (does one mean migrating individuals, or coalescent lineages moving
 between demes?)
 \item
 Anchoring time in the past and having time values increase towards
-the present would require that users manually translate from "years ago".
+the present would require that users manually translate from ``years ago''.
 This is tedious and error prone.
 \item
-"Now" is a natural time anchor.
+``Now'' is a natural time anchor.
 \item
 There is no perfect choice, but we must make a choice.
 Supporting multiple timescales was considered, but this would be a
@@ -453,15 +453,15 @@ substantial undertaking without a clear benefit.
 \end{itemize}
 
 Demes uses forwards-time conventions in many places, such as for
-"source" and "dest" migration fields (migrants leave a "source"
-deme and have offspring in a "dest" deme),
+``source'' and ``dest'' migration fields (migrants leave a ``source''
+deme and have offspring in a ``dest'' deme),
 epoch ordering (from the past towards the present),
 and a deme must be listed in the input file before its
 descendant demes.
 This latter requirement means that older demes are listed first and that
 demes are topologically sorted according to ancestry relationships.
 Most non-trivial models of biological relevance are treelike with one
-"root" deme that stretches back in time towards infinity.
+``root'' deme that stretches back in time towards infinity.
 The ordering in Demes naturally aligns with how rooted trees are typically drawn:
 top-down as in computer science (\ggcomment{cite Knuth, vol 1, section 2.3}),
 or left-to-right as in phylogenetics
@@ -470,7 +470,7 @@ or left-to-right as in phylogenetics
 Finally, we note that reviewer 2 also raised the issue of how times should
 be interpreted in a forwards-in-time simulator.
 We have added a section to the specification that describes this,
-and added a paragraph to the "Time units" section of the manuscript's
+and added a paragraph to the ``Time units'' section of the manuscript's
 appendix which gives backwards-time and forwards-time interpretations
 for infinite time values.
 

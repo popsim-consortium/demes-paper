@@ -167,7 +167,7 @@ simulators~\citep[e.g.,][]{ewing2010msms,chen2009fast,staab2015scrm}.
 However, this conciseness means that models of even intermediate complexity
 are difficult for humans to understand, making errors likely.
 APIs are more verbose, but require a substantial time investment to
-learn, and are tied to a specific tool, so this knowledge is not portable
+learn, and as they are tied to a specific tool this knowledge is not portable
 to other simulators.
 Like APIs, input parameter file formats for simulators allow the model specification
 to be less terse and allow for documentation in the form of comments.
@@ -332,7 +332,7 @@ specifying default values that are inherited hierarchically.
     }
 \end{figure}
 
-In Figure \ref{fig:IM} we provide an example model in Demes YAML format.
+In Figure \ref{fig:IM} we provide an example isolation-with-migration model in Demes YAML format.
 Models typically start with a concise description, followed by the mandatory
 \texttt{time\_units} field.
 This model uses the \texttt{defaults} section to provide a default \texttt{start\_size}
@@ -352,8 +352,8 @@ so the migration is symmetric. No migration times are specified, so migrations
 occur continuously at the given rate during the time interval over which
 both demes exist (from 100 generations ago until the present).
 We do not attempt a detailed explanation of all Demes features here,
-and readers are instead directed to the tutorial included
-in the online Demes specification
+and readers are instead directed to the tutorial and detailed specification
+in the online documentation
 (\url{https://popsim-consortium.github.io/demes-spec-docs/}).
 
 \subsection*{Parsers}
