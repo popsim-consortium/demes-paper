@@ -337,13 +337,11 @@ format, and add some of its nice features to the MDM (e.g. defaults)
 \end{point}
 \begin{reply}
 
-\ggcomment{Anything here we should clarify in the manuscript?}
-
 We've spent considerable effort trying to anticipate ways in which users
 could create erroneous demographic models. By design the Demes spec
 makes many classes of model misspecification impossible to write,
-requires errors be raised when models are ambiguous,
-and explicitly documents the required behavior for edge cases.
+it requires that errors are raised when models are ambiguous,
+and it explicitly documents the required behavior for edge cases.
 We honestly believe that the Demes format is easier to write
 and interpret than the status quo.
 However, we agree that there are some aspects of the HDM that will be
@@ -354,6 +352,8 @@ and our initial approach was to simply allow the omission of some fields
 when there was an obvious default.
 The result is that an MDM model is a valid HDM model (but not vice versa),
 so users are free to be more explicit in any part of a model.
+This point was not previously mentioned in the manuscript, so we have
+added a paragraph to the Parsers section which explains this.
 
 We provide the following resources to assist users when writing models.
 \begin{itemize}
@@ -381,6 +381,10 @@ converter only accepts MDM models (and only in JSON format).
 It thus relies on users converting HDM models using an
 external parser, which is a small inconvenience for a large gain
 in interoperability.
+This is not ideal, however, because the software must then
+*validate* the model itself---validation is usually the job of the parser,
+and it's undesirable for users to be manually writing or modifying models
+unless they are subsequently validated according to the spec.
 
 \end{reply}
 

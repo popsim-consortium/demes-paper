@@ -352,6 +352,15 @@ we provide high-quality parser implementations in the Python and
 C languages (Table~\ref{tab:software}, as discussed in
 Appendix~\ref{sec:appendix-parsers}).
 
+%\subsection*{Machine Data Model}
+A Demes model in MDM form is also in valid HDM form, so parsing an already
+resolved model does not change the model. Furthermore, this allows users to be
+more verbose and write values even when they are not required by the HDM.
+Being explicit may be preferred for reasons of clarity, or if the user is
+unsure about how an HDM model will be resolved into an MDM model.
+Although we note that in the latter case, users can simply look at the
+parser output.
+
 \subsection*{The scope of Demes}
 
 The Demes specification is static by design---we wish to unambiguously
