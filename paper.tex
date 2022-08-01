@@ -297,7 +297,6 @@ specifying default values that are inherited hierarchically.
 
 \subsection*{Example: an isolation with migration model}
 
-\ggcomment{Add some text here describing the YAML in Figure \ref{fig:IM}.}
 
 \begin{figure}[h!]
     \begin{minipage}{0.45\textwidth}
@@ -322,13 +321,36 @@ specifying default values that are inherited hierarchically.
         \label{fig:IM}
         Example isolation-with-migration Demes model. (A) The Human Data Model
         representation expressed using YAML.
-        (B) A visual representation of the model using \texttt{demesdraw}.
+        (B) A visual representation of the model using \demesdraw.
         The same model in the Machine Data Model form is provided in
         Figure~\ref{fig:IM-MDM}.
         The YAML descriptions in (A) and Figure~\ref{fig:IM-MDM} correspond
         exactly to a JSON description, but are much more human-readable.
     }
 \end{figure}
+
+In Figure \ref{fig:IM} we provide an example model in Demes YAML format.
+Models typically start with a concise description, followed by the mandatory
+\texttt{time\_units} field.
+This model uses the \texttt{defaults} section to provide a default \texttt{start\_size}
+of 1000 individuals for each epoch of each deme.
+There are three demes in the model, an ancestral deme named ``A'' which ceases
+to exist at 100 generations ago, and demes ``X'' and ``Y'' that derive their
+ancestry from ``A'' at this time.
+Demes A and X have only one epoch, in which the population sizes are
+constant, whereas deme Y has two epochs. Deme Y's second epoch has a different
+\texttt{end\_size} than its \texttt{start\_size}, which indicates the size
+grows exponentially from 1000 individuals at 50 generations ago to 3000
+individuals at time 0 (the present).
+The migration section lists one migration stanza, between demes X and Y.
+This migration stanza doesn't indicate a source or destination deme,
+so the migration is symmetric. No migration times are specified, so migrations
+occur continuously at the given rate during the time interval over which
+both demes exist (from 100 generations ago until the present).
+We do not attempt a detailed explanation of all Demes features here,
+and readers are instead directed to the tutorial included
+in the online Demes specification
+(\url{https://popsim-consortium.github.io/demes-spec-docs/}).
 
 \subsection*{Parsers}
 
