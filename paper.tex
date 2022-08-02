@@ -588,6 +588,9 @@ Epochs are contiguous time intervals that define
 the existence interval of the population. Each epoch specifies the population size
 over that interval, which can be a constant value or a function defined by start
 and end sizes that must remain positive.
+Only exponential population size changes are currently supported,
+but other functions may be added to the specification over time.
+
 
 \subsection{Population dynamics}
 
@@ -630,6 +633,7 @@ Each generation a proportion of offspring
 $\sigma$ are expected to be generated through clonal reproduction,
 while $1-\sigma$ are expected to arise through sexual reproduction.
 Within the sexually-reproduced offspring,
+a proportion
 $S$ are born via self-fertilization while the rest
 have parents drawn at random from the previous generation.
 Depending on the simulator, this random drawing of parent may occur
