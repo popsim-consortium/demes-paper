@@ -221,15 +221,18 @@ the Machine Data Model (MDM) designed for programmatic input and processing;
 and the parser, which is responsible for transforming the former
 into the latter.
 
-Below we provide a brief overview of the population genetics models
+Here we provide a brief overview of the population genetics models
 that Demes supports and the components of the Demes infrastructure.
-We then highlight an example usage, including visualization and simulation
-of a multi-population demographic model.
-More detailed descriptions of the population genetics model, parsers, scope, and
-additional examples are given in the Appendix.
 Complete technical details of the MDM and HDM, and the responsibilities
 of the parser are provided in the online Demes specification
 (\url{https://popsim-consortium.github.io/demes-spec-docs/}).
+This specification rigorously defines the data model,
+fully describing the entities and their
+relationships, and the required behavior of implementations.
+Since the online specification is definitive,
+we will not recapitulate the details
+here, but instead focus on the high level properties of the model and
+the rationale behind key design decisions.
 
 \CatchFileDef{\softwaretable}{software-table.tex}{}
 \renewcommand{\arraystretch}{1.5}
@@ -286,18 +289,32 @@ The Demes Human Data Model (HDM) is focused on efficient human
 understanding and avoiding errors.
 We have adopted the widely used YAML format~\citep{ben2009yaml} as the
 primary interface for writing and interchanging demographic models
-(see Appendix~\ref{sec:appendix-spec} for details about our choice of
-YAML).
-Demographic models written in YAML format provide information about global
+(see Appendix~\ref{sec:appendix-spec} for rationale).
+Demographic models provide information about global
 features of the model (such as time units and generation times),
 populations (as ``demes'') and their existence intervals (as ``epochs''),
 and gene flow between populations
-(as continuous ``migrations'' or instantaneous ``pulse'' events)
-(e.g., Figures~\ref{fig:IM}~and~\ref{fig:showcase}).
-The HDM encourages human understanding by avoiding
-redundancy in the description where possible and by providing a mechanism for
-specifying default values that are inherited hierarchically.
+(as continuous ``migrations'' or instantaneous ``pulse'' events).
+Fig~\ref{fig:IM} shows an isolation-with-migration in HDM format.
 
+Structurally, the HDM encourages human understanding
+by avoiding redundancy in the description where possible and by providing a
+mechanism for specifying default values that are inherited hierarchically.
+For values that repeat
+across fields, defaults may be used to implicitly assign default values to
+fields of the given type.  A default is superseded by an explicitly provided
+value if given. Size values are inherited naturally following the
+progression of time. For example, if an epoch \texttt{start\_size} is not
+provided (neither directly, nor via a defaults section),
+it is assumed to be equal to the \texttt{end\_size} of the previous
+epoch. This also means that the first epoch of each population must specify the
+initial size (or it must be provided in a defaults section).
+
+Avoiding redundancy in this way reduces the cognitive load on readers,
+by highlighting necessary parameters which may be otherwise be obscured.
+It is not necessary---or indeed recommended---that all models are expressed
+in a maximally concise form, and we wholeheartedly endorse
+the explicit statement of parameters where it increases model legibility.
 
 \subsection*{Parsers}
 
@@ -326,32 +343,55 @@ Having common parsers also benefits users by providing
 consistent and informative error messages for missing values or
 issues in formatting.
 
-%\subsection*{Machine Data Model}
-A Demes model in MDM form is also in valid HDM form, so parsing an already
-resolved model does not change the model. Furthermore, this allows users to be
-more verbose and write values even when they are not required by the HDM.
-Being explicit may be preferred for reasons of clarity, or if the user is
-unsure about how an HDM model will be resolved into an MDM model.
-Although we note that in the latter case, users can simply look at the
-parser output.
+\subsection*{Scope of the specification}
 
-\subsection*{The scope of Demes}
+A primary design goal of Demes is to provide a means of
+unambiguously communicating the results of demographic
+model inferences to population genetic simulators.
+Since demography is defined in terms of groups of individuals
+and these groupings are influenced by genetics,
+it is difficult to find a simple definition that separates
+the two. Thus, we have attempted to be pragmatic,
+limiting the features that we include in Demes to
+those that are (or can reasonably be expected to)
+in practise regarded as part of a demographic model.
+
+Thus, the model is limited to features that we can expect many different
+demographic inference and simulation methods to share. The specification only
+describes demographic features at the population level. Features of genome
+biology are out of scope, including mutation and recombination rates,
+genome annotations, ploidy, and so on. Selection and dominance models are
+absent, as discussed in Appendix.~\ref{sec:appendix-pop-gen-model}.
+It is important to note, however, that Demes may be used in applications that
+include additional population genetic processes outside of what is explicitly
+modelled in the specification, such as interpreting population sizes as
+carrying capacities, implementations of hard selection, or layering more
+complicated mating or spatial structure. The Demes specification
+is intended to provide a basic model that can be elaborated on where necessary.
+
+Demes is not a standard population genetic simulation specification,
+although it could be \emph{part} of one.
+Since the standard is based on JSON, and JSON documents can be
+arbitrarily nested, it is possible to imagine a simple specification
+of genome features such as mutation and recombination rates
+in which the demography is defined by an embedded Demes specification.
+Features of the simulation specification (such as defining
+the time and location of samples) can then \emph{refer to} the Demes
+model. This design, in which we embed the Demographic model
+\emph{within} a larger specification rather than adding arbitrary
+and unrelated complexities \emph{to} the demography
+is an essential simplification and separation of duties.
 
 The Demes specification is static by design---we wish to unambiguously
 describe a demographic model with a concrete set of parameters.
 This simplicity means that we cannot directly specify parameter distributions
 or estimated confidence intervals for those parameters.
 While it is not difficult to imagine extending the specification in ways that
-would allow this (Appendix~\ref{sec:appendix-scope}), it is not immediately
-clear that the benefits are worth the increased parser complexity.
-It is important to note, however, that Demes may be used in applications that
-include additional population genetic processes outside of what is explicitly
-modeled in the specification, such as interpreting population sizes as
-carrying capacities, implementations of hard selection, or layering more
-complicated mating or spatial structure. The Demes specification therefore
-provides a basic model that can be elaborated on where necessary.
+would allow this, it is not
+clear that the benefits are worth the increased parser complexity
+(see Appendix~\ref{sec:appendix-static}).
 
-\section*{Example: an isolation with migration model}
+\section*{Example: an isolation-with-migration model}
 
 \begin{figure}[h!]
     \begin{minipage}{0.45\textwidth}
@@ -482,7 +522,7 @@ between inference and simulation, and also to provide the foundations
 for a sustainable ecosystem of tools built around this data model.
 Table~\ref{tab:software} shows some initial infrastructure that we have
 built as part of developing Demes, but many other useful tools
-can be envisaged that consume, transform, or produce this format.
+can be envisaged that produce, consume, or transform this format.
 
 Reproducibility is a significant problem throughout the
 sciences~\citep{baker20161}, and various measures have been
@@ -502,6 +542,7 @@ publications, either as supplemental material or uploaded to a data repository.
 Graham Gower was supported by a Villum Fonden Young Investigator award to Fernando Racimo (project no. 00025300).
 Ryan Gutenkunst was supported by the National Institute of General Medical Sciences of the National Institutes of Health (R01GM127348 to RNG).
 Matthew Hartfield is supported by a NERC Independent Research Fellowship (NE/R015686/1).
+Jerome Kelleher is supported by the Robertson Foundation.
 
 \bibliographystyle{genetics}
 \bibliography{paper}
@@ -526,22 +567,6 @@ Along with the schema, full technical details of the
 of the model are provided in the
 online specification document
 (\url{https://popsim-consortium.github.io/demes-spec-docs/}).
-This specification rigorously defines the data model,
-fully describing the entities and their
-relationships, and the required behavior of implementations.
-Since the online specification is definitive,
-we will not recapitulate the details
-here, but instead focus on the high level properties of the model and
-the rationale behind key design decisions.
-
-Below we detail the population genetics model in
-Appendix~\ref{sec:appendix-pop-gen-model},
-the high-level, human-readable model specification in
-Appendix~\ref{sec:appendix-spec}, demographic model parsers and their
-intended behavior in Appendix~\ref{sec:appendix-parsers}, and the
-intended scope of Demes in Appendix~\ref{sec:appendix-scope}.
-The extended figures in Appendix~\ref{sec:appendix-figures} provide
-additional examples and illustrations of Demes usage.
 
 \section{Population genetics model details}
 \label{sec:appendix-pop-gen-model}
@@ -687,10 +712,9 @@ individuals in a destination population by individuals with parents from a
 source population.
 
 
-\section{Human Data Model}\label{sec:appendix-spec}
+\section{Rationale for YAML}\label{sec:appendix-spec}
 
-The Demes Human Data Model (HDM) is focused on the efficiency of
-human understanding and the avoidance of errors. We have adopted the widely
+We have adopted the widely
 used YAML format~\citep{ben2009yaml} as the recommended means of interchanging
 Demes models (e.g., Figures~\ref{fig:IM}~and~\ref{fig:tennessen}). YAML is a data
 serialization language with an emphasis on simplicity and which interoperates well
@@ -704,26 +728,7 @@ Since the Demes data model is defined in JSON Schema,
 however, there is no formal dependency on YAML and implementations may choose
 to use JSON directly if they wish (e.g., for greater efficiency).
 
-Structurally, the HDM encourages human understanding
-by avoiding redundancy in the description where possible and by providing a
-mechanism for specifying default values that are inherited hierarchically.
-Figure~\ref{fig:IM} shows an example Demes model expressed in both the
-HDM and Machine Data Model (MDM) forms (both in terms of YAML syntax).
-For values that repeat
-across fields, defaults may be used to implicitly assign default values to
-fields of the given type.  A default is superseded by an explicitly provided
-value if given. Size values are inherited naturally following the
-progression of time. For example, if an epoch \texttt{start\_size} is not
-provided (neither directly, nor via a defaults section),
-it is assumed to be equal to the \texttt{end\_size} of the previous
-epoch. This also means that the first epoch of each population must specify the
-initial size (or it must be provided in a defaults section).
-
-
-\section{Scope of the specification}
-\label{sec:appendix-scope}
-
-\subsection{Static models, not parameterized models}
+\section{Rationale for static models}
 \label{sec:appendix-static}
 
 The Demes specification is designed to describe demographic
@@ -782,33 +787,6 @@ specifically designed for extending static data in arbitrarily complex ways
 %\citep{ytt,jsonnet,cue,dhall}.
 %(\ggcomment{refs: YTT, Jsonnet, CUE, Dhall}).
 
-
-\subsection{Population-level features, not genome features}
-\label{sec:appendix-features}
-
-Demes is designed to interface with a large number of simulation and inference
-methods, so we have restricted the specification to only describe
-demographic features at the population level.
-Features of the underlying genome biology are omitted,
-including mutation and recombination rates,
-genome annotations, ploidy, and so on.
-Selection and dominance models are absent, as discussed in
-Sec.~\ref{sec:appendix-pop-gen-model}, and we do not
-specify how individuals are sampled.
-
-The model is, by design, very limited. We do not specify details of
-individuals or of the processes that happen within populations,
-because such details are necessarily complicated, vary greatly by
-application, and attempts to encompass such a broad range of biological
-processes are unlikely to succeed.
-The narrow focus on individuals and their groupings into populations
-should ensure that the Demes standard is stable, and not subject to
-continual development as more and more elaborations of basic processes
-are added. Demes is intended to provide \emph{part} of a
-simulation model specification; other parts of the specification,
-such as sampling strategies, or parameters that vary by time
-or population can \emph{refer to} this well defined and unambiguous
-description of the demography.
 
 \section{Extended data and figures}
 \label{sec:appendix-figures}
