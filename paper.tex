@@ -298,8 +298,58 @@ The HDM encourages human understanding by avoiding
 redundancy in the description where possible and by providing a mechanism for
 specifying default values that are inherited hierarchically.
 
-\subsection*{Example: an isolation with migration model}
 
+\subsection*{Parsers}
+
+While the HDM is designed for human readability and
+conciseness, the underlying data model suitable for software implementation
+(the Machine Data Model, or MDM)
+is redundant and exhaustive.
+Translation from the HDM to the MDM
+requires resolving hierarchically-defined default values and verifying
+relationships between populations and the validity of specified parameter
+values.
+Because this translation and validation requires significant
+programming effort, we define a standard software entity as part of the
+specification to perform this task (the parser),
+which is intended to be shared by programs that support Demes as input.
+By maintaining high-quality Demes parsers available as libraries,
+we ensure consistency across simulation and inference
+software.
+Having common parsers also benefits users by providing
+consistent and informative error messages for missing values or
+issues in formatting.
+In addition to a reference implementation written in Python,
+we provide high-quality parser implementations in the Python and
+C languages (Table~\ref{tab:software}, as discussed in
+Appendix~\ref{sec:appendix-parsers}).
+
+%\subsection*{Machine Data Model}
+A Demes model in MDM form is also in valid HDM form, so parsing an already
+resolved model does not change the model. Furthermore, this allows users to be
+more verbose and write values even when they are not required by the HDM.
+Being explicit may be preferred for reasons of clarity, or if the user is
+unsure about how an HDM model will be resolved into an MDM model.
+Although we note that in the latter case, users can simply look at the
+parser output.
+
+\subsection*{The scope of Demes}
+
+The Demes specification is static by design---we wish to unambiguously
+describe a demographic model with a concrete set of parameters.
+This simplicity means that we cannot directly specify parameter distributions
+or estimated confidence intervals for those parameters.
+While it is not difficult to imagine extending the specification in ways that
+would allow this (Appendix~\ref{sec:appendix-scope}), it is not immediately
+clear that the benefits are worth the increased parser complexity.
+It is important to note, however, that Demes may be used in applications that
+include additional population genetic processes outside of what is explicitly
+modeled in the specification, such as interpreting population sizes as
+carrying capacities, implementations of hard selection, or layering more
+complicated mating or spatial structure. The Demes specification therefore
+provides a basic model that can be elaborated on where necessary.
+
+\section*{Example: an isolation with migration model}
 
 \begin{figure}[h!]
     \begin{minipage}{0.45\textwidth}
@@ -355,56 +405,6 @@ We do not attempt a detailed explanation of all Demes features here,
 and readers are instead directed to the tutorial and detailed specification
 in the online documentation
 (\url{https://popsim-consortium.github.io/demes-spec-docs/}).
-
-\subsection*{Parsers}
-
-While the HDM is designed for human readability and
-conciseness, the underlying data model suitable for software implementation
-(the Machine Data Model, or MDM)
-is redundant and exhaustive.
-Translation from the HDM to the MDM
-requires resolving hierarchically-defined default values and verifying
-relationships between populations and the validity of specified parameter
-values.
-Because this translation and validation requires significant
-programming effort, we define a standard software entity as part of the
-specification to perform this task (the parser),
-which is intended to be shared by programs that support Demes as input.
-By maintaining high-quality Demes parsers available as libraries,
-we ensure consistency across simulation and inference
-software.
-Having common parsers also benefits users by providing
-consistent and informative error messages for missing values or
-issues in formatting.
-In addition to a reference implementation written in Python,
-we provide high-quality parser implementations in the Python and
-C languages (Table~\ref{tab:software}, as discussed in
-Appendix~\ref{sec:appendix-parsers}).
-
-%\subsection*{Machine Data Model}
-A Demes model in MDM form is also in valid HDM form, so parsing an already
-resolved model does not change the model. Furthermore, this allows users to be
-more verbose and write values even when they are not required by the HDM.
-Being explicit may be preferred for reasons of clarity, or if the user is
-unsure about how an HDM model will be resolved into an MDM model.
-Although we note that in the latter case, users can simply look at the
-parser output.
-
-\subsection*{The scope of Demes}
-
-The Demes specification is static by design---we wish to unambiguously
-describe a demographic model with a concrete set of parameters.
-This simplicity means that we cannot directly specify parameter distributions
-or estimated confidence intervals for those parameters.
-While it is not difficult to imagine extending the specification in ways that
-would allow this (Appendix~\ref{sec:appendix-scope}), it is not immediately
-clear that the benefits are worth the increased parser complexity.
-It is important to note, however, that Demes may be used in applications that
-include additional population genetic processes outside of what is explicitly
-modeled in the specification, such as interpreting population sizes as
-carrying capacities, implementations of hard selection, or layering more
-complicated mating or spatial structure. The Demes specification therefore
-provides a basic model that can be elaborated on where necessary.
 
 \section*{Application: simulation using Demes}
 
