@@ -373,6 +373,9 @@ which is intended to be shared by programs that support Demes as input.
 By maintaining high-quality Demes parsers available as libraries,
 we ensure consistency across simulation and inference
 software.
+Having common parsers also benefits users by providing
+consistent and informative error messages for missing values or
+issues in formatting.
 In addition to a reference implementation written in Python,
 we provide high-quality parser implementations in the Python and
 C languages (Table~\ref{tab:software}, as discussed in
@@ -822,7 +825,7 @@ methods, so we have restricted the specification to only describe
 demographic features at the population level.
 Features of the underlying genome biology are omitted,
 including mutation and recombination rates,
-genome annotations, ploidy, sequence annotations, and so on.
+genome annotations, ploidy, and so on.
 Selection and dominance models are absent, as discussed in
 Sec.~\ref{sec:appendix-pop-gen-model}, and we do not
 specify how individuals are sampled.
