@@ -57,34 +57,31 @@
 
 \section*{Response to the editor}
 % General intro text goes here
-Thank you for considering this manuscript for publication.
+Thank you for considering this manuscript for publication, for your
+positive comments and in particular for the helpful and insightful reviews.
 
-Things to mention:
+The changes that we have made mostly reflect an attempt to better
+explain the purpose of Demes, its scope, and the rationale for
+key design decisions. While the changes to the text
+look fairly extensive (see the attached latex-diff), they are mostly
+a function of moving text from the appendix to the main text, and
+removing redundancy.
+
+Specifically:
 
 \begin{itemize}
 \item We compressed the text and improved the presentation by removing
 the Parsers appendix (there was little extra information that was not
 already in the existing main text section).
-\item Reviewer 2 made some good and fair points, but which were mainly
-(we believe) missing the underlying rationale for design decisions.
+\item Laurent made some good and fair points, but which were mainly
+(we believe) reflecting our failure at communicating
+the underlying rationale for design decisions effectively.
 We have rearranged the text, bringing some content that was in the
 appendix into the main text to try and address this up front
 and avoid similar misunderstandings.
 \end{itemize}
 
-\subsection*{Specific comments}
-% We address your specific comments below:
-% % \reviewersection
-
-\textit{
-Demes is an important advance to standardizing the implementation of popgen
-models, and so a very welcome contribution. The reviewers give a number of very
-useful suggestions. I leave it up to you how you proceed with incorporating
-changes based on these comments, as you will have more of a sense of how the
-comments overlap those from other users, but please do write a response to all
-of the comments.
-}
-
+We have responded to all comments point-by-point, below.
 
 \section*{Response to the reviewers}
 % General intro text goes here
@@ -158,12 +155,10 @@ it is done well, but we've seen formats change for other things through time
 (e.g. in bioinformatics) to adapt to new usage.
 \end{point}
 \begin{reply}
-
 We have had an issue open for this for some time (\url{https://github.com/popsim-consortium/demes-spec/issues/20}).
 The current plan is to add a variable for this when the spec hits version 1.0, which will coincide
 with this publication.
 Files omitting a spec version will assume a default value of 1.0.
-
 \end{reply}
 
 \begin{point}
@@ -174,8 +169,7 @@ Especially that in your examples there are no start\_time for the first
 population. This might be hard for some users to wrap their head around.
 \end{point}
 \begin{reply}
-
-We thank the reviewer for bringing this omission to our attention.
+Thank you for bringing this omission to our attention.
 It's important that different forward simulators use the same strategy
 for converting from times in the past (as used by Demes) into their
 corresponding values when using a forwards-time convention.
@@ -187,8 +181,6 @@ conversion should be done
 (\url{https://github.com/popsim-consortium/demes-spec/pull/159}),
 and added a brief description to the ``Time units'' section in the manuscript's
 appendix.
-
-
 \end{reply}
 
 \begin{point}
@@ -198,40 +190,36 @@ and the given programming language for users not used to it). Learning a new
 API each time you change simulator is also time consuming.
 \end{point}
 \begin{reply}
-
 We have updated the text to include this point.
 \end{reply}
 
 \begin{point}
-p2 "YAML format" you could specify that it is a data serialization language
+p2 ``YAML format" you could specify that it is a data serialization language
 \end{point}
 \begin{reply}
-
 We have updated the text to include this point.
 \end{reply}
 
 \begin{point}
-p12 "time units is in generations" you could precise it is the default value here, if it is?
+p12 ``time units is in generations" you could precise it is the default value here, if it is?
 \end{point}
 \begin{reply}
-
 There is no default value for the time units. This must be specified explicitly.
 We mention that the time units field is mandatory in the new Example section
 that describes the new Figure 1.
 \end{reply}
 
 \begin{point}
-p12 "such as years, accompanied by the generation time". Might be worth
+p12 ``such as years, accompanied by the generation time". Might be worth
   detailing that it is needed as simulators work with generations and not
 years, so there needs to be some kind of conversion.
 \end{point}
 \begin{reply}
-
 We have updated the text to include this point.
 \end{reply}
 
 \begin{point}
-p12 "function defined by start and end sizes" You should detail here what are
+p12 ``function defined by start and end sizes" You should detail here what are
   the models of population expansion available and what is the default. Linear,
 exponential, etc.?
 \end{point}
@@ -242,14 +230,14 @@ to include more.
 \end{reply}
 
 \begin{point}
-p12 "S are born via [...]" missing that S is a proportion
+p12 ``S are born via [...]" missing that S is a proportion
 \end{point}
 \begin{reply}
 Fixed.
 \end{reply}
 
 \begin{point}
-p13-14 "Other implicit values [...]" until end of paragraph, this part with
+p13-14 ``Other implicit values [...]" until end of paragraph, this part with
   the example could be worth integrating into the main text as this is a major
 thing to understand about the data model in my opinion.
 \end{point}
@@ -267,7 +255,7 @@ We have updated the Parsers main text section to make this point.
 \end{reply}
 
 \begin{point}
-p15 what's the difference between "genome annotations" and "sequence annotations"?
+p15 what's the difference between ``genome annotations" and ``sequence annotations"?
 \end{point}
 \begin{reply}
 Good point; we have deleted the ``sequence annotations''.
@@ -284,7 +272,6 @@ That way you could write your model in Japanese or Spanish and it could still
 be read without issue.
 \end{point}
 \begin{reply}
-
 The field names in a YAML file are variables, not words \textit{per se}.
 Thus, allowing different inputs for the field names is like having code trying
 to understand different names for the same piece of data.
@@ -292,7 +279,6 @@ While it would be useful to allow users to generate files with variable names
 that are not English words, and in character sets other than Latin, those files would
 require additional conversion into the variable/value format defined by \textit{demes}.
 We feel that such conversion is beyond the scope of this project.
-
 \end{reply}
 
 \begin{point}
@@ -300,7 +286,6 @@ Do you think such plain text format also provide a better substrate for
 versionning demographic models? Could be mentioned.
 \end{point}
 \begin{reply}
-
 While plain-text formats are ideally suited for use with version control
 systems such as git, almost all competing/custom formats are also
 plain text and thus share this property. However, Demes models are more
@@ -311,7 +296,7 @@ changes more obvious when reviewing change requests such as git pull requests.
 \reviewersection
 
 \begin{point}
-In their paper entitled "Demes: a standard format for demographic models",
+In their paper entitled ``Demes: a standard format for demographic models",
 Gower et al. propose a new way to describe (historical) demographic models of
 populations.
 
