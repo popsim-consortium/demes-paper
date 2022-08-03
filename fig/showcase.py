@@ -117,8 +117,8 @@ if __name__ == "__main__":
     ax4 = plt.subplot2grid(grid, (2, 4), colspan=6, rowspan=3)
     img = mpimg.imread("minted-snippet.png")
     yy, xx, _ = img.shape
-    ax4.set_xlim(0, xx)
-    ax4.set_ylim(yy, 0)
+    ax4.set_xlim(-xx * 0.01, xx * 1.01)
+    ax4.set_ylim(yy * 1.01, -yy * 0.01)
     ax4.imshow(img, interpolation="none")
     ax4.set_frame_on(False)
     ax4.set_xticks([])

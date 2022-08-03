@@ -104,8 +104,9 @@ to alleviate these issues. Demes provides a well-defined and unambiguous
 model of populations and their properties that is straightforward to
 implement in software, and a text file format that is designed for
 simplicity and clarity.
-We provide thoroughly tested implementations of Demes parsers in Python
-and C, and showcase initial support in several simulators and inference
+We provide thoroughly tested implementations of Demes parsers
+in multiple languages including Python and C,
+and showcase initial support in several simulators and inference
 methods.
 An introduction to the file format and a detailed specification are available at:\\
 \url{https://popsim-consortium.github.io/demes-spec-docs/}.
@@ -257,7 +258,7 @@ the rationale behind key design decisions.
 For inference and simulation software to meaningfully interoperate there
 must be a shared understanding of what a demographic model \emph{is}.
 Population genetics is a large field, and rather than attempting to
-capture all possible within- and between- population processes, we have
+capture all possible within- and between-population processes, we have
 instead adopted a pragmatic approach of identifying a common set
 of assumptions shared by many methods. We outline the processes
 and assumptions briefly here and in
@@ -354,7 +355,7 @@ The Demes specification precisely defines the required behavior of parsers,
 and we provide a reference implementation written in Python to resolve any
 potential ambiguities, as well as an extensive test suite of examples and the
 expected outputs. In addition, we have high-quality parser implementations in
-the Python and C languages (Table~\ref{tab:software})
+the Python, C, Rust, and Julia languages (Table~\ref{tab:software})
 providing a solid foundation for the software ecosystem.
 By maintaining high-quality Demes parsers available as libraries,
 we ensure consistency across simulation and inference
@@ -383,7 +384,7 @@ genome annotations, ploidy, and so on. Selection and dominance models are
 absent, as discussed in Appendix~\ref{sec:appendix-pop-gen-model}.
 It is important to note, however, that Demes may be used in applications that
 include additional population genetic processes outside of what is explicitly
-modelled in the specification, such as interpreting population sizes as
+modeled in the specification, such as interpreting population sizes as
 carrying capacities, implementations of hard selection, or layering more
 complicated mating or spatial structure. The Demes specification
 is intended to provide a basic model that can be elaborated on where necessary.
@@ -391,7 +392,7 @@ is intended to provide a basic model that can be elaborated on where necessary.
 Demes is not a standard population genetic simulation specification,
 although it could be \emph{part} of one.
 Since the standard is based on JSON, and JSON documents can be
-arbitrarily nested, it is possible to imagine a simple specification
+arbitrarily nested, we can imagine a simple specification
 of genome features such as mutation and recombination rates
 in which the demography is defined by an embedded Demes specification.
 Features of the simulation specification (such as defining
