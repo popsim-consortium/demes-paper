@@ -57,34 +57,31 @@
 
 \section*{Response to the editor}
 % General intro text goes here
-Thank you for considering this manuscript for publication.
+Thank you for considering this manuscript for publication, for your
+positive comments and in particular for the helpful and insightful reviews.
 
-Things to mention:
+The changes that we have made mostly reflect an attempt to better
+explain the purpose of Demes, its scope, and the rationale for
+key design decisions. While the changes to the text
+look fairly extensive (see the attached latex-diff), they are mostly
+a function of moving text from the appendix to the main text, and
+removing redundancy.
+
+Specifically:
 
 \begin{itemize}
 \item We compressed the text and improved the presentation by removing
 the Parsers appendix (there was little extra information that was not
 already in the existing main text section).
-\item Reviewer 2 made some good and fair points, but which were mainly
-(we believe) missing the underlying rationale for design decisions.
+\item Laurent made some good and fair points, but which were mainly
+(we believe) reflecting our failure at communicating
+the underlying rationale for design decisions effectively.
 We have rearranged the text, bringing some content that was in the
 appendix into the main text to try and address this up front
 and avoid similar misunderstandings.
 \end{itemize}
 
-\subsection*{Specific comments}
-% We address your specific comments below:
-% % \reviewersection
-
-\textit{
-Demes is an important advance to standardizing the implementation of popgen
-models, and so a very welcome contribution. The reviewers give a number of very
-useful suggestions. I leave it up to you how you proceed with incorporating
-changes based on these comments, as you will have more of a sense of how the
-comments overlap those from other users, but please do write a response to all
-of the comments.
-}
-
+We have responded to all comments point-by-point, below.
 
 \section*{Response to the reviewers}
 % General intro text goes here
@@ -158,12 +155,10 @@ it is done well, but we've seen formats change for other things through time
 (e.g. in bioinformatics) to adapt to new usage.
 \end{point}
 \begin{reply}
-
 We have had an issue open for this for some time (\url{https://github.com/popsim-consortium/demes-spec/issues/20}).
 The current plan is to add a variable for this when the spec hits version 1.0, which will coincide
 with this publication.
 Files omitting a spec version will assume a default value of 1.0.
-
 \end{reply}
 
 \begin{point}
@@ -174,8 +169,7 @@ Especially that in your examples there are no start\_time for the first
 population. This might be hard for some users to wrap their head around.
 \end{point}
 \begin{reply}
-
-We thank the reviewer for bringing this omission to our attention.
+Thank you for bringing this omission to our attention.
 It's important that different forward simulators use the same strategy
 for converting from times in the past (as used by Demes) into their
 corresponding values when using a forwards-time convention.
@@ -187,8 +181,6 @@ conversion should be done
 (\url{https://github.com/popsim-consortium/demes-spec/pull/159}),
 and added a brief description to the ``Time units'' section in the manuscript's
 appendix.
-
-
 \end{reply}
 
 \begin{point}
@@ -198,40 +190,36 @@ and the given programming language for users not used to it). Learning a new
 API each time you change simulator is also time consuming.
 \end{point}
 \begin{reply}
-
 We have updated the text to include this point.
 \end{reply}
 
 \begin{point}
-p2 "YAML format" you could specify that it is a data serialization language
+p2 ``YAML format" you could specify that it is a data serialization language
 \end{point}
 \begin{reply}
-
 We have updated the text to include this point.
 \end{reply}
 
 \begin{point}
-p12 "time units is in generations" you could precise it is the default value here, if it is?
+p12 ``time units is in generations" you could precise it is the default value here, if it is?
 \end{point}
 \begin{reply}
-
 There is no default value for the time units. This must be specified explicitly.
 We mention that the time units field is mandatory in the new Example section
 that describes the new Figure 1.
 \end{reply}
 
 \begin{point}
-p12 "such as years, accompanied by the generation time". Might be worth
+p12 ``such as years, accompanied by the generation time". Might be worth
   detailing that it is needed as simulators work with generations and not
 years, so there needs to be some kind of conversion.
 \end{point}
 \begin{reply}
-
 We have updated the text to include this point.
 \end{reply}
 
 \begin{point}
-p12 "function defined by start and end sizes" You should detail here what are
+p12 ``function defined by start and end sizes" You should detail here what are
   the models of population expansion available and what is the default. Linear,
 exponential, etc.?
 \end{point}
@@ -242,14 +230,14 @@ to include more.
 \end{reply}
 
 \begin{point}
-p12 "S are born via [...]" missing that S is a proportion
+p12 ``S are born via [...]" missing that S is a proportion
 \end{point}
 \begin{reply}
 Fixed.
 \end{reply}
 
 \begin{point}
-p13-14 "Other implicit values [...]" until end of paragraph, this part with
+p13-14 ``Other implicit values [...]" until end of paragraph, this part with
   the example could be worth integrating into the main text as this is a major
 thing to understand about the data model in my opinion.
 \end{point}
@@ -267,7 +255,7 @@ We have updated the Parsers main text section to make this point.
 \end{reply}
 
 \begin{point}
-p15 what's the difference between "genome annotations" and "sequence annotations"?
+p15 what's the difference between ``genome annotations" and ``sequence annotations"?
 \end{point}
 \begin{reply}
 Good point; we have deleted the ``sequence annotations''.
@@ -284,7 +272,6 @@ That way you could write your model in Japanese or Spanish and it could still
 be read without issue.
 \end{point}
 \begin{reply}
-
 The field names in a YAML file are variables, not words \textit{per se}.
 Thus, allowing different inputs for the field names is like having code trying
 to understand different names for the same piece of data.
@@ -292,7 +279,6 @@ While it would be useful to allow users to generate files with variable names
 that are not English words, and in character sets other than Latin, those files would
 require additional conversion into the variable/value format defined by \textit{demes}.
 We feel that such conversion is beyond the scope of this project.
-
 \end{reply}
 
 \begin{point}
@@ -300,7 +286,6 @@ Do you think such plain text format also provide a better substrate for
 versionning demographic models? Could be mentioned.
 \end{point}
 \begin{reply}
-
 While plain-text formats are ideally suited for use with version control
 systems such as git, almost all competing/custom formats are also
 plain text and thus share this property. However, Demes models are more
@@ -311,7 +296,7 @@ changes more obvious when reviewing change requests such as git pull requests.
 \reviewersection
 
 \begin{point}
-In their paper entitled "Demes: a standard format for demographic models",
+In their paper entitled ``Demes: a standard format for demographic models",
 Gower et al. propose a new way to describe (historical) demographic models of
 populations.
 
@@ -340,7 +325,24 @@ I have found the paper clearly written and I have just a few comments,
 regarding the structure of the paper and the Demes implementation itself.
 \end{point}
 \begin{reply}
-TODO
+Dear Laurent,
+
+Thank you for the kind words and the careful and insightful review.
+We have found your comments extremely useful, helping us to see
+parts of the manuscript where we had failed to sufficiently explain
+key points and motivations. We have addressed each of your points
+in turn below, and would be grateful for any further thoughts
+you may have.
+
+On a practical note, we have waited until Demes and the surrounding
+software ecosystem is quite mature before submitting this paper
+for publication. On the upside, this means that the features
+we are describing are battle-hardened, and the abstractions that
+we are using have worked well in practice for a range of
+applications. On the downside, however, this means that our ability
+to change the specification is rather limited, as we hope you
+will appreciate.
+
 \end{reply}
 
 \begin{point}
@@ -358,19 +360,32 @@ programs could use the MDM as the default input file format. Having both
 possibilities would be great, but personally I would just remove the HDM
 format, and add some of its nice features to the MDM (e.g. defaults)
 \end{point}
-\begin{reply}
 
-We thank the reviewer for the useful feedback, and for relaying their
-experience.
+\begin{reply}
+This is a reasonable point, which we have addressed by
+(a) making the rationale for the HDM clearer in the text; and (b) adding an
+example IM model in HDM format, which we briefly explain. Hopefully
+this will be enough for readers to understand the basic elements of the
+model.
+
+A key goal of the HDM is human \emph{understanding} --- we hope that
+users can look at a Demes model (and perhaps the demesdraw rendering)
+as illustrated in the new figure, and understand key features of it.
+Perhaps people may even include models used in the text of their
+papers (as we often see for \texttt{ms} command lines!).
+Conciseness, and avoiding the repetition of ``obvious'' values,
+is a key part of making this representation human-readable.
+
+In terms of user-friendliness, we think that
+the tools available for working with
+Demes really are substantially better than the status quo.
 We've spent considerable effort trying to anticipate ways in which users
 could create erroneous demographic models. By design the Demes spec
 makes many classes of model misspecification impossible to write,
 it requires that errors are raised when models are ambiguous,
 and it explicitly documents the required behavior for edge cases.
-We honestly believe that the Demes format is easier to write
-and interpret than the status quo.
-However, we agree that there are some aspects of the HDM that will be
-confusing for new users.
+Of course, there will be some aspects of the HDM that will be
+confusing for new users --- nothing is perfect.
 
 The HDM was explicitly designed to be a less-verbose version of the MDM,
 and our initial approach was to simply allow the omission of some fields
@@ -407,11 +422,6 @@ converter only accepts MDM models (and only in JSON format).
 It thus relies on users converting HDM models using an
 external parser, which is a small inconvenience for a large gain
 in interoperability.
-This is not ideal, however, because the software must then
-*validate* the model itself---validation is usually the job of the parser,
-and it's undesirable for users to be manually writing or modifying models
-unless they are subsequently validated according to the spec.
-
 \end{reply}
 
 \begin{point}
@@ -425,16 +435,9 @@ for both the time definition and the demographic definition of epochs (maybe
 begin with the more recent epochs and finish with the more ancient ones).
 \end{point}
 \begin{reply}
-
-We thank the reviewer for the critical feedback and suggestions.
-On a practical note, changing how the timescale is defined
-at this stage of the Demes project would require substantial changes
-to all of the Demes software and documentation.
-
-We appreciate that the timescale we've chosen may at first be jarring
-because Demes time values increase towards the past, but Demes uses
-forwards-time language and ordering conventions.
-Defining the timescale was a fundamental choice that we didn't take lightly.
+This is an entirely reasonable point, and a question that
+we agonised over at length. There is no correct answer, but
+we believe that the current choice is the ``least-bad'' option.
 All decisions about Demes are publicly recorded in github issues,
 pull requests, and many experiments in both writing models and implementing
 Demes-related software.
@@ -472,19 +475,12 @@ demes are topologically sorted according to ancestry relationships.
 Most non-trivial models of biological relevance are treelike with one
 ``root'' deme that stretches back in time towards infinity.
 The ordering in Demes naturally aligns with how rooted trees are typically drawn:
-top-down as in computer science (\ggcomment{cite Knuth, vol 1, section 2.3}),
+top-down as in computer science (e.g.~Knuth)
 or left-to-right as in phylogenetics
-(\ggcomment{cite Felsenstein, Inferring Phylogenies, chapter 34}).
-
-Finally, we note that reviewer 2 also raised the issue of how times should
-be interpreted in a forwards-in-time simulator.
-We have added a section to the specification that describes this,
-and added a paragraph to the ``Time units'' section of the manuscript's
-appendix which gives backwards-time and forwards-time interpretations
-for infinite time values.
-
+(e.g.~Felsenstein)
 
 \end{reply}
+
 \begin{point}
 p. 12 Population dynamics. I am not sure that it is necessary to assume a
   specific population dynamics model (e.g. Wright-Fisher model) for a data
@@ -499,18 +495,26 @@ implement selection that it should be left to the specific programs reading the
 demography.
 \end{point}
 \begin{reply}
-TODO
-
+Excellent point, and we entirely agree. We have tried to clarify by simply
+stating in the main text that dynamics are assumed to be Wright-Fisher,
+with a more precise statement in the Appendix. We have also tried to clarify
+the motivation for stating these assumptions in the main text.
 \end{reply}
+
 \begin{point}
 - p. 12 selfing and cloning. These two parameters are making more sense for
   forward than backward simulators, and they thus do not seem to be fully
 generic.
 \end{point}
 \begin{reply}
-TODO
-
+Indeed---this is a point that we had very long and detailed discussions on.
+In the end, the decision to include them is pragmatic, since several of the
+initial software implementations consider these parameters to be part of
+the demography. We have updated the text in the paper to reflect this
+choice, and stressed the pragmatic approach to defining the line between
+genetics and demography.
 \end{reply}
+
 \begin{point}
 p. 13: Defaults and inheritance. It is not entirely clear to me what happens
   when a default parameter is superseded in a given ancestral population. Is
@@ -518,14 +522,16 @@ the new value inherited in the daughter populations or is it the default value
 that applies?
 \end{point}
 \begin{reply}
-TODO
+Default values are inherited hierarchically through the \emph{document},
+rather than the graph of demes.
 
-\ggcomment{
-Check the spec to see if this is clear there.
-Then refer to the spec.
-}
-
+Please see the specification
+(\url{https://popsim-consortium.github.io/demes-spec-docs/main/specification.html#defaults})
+and tutorial
+(\url{https://popsim-consortium.github.io/demes-spec-docs/main/tutorial.html#setting-defaults})
+for the detailed documentation on this.
 \end{reply}
+
 \begin{point}
 p. 14. Parsers. It is a good idea to provide HDM to MDM parsers, but I note
   that each program reading an MDM will also implement its own parser to read
@@ -536,21 +542,31 @@ population ancestors have all been defined, or that end\_times are compatible
 with start\_time.
 \end{point}
 \begin{reply}
-TODO
+It's not necessarily true that a program that accepts the MDM will need to
+write its own Demes (MDM) parser. For example, msprime uses the \texttt{demes}
+Python module to accept demographic models in Demes format. In effect,
+what msprime does is take the object model provided by the parser
+which is identical to an MDM document. Msprime then processes this document,
+converting it into its own internal Demography format. Once the conversion
+into msprime's internal format is complete, \emph{this} object
+model is validated using precisely the same code as if the model
+had been produced by msprime's own demography APIs.
+The only validation that msprime does on the Demes MDM document
+is to check for parameters that it doesn't support (like selfing and cloning
+rates).
 
-\ggcomment{
-\begin{itemize}
-\item
-We provide parsers, so the simulation software doesn't have to
-write this. Thus parsers are shared between simulators.
-\item
-The parser does validation too.
-\item
-A simulator can choose to only accept MDM models.
-\end{itemize}
-}
+Thus, from msprime's perpective, there is no difference between what we
+have currently (the HDM converted to MDM via the parser) and what
+you propose (the MDM validated by the parser).
 
+If the HDM did not exist, we would still require parsers because validating
+the full MDM is a lengthy and tedious task.
+A key goal that we set was for the ecosystem to be ``batteries-included''
+from the outset, which is why we have implemented several high-quality
+parsers (Python, and C with Rust, Julia in development) which should
+cover the vast majority of use-cases.
 \end{reply}
+
 \begin{point}
 p. 16: migration section might become hard to read when there are more than a
   few migration rates to specify. A migration matrix representation would make
@@ -560,12 +576,10 @@ dest, start\_time, end\_time, rate\} And then just entering values: \{ X, Y, 100
 0, 50, 0.0001\}
 \end{point}
 \begin{reply}
-TODO
-
-\ggcomment{
-Say something about sparse versus dense.
-Then refer to our docs so that we don't have to copy/paste the docs in the manuscript.
-}
+YAML supports a similar type of shorthand, and there are various
+examples in the tutorial where we use it to increase legibility,
+e.g.
+\url{https://popsim-consortium.github.io/demes-spec-docs/main/tutorial.html#exponential-size-changes}
 
 \end{reply}
 \begin{point}
@@ -574,11 +588,15 @@ p. 17 : Whole HDM model is looking strange for a naive user, with a lot of
 is start time infinity by default for ancestral population?
 \end{point}
 \begin{reply}
-TODO
-
-\ggcomment{
-Refer to our docs so that we don't have to copy/paste the docs in the manuscript.
-}
+We have updated the main text to note that the goal of the paper is not to give the reader
+a detailed understanding of the Demes model, but to argue for its necessity
+and to explain the rationale for key design decisions.
+However, to give the reader a very basic
+understanding of how Demes works, we have added a new Example section that
+gives a simple IM model, with a walk-through in the text.
+Hopefully this, along with the extensive online materials
+(in particular the tutorial), will be sufficient to address specific
+points like this on the structure of the model.
 
 \end{reply}
 \begin{point}
@@ -587,13 +605,9 @@ AFR and EUR have no starting times, which suggests that they are created when
 ANC at different times?
 \end{point}
 \begin{reply}
-TODO
-
-\ggcomment{
-Refer to our docs so that we don't have to copy/paste the docs in the manuscript.
-}
-
+See response to point 2.9.
 \end{reply}
+
 \begin{point}
 migrations section looks strangely defined. Is symmetric migration
   implemented by default? Starting time is not specified for first epoch. Does
@@ -601,26 +615,22 @@ it mean the epoch starts with the creation of AFR and EUR? But again what if
 AFR and EUR would have been created at different times?
 \end{point}
 \begin{reply}
-TODO
-
-\ggcomment{
-Refer to our docs so that we don't have to copy/paste the docs in the manuscript.
-}
-
+See response to point 2.9.
 \end{reply}
+
 \begin{point}
 It is good to have a standard way of specifying a given demographic scenario,
   but it would also be good to have a standard way to specify genetic data to
 be simulated, and to link it to the demography.
 \end{point}
 \begin{reply}
-TODO
-
-\ggcomment{
-Not sure what this means, exactly? Likely beyond the scope of Demes.
-}
-
+We absolutely agree! However, as we stress in several places in the updated
+text this is outside the scope of defining a demographic model, and this
+is a vital simplification. We note in the updated ``Scope of the
+Specification'' section that Demes could be part of a standard simulation
+specification by embedding the demographic model within it.
 \end{reply}
+
 \begin{point}
 Finally, I see the point of separating a model from the sampling, but in some
   cases it could be beneficial to mention them in the same file, for instance
@@ -629,8 +639,10 @@ population. Making sample size part of the properties of a deme would make it
 more efficient than specifying it from outside.
 \end{point}
 \begin{reply}
-TODO
-
+See the previous response for the general point; it is
+more general and extensible to embed a demes model \emph{within} an
+overall simulation description, than it is to include details required
+for a simulation in the Demes model.
 \end{reply}
 
 \end{document}

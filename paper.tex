@@ -254,34 +254,54 @@ the rationale behind key design decisions.
 \end{table}
 
 \subsection*{Population genetics model}
+For inference and simulation software to meaningfully interoperate there
+must be a shared understanding of what a demographic model \emph{is}.
+Population genetics is a large field, and rather than attempting to
+capture all possible within- and between- population processes, we have
+instead adopted a pragmatic approach of identifying a common set
+of assumptions shared by many methods. We outline the processes
+and assumptions briefly here and in
+Appendix~\ref{sec:appendix-pop-gen-model}.
 
 Demographic models consist of one or more populations (or ``demes'') defined
 by their size histories and the time intervals of their existence.
 Individuals can move between populations based on their ancestor-descendant
 relationships  or by continuous or discrete migration events.
-The demographic model itself omits information about genome biology, such as
-genome size and architecture, ploidy, and mutation and recombination rates.
-It also omits any information about selection operating within populations.
-Within populations, allele-frequency dynamics are assumed to
-follow the Wright-Fisher model, so that generations are discrete and
-non-overlapping and population sizes are independent of mean fitness
-(i.e., ``soft'' selection~\citep{christiansen1975hard}).
-While these restrictions preclude some population-genetic scenarios of
-interest, such as continuous spatial structure
-\citep{wright1943isolation,barton2002neutral,barton2010new,
-ringbauer2017inferring,battey2020space}
-or stochastic population size dynamics
-\citep{nunney1993assessing,orr2014population},
-many current forwards- and backwards-in-time simulators
-make these same assumptions.
-The basic assumptions of discrete populations connected by instantaneous or continuous
-migrations are also shared by many inference methods
-\citep[e.g.,][]{gutenkunst2009inferring,gravel2012population,kamm2017efficient,
-jouganous2017inferring,ragsdale2019models,excoffier2021fastsimcoal2}.
+Within a population, we assume Wright-Fisher dynamics
+(see Appendix~\ref{sec:appendix-population-dynamics} for more
+precise details).
+As described in the Scope of the Specification section below, the demographic
+model does not, as a deliberate simplification and separation of
+duties, include any information about genome biology or selection.
+
+These basic assumptions of discrete Wright-Fisher populations connected by
+instantaneous or continuous
+migrations are shared by many inference methods
+\citep[e.g.,][]{gutenkunst2009inferring,li2011inference,
+gravel2012population,kamm2017efficient,
+jouganous2017inferring,ragsdale2019models,
+excoffier2021fastsimcoal2}, and
+forwards- and backwards-time simulators~\citep[e.g.,][]{hudson2002generating,
+gutenkunst2009inferring,
+excoffier2011fastsimcoal,kelleher2016efficient,
+jouganous2017inferring,haller2019slim,thornton2019-nu}.
 Demes therefore serves as ``middleware'' between inference methods and simulation
 software, capturing these common assumptions.
-Appendix~\ref{sec:appendix-pop-gen-model} provides more details on the
-population genetics models supported by Demes.
+
+It is important to note that the goal of describing
+the basic population processes precisely is not to be
+proscriptive about what methods may or may not use the specification,
+but so that we can be clear on what situations we can
+expect methods to agree exactly. Arbitrary population
+processes
+---for example, within-deme
+continuous spatial structure
+\citep{wright1943isolation,barton2002neutral,barton2010new,
+ringbauer2017inferring,battey2020space}---may
+be layered on top of this basic description,
+but as dynamics diverge from the core assumptions,
+then of course we can expect results to differ
+accordingly.
 
 \subsection*{Human Data Model}
 
@@ -295,17 +315,17 @@ features of the model (such as time units and generation times),
 populations (as ``demes'') and their existence intervals (as ``epochs''),
 and gene flow between populations
 (as continuous ``migrations'' or instantaneous ``pulse'' events).
-Fig~\ref{fig:IM} shows an isolation-with-migration in HDM format.
+Fig~\ref{fig:IM} shows an example isolation-with-migration model in HDM format.
 
 Structurally, the HDM encourages human understanding
 by avoiding redundancy in the description where possible and by providing a
 mechanism for specifying default values that are inherited hierarchically.
 For values that repeat
-across fields, defaults may be used to implicitly assign default values to
+across fields, the ``defaults'' mechanism may be used to implicitly assign default values to
 fields of the given type.  A default is superseded by an explicitly provided
 value if given. Size values are inherited naturally following the
 progression of time. For example, if an epoch \texttt{start\_size} is not
-provided (neither directly, nor via a defaults section),
+provided (either directly, or via a defaults section),
 it is assumed to be equal to the \texttt{end\_size} of the previous
 epoch. This also means that the first epoch of each population must specify the
 initial size (or it must be provided in a defaults section).
@@ -355,12 +375,12 @@ the two. Thus, we have attempted to be pragmatic,
 limiting the features that we include in Demes to
 those that are in practise regarded as part of a demographic model.
 
-Thus, the model is limited to features that we can expect many different
+The model is therefore limited to features that we can expect many different
 demographic inference and simulation methods to share. The specification only
 describes demographic features at the population level. Features of genome
 biology are out of scope, including mutation and recombination rates,
 genome annotations, ploidy, and so on. Selection and dominance models are
-absent, as discussed in Appendix.~\ref{sec:appendix-pop-gen-model}.
+absent, as discussed in Appendix~\ref{sec:appendix-pop-gen-model}.
 It is important to note, however, that Demes may be used in applications that
 include additional population genetic processes outside of what is explicitly
 modelled in the specification, such as interpreting population sizes as
@@ -376,7 +396,7 @@ of genome features such as mutation and recombination rates
 in which the demography is defined by an embedded Demes specification.
 Features of the simulation specification (such as defining
 the time and location of samples) can then \emph{refer to} the Demes
-model. This design, in which we embed the Demographic model
+model. This design, in which we embed the demographic model
 \emph{within} a larger specification rather than adding arbitrary
 and unrelated complexities \emph{to} the demography
 is an essential simplification and separation of duties.
@@ -387,10 +407,8 @@ This simplicity means that we cannot directly specify parameter distributions
 or estimated confidence intervals for those parameters.
 While it is not difficult to imagine extending the specification in ways that
 would allow this, it is not
-clear that the benefits are worth the increased parser complexity
+clear that the benefits are worth the greatly increased parser complexity
 (see Appendix~\ref{sec:appendix-static}).
-
-\section*{Example: an isolation-with-migration model}
 
 \begin{figure}[h!]
     \begin{minipage}{0.45\textwidth}
@@ -418,12 +436,11 @@ clear that the benefits are worth the increased parser complexity
         (B) A visual representation of the model using \demesdraw.
         The same model in the Machine Data Model form is provided in
         Figure~\ref{fig:IM-MDM}.
-        The YAML descriptions in (A) and Figure~\ref{fig:IM-MDM} correspond
-        exactly to a JSON description, but are much more human-readable.
     }
 \end{figure}
 
-In Figure \ref{fig:IM} we provide an example isolation-with-migration model in Demes YAML format.
+\section*{Example: an isolation-with-migration model}
+In Figure \ref{fig:IM} we provide an example isolation-with-migration model.
 Models typically start with a concise description, followed by the mandatory
 \texttt{time\_units} field.
 This model uses the \texttt{defaults} section to provide a default \texttt{start\_size}
@@ -431,7 +448,7 @@ of 1000 individuals for each epoch of each deme.
 There are three demes in the model, an ancestral deme named ``A'' which exists
 arbitrarily far back into the past then ceases to exist at 100 generations ago,
 and demes ``X'' and ``Y'' that derive their
-ancestry from A when A goes extinct.
+ancestry from A when it goes extinct.
 Demes A and X have only one epoch, in which the population sizes are
 constant, whereas deme Y has two epochs. Deme Y's second epoch has a different
 \texttt{end\_size} than its \texttt{start\_size}, which indicates the size
@@ -515,7 +532,7 @@ tools that produce and consume the standard.
 Demographic models are a key part of population genetics research,
 and to date the transfer of inferred models to downstream simulations
 has been \textit{ad-hoc}, and conversions between the many different ways
-of expressing such models is both labor intensive and fraught with errors.
+of expressing such models is both labor intensive and error-prone.
 The proposed Demes standard is an attempt to bridge this gap
 between inference and simulation, and also to provide the foundations
 for a sustainable ecosystem of tools built around this data model.
@@ -529,7 +546,7 @@ proposed to increase the likelihood of researchers being
 able to replicate results in the
 literature~\citep{munafo2017manifesto}. The most basic requirement
 for reproducibility is that we must be able to state precisely what
-the result in question is. The lack of standardization in how
+the result in question \emph{is}. The lack of standardization in how
 complex demographic models are communicated today, and the lack of
 precision in the published model descriptions means that it is difficult
 to replicate analyses, or reproduce those models for later simulation.
@@ -603,7 +620,8 @@ In a coalescent setting, there is no upper bound for the coalescent time
 of lineages in this population.
 In a forwards-time setting, the interval of time between infinity and
 the oldest non-infinite model time (i.e. the ``first event") is approximated
-by the simulator's burn-in phase.
+by the simulator's burn-in phase---detailed guidance
+is provided in the online specification.
 
 \subsection{Sizes and epochs}
 
@@ -622,7 +640,7 @@ but other functions may be added to the specification over time.
 
 
 \subsection{Population dynamics}
-
+\label{sec:appendix-population-dynamics}
 Within a population, we assume that allele frequency dynamics can
 be described by the Wright-Fisher model.
 Briefly, generations are non-overlapping (all parents
@@ -646,8 +664,6 @@ stochastic fluctuations in population size, such as interpreting
 population sizes as carrying capacities.
 Many forwards and backwards time simulators currently implement this model
 \citep[e.g.,][]{hudson2002generating,gutenkunst2009inferring,excoffier2011fastsimcoal,kelleher2016efficient,jouganous2017inferring,haller2019slim,thornton2019-nu}.
-Each has their own unique method of specifying the details of selection and demography.
-The goal of Demes is to provide a common method for the latter task.
 
 \subsection{Selfing and cloning}
 
@@ -671,8 +687,6 @@ amount of ``residual'' selfing is expected, so that the realized selfing probabi
 is $(1-\sigma)(S + (1-S)/N)$ instead of $(1-\sigma)S$ (so that even with $\sigma=0$
 and $S=0$, selfing may still occur with probability $1/N$), although
 this effect is negligible in large populations \citep{nordborg1997coalescent}.
-Simulators that allow variable rates of selfing are expected to clearly
-document the expected behavior.
 
 By allowing the definition of selfing and cloning probabilities, we allow many
 standard models to be defined.
@@ -683,9 +697,6 @@ an epoch are not considered.
 More details of the mathematical properties of selfing and cloning rates
 in a coalescent context can be found in
 \citet{nordborg1997coalescent,hartfield2016facsexcoal}.
-
-%\mhcomment{If requested
-%I can quickly draw up a schematic diagram to illustrate these partitions.}
 
 \subsection{Relationships between populations}
 
@@ -717,12 +728,12 @@ We have adopted the widely
 used YAML format~\citep{ben2009yaml} as the recommended means of interchanging
 Demes models (e.g., Figures~\ref{fig:IM}~and~\ref{fig:tennessen}). YAML is a data
 serialization language with an emphasis on simplicity and which interoperates well
-with JSON (indeed, YAML 1.2 is a super set of JSON). We chose YAML over JSON
+with JSON (indeed, YAML 1.2 is a superset of JSON). We chose YAML over JSON
 because although JSON is an excellent format for data interchange, it is
-ill-suited for human understanding or manipulation. We also considered other
+ill-suited for human understanding and manipulation. We also considered other
 declarative data exchange formats such as TOML,
-but chose YAML because of equivalence with JSON,
-its popularity and good software support.
+but chose YAML because of its equivalence with JSON,
+popularity, and good software support.
 Since the Demes data model is defined in JSON Schema,
 however, there is no formal dependency on YAML and implementations may choose
 to use JSON directly if they wish (e.g., for greater efficiency).
@@ -769,8 +780,8 @@ some inference methods (e.g. absolute times versus relative times between events
 Implementing the many distributions of interest and supporting a general
 way to describe a model's free parameters would greatly increase the
 complexity of parsers, with relatively limited benefit to most users.
-It's unlikely that Demes could be made sufficiently
-flexible without considerable effort to implement many features of
+It is unlikely that Demes could be made sufficiently
+flexible without implementing many features of
 general-purpose programming languages, such as variables, arithmetic,
 and flow control.
 Such use cases are therefore better served by writing model-generating
@@ -831,7 +842,7 @@ specifically designed for extending static data in arbitrarily complex ways
         which can then be used by \msprime\ to create the demographic model used in
         \texttt{msprime.sim\_ancestry()}. The same loaded graph can also be
         passed to \moments\ to compute the expected joint SFS.
-        To compare the SFS in Figure~\ref{fig:showcase}, we \emph{marginalize} the
+        To compare the SFS in Figure~\ref{fig:showcase}, we marginalize the
         joint SFS to obtain the single-population SFS for both AFR and EUR populations.
         Lines interfacing \demes\ and other software are highlighted.
     }
