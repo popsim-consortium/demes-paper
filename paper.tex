@@ -254,34 +254,54 @@ the rationale behind key design decisions.
 \end{table}
 
 \subsection*{Population genetics model}
+For inference and simulation software to meaning fully interoperate there
+must be a shared understanding of what a demographic model \emph{is}.
+Population genetics is a large field, and rather than attempting to
+capture all possible within- and between- population processes, we have
+instead adopted a pragmatic approach of identifying a common set
+of assumptions shared by many methods. We outline the processes
+and assumptions briefly here and in
+Appendix~\ref{sec:appendix-pop-gen-model}.
 
 Demographic models consist of one or more populations (or ``demes'') defined
 by their size histories and the time intervals of their existence.
 Individuals can move between populations based on their ancestor-descendant
 relationships  or by continuous or discrete migration events.
-The demographic model itself omits information about genome biology, such as
-genome size and architecture, ploidy, and mutation and recombination rates.
-It also omits any information about selection operating within populations.
-Within populations, allele-frequency dynamics are assumed to
-follow the Wright-Fisher model, so that generations are discrete and
-non-overlapping and population sizes are independent of mean fitness
-(i.e., ``soft'' selection~\citep{christiansen1975hard}).
-While these restrictions preclude some population-genetic scenarios of
-interest, such as continuous spatial structure
-\citep{wright1943isolation,barton2002neutral,barton2010new,
-ringbauer2017inferring,battey2020space}
-or stochastic population size dynamics
-\citep{nunney1993assessing,orr2014population},
-many current forwards- and backwards-in-time simulators
-make these same assumptions.
-The basic assumptions of discrete populations connected by instantaneous or continuous
-migrations are also shared by many inference methods
-\citep[e.g.,][]{gutenkunst2009inferring,li2011inference,gravel2012population,kamm2017efficient,
-jouganous2017inferring,ragsdale2019models,excoffier2021fastsimcoal2}.
+As described in the Scope of the Specification section below, the demographic
+model does not, as a deliberate simplification and separation of
+duties, include any information about genome biology or selection.
+Within a population, we assume Wright-Fisher dynamics
+(see Appendix~\ref{sec:appendix-population-dynamics} for more
+precise details).
+
+These basic assumptions of discrete Wright-Fisher populations connected by
+instantaneous or continuous
+migrations are shared by many inference methods
+\citep[e.g.,][]{gutenkunst2009inferring,li2011inference,
+gravel2012population,kamm2017efficient,
+jouganous2017inferring,ragsdale2019models,
+excoffier2021fastsimcoal2}, and
+forwards- and backwards-time simulators~\citep[e.g.,][]{hudson2002generating,
+gutenkunst2009inferring,
+excoffier2011fastsimcoal,kelleher2016efficient,
+jouganous2017inferring,haller2019slim,thornton2019-nu}.
 Demes therefore serves as ``middleware'' between inference methods and simulation
 software, capturing these common assumptions.
-Appendix~\ref{sec:appendix-pop-gen-model} provides more details on the
-population genetics models supported by Demes.
+
+It is important to note that the goal of describing
+the basic population processes precisely is not to be
+proscriptive about what methods may or may not use the specification,
+but so that we can be clear on what situations we can
+expect methods to agree exactly. Arbitrary population
+processes
+---for example, within-deme
+continuous spatial structure
+\citep{wright1943isolation,barton2002neutral,barton2010new,
+ringbauer2017inferring,battey2020space}---may
+be layered on top of this basic description,
+but as dynamics diverge from the core assumptions,
+then of course we can expect results to differ
+accordingly.
 
 \subsection*{Human Data Model}
 
@@ -620,7 +640,7 @@ but other functions may be added to the specification over time.
 
 
 \subsection{Population dynamics}
-
+\label{sec:appendix-population-dynamics}
 Within a population, we assume that allele frequency dynamics can
 be described by the Wright-Fisher model.
 Briefly, generations are non-overlapping (all parents
@@ -644,8 +664,6 @@ stochastic fluctuations in population size, such as interpreting
 population sizes as carrying capacities.
 Many forwards and backwards time simulators currently implement this model
 \citep[e.g.,][]{hudson2002generating,gutenkunst2009inferring,excoffier2011fastsimcoal,kelleher2016efficient,jouganous2017inferring,haller2019slim,thornton2019-nu}.
-Each has their own unique method of specifying the details of selection and demography.
-The goal of Demes is to provide a common method for the latter task.
 
 \subsection{Selfing and cloning}
 
