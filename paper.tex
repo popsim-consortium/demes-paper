@@ -41,10 +41,6 @@
 \newcommand{\MSMC}[0]{\texttt{MSMC}}
 \newcommand{\demesslim}[0]{\texttt{demes-slim}}
 
-\usepackage{catchfile}
-\begin{filecontents*}{software-table.tex}
-\end{filecontents*}
-
 \begin{document}
 
 \title{Demes: a standard format for demographic models}
@@ -256,12 +252,76 @@ we will not recapitulate the details
 here, but instead focus on the high level properties of the model and
 the rationale behind key design decisions.
 
-\CatchFileDef{\softwaretable}{software-table.tex}{}
 \renewcommand{\arraystretch}{1.5}
 \begin{table}
     \begin{center}
         \begin{tabular}{lp{12cm}}
-            \softwaretable
+%%% Start software table
+
+\toprule
+\multicolumn{2}{l}{Software infrastructure}\\
+\midrule
+\texttt{demes-python} &
+    A Python library for loading, saving, and working with
+    Demes models. Includes support for converting to and from
+    \texttt{ms}~\citep{hudson2002generating}
+    (\url{https://github.com/popsim-consortium/demes-python}).\\
+
+\texttt{demes-c} &
+    A C library for parsing Demes YAML descriptions
+    (\url{https://github.com/grahamgower/demes-c}). \\
+
+\texttt{demes-rust} &
+    A Demes parser in Rust
+    (\url{https://github.com/molpopgen/demes-rs}). \\
+
+\texttt{demes-julia} &
+    A parser in Julia
+    (\url{https://github.com/apragsdale/Demes.jl}). \\
+
+\texttt{demesdraw} &
+    A Python library for visualizing Demes models
+    (\url{https://github.com/grahamgower/demesdraw}). \\
+
+\midrule
+\multicolumn{2}{l}{Methods using Demes as input/output format}\\
+\midrule
+
+% TOOL AUTHORS: please add a row to this table to summarise what the software
+% does, and how it implements demes.
+
+\dadi &
+   Optimizes parameters in models of demographic history and distributions of fitness effects using SFS~\citep{gutenkunst2009inferring}. Can simulate SFS from Demes models.
+    \\
+
+\demesslim &
+    Loads Demes models into the \slim\ forward simulator \citep{haller2019slim}.\\
+
+\fwdpy &
+   Simulates the Wright-Fisher model forward in time \citep{thornton2014cpp,thornton2019-nu}. Demes is the preferred format for specifying a demographic model.\\
+
+\gadma &
+    Infers models of demographic history \citep{noskova2020gadma}. Outputs Demes models and visualizations. \\
+
+\gIMble &
+    Fits IM-type demographic models and infers genomic barriers to geneflow \citep{laetsch2022gimble}. Outputs inferred models in Demes format. \\
+
+\moments &
+    Optimizes parameters in models of demographic history using SFS and linkage disequilibrium statistics
+    \citep{jouganous2017inferring,ragsdale2019models}. Models to be optimized can be specified in Demes.\\
+
+\MSMC & A script provided in the MSMC-tools repository
+(\url{https://github.com/stschiff/msmc-tools})
+converts MSMC \citep{SchiffelsDurbin2014,WangSchiffels2020} output to the demes format.
+\\
+
+\msprime &
+    Simulates population genetic models using tree sequences~\citep{kelleher2016efficient,kelleher2020coalescent,baumdicker2021-iu}. Demographic history models can be specified using Demes.\\
+
+\bottomrule
+
+
+%%% end software table
         \end{tabular}
     \end{center}
     \caption{
