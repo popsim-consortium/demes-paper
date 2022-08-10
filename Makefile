@@ -1,7 +1,6 @@
 DEPS=\
 	paper.tex \
 	paper.bib \
-	software-table.tex \
 	models/IM.yaml \
 	models/IM-resolved.yaml \
 	models/tennessen.yaml \
