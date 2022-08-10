@@ -1,8 +1,6 @@
-\documentclass[11pt]{article}
-\usepackage[round,comma,authoryear]{natbib}
-\usepackage{fullpage}
-\usepackage{authblk}
-\usepackage{graphicx}
+\documentclass[9pt,twocolumn,twoside]{gsajnl}
+\articletype{inv} % article type
+
 \usepackage{booktabs}
 \usepackage{amsmath}
 \usepackage[labelformat=simple]{subcaption}
@@ -24,7 +22,7 @@
 % or input from a source file using \inputminted
 
 % Import this last to avoid mysterious errors.
-\usepackage[implicit=false]{hyperref}
+% \usepackage[implicit=false]{hyperref}
 
 % local definitions
 \newcommand{\ms}[0]{\texttt{ms}}
@@ -42,12 +40,6 @@
 \newcommand{\tskit}[0]{\texttt{tskit}}
 \newcommand{\MSMC}[0]{\texttt{MSMC}}
 \newcommand{\demesslim}[0]{\texttt{demes-slim}}
-
-\newcommand{\aprcomment}[1]{{\textcolor{blue}{APR: #1}}}
-\newcommand{\jkcomment}[1]{{\textcolor{red}{JK: #1}}}
-\newcommand{\ggcomment}[1]{{\textcolor{yellow!60!red}{GG: #1}}}
-\newcommand{\krtcomment}[1]{{\textcolor{purple}{KRT: #1}}}
-\newcommand{\mhcomment}[1]{{\textcolor{cyan}{MH: #1}}}
 
 \usepackage{catchfile}
 \begin{filecontents*}{software-table.tex}
@@ -69,7 +61,7 @@
 \author[8]{Stephan Schiffels}
 \author[4]{Travis J. Struck}
 %Senior Authors
-\author[6,$\dagger$,$\aleph$]{Jerome Kelleher}
+\author[6,$\dagger$,$\ddagger$]{Jerome Kelleher}
 \author[7,$\dagger$]{Kevin R. Thornton}
 
 \affil[1]{Section for Molecular Ecology and Evolution, Globe Institute, University of Copenhagen}
@@ -82,12 +74,16 @@
 \affil[7]{Ecology and Evolutionary Biology, University of California, Irvine}
 \affil[8]{Max Planck Institute for Evolutionary Anthropology, Leipzig, Germany}
 
-\affil[$\star$]{Denotes shared first authorship, listed alphabetically}
-\affil[$\dagger$]{Denotes shared senior authorship, listed alphabetically}
-\affil[$\aleph$]{Denotes corresponding author}
+% \affil[$\star$]{Denotes shared first authorship, listed alphabetically}
+% \affil[$\dagger$]{Denotes shared senior authorship, listed alphabetically}
+% \affil[$\aleph$]{Denotes corresponding author}
 
 
-\maketitle
+\keywords{Demographic models, inference, simulation}
+
+\runningtitle{Demes: a standard format for demographic models}
+\runningauthor{Gower \textit{et al.}}
+
 
 \begin{abstract}
 Understanding the demographic history of populations is a
@@ -117,6 +113,26 @@ An introduction to the file format and a detailed specification are available at
 \url{https://popsim-consortium.github.io/demes-spec-docs/}.
 \end{abstract}
 
+\maketitle
+\thispagestyle{firststyle}
+\marginmark
+\firstpagefootnote
+
+% Use the \equalcontrib command to mark authors with equal
+% contributions, using the relevant superscript numbers
+% \equalcontrib{1}
+% \equalcontrib{2}
+\makeatletter
+\newcommand{\equalcontribfirst}[1]{\@authfootnote{#1}{These authors contributed equally to this work, as joint first authors.}}
+\newcommand{\equalcontriblast}[1]{\@authfootnote{#1}{These authors contributed equally to this work, as joint last authors.}}
+\makeatother
+
+\equalcontribfirst{$\star$} % {Denotes shared first authorship, listed alphabetically}
+\equalcontriblast{$\dagger$} % {Denotes shared senior authorship, listed alphabetically}
+% \equalcontrib{$\ddagger$}{Denotes corresponding author}
+
+\correspondingauthoraffiliation{$\ddagger$}{\url{jerome.kelleher@bdi.ox.ac.uk}}
+\vspace{-33pt}% Only used for adjusting extra space in the left column of the first page
 \section*{Introduction}
 
 The ever-increasing amount of genetic sequencing data from genetically and
@@ -572,7 +588,7 @@ Jerome Kelleher is supported by the Robertson Foundation.
 Stephan Schiffels was supported by funding from the European Research Council (ERC) under the European Union’s Horizon 2020 research and innovation programme (grant agreement No 851511).
 Gertjan Bisschop was supported by funding from the ERC(ModelGenomLand, 757648).
 
-\bibliographystyle{genetics}
+% \bibliographystyle{genetics}
 \bibliography{paper}
 
 \renewcommand{\thefigure}{A\arabic{figure}}
