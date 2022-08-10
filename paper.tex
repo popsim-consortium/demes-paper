@@ -255,7 +255,6 @@ the rationale behind key design decisions.
 \renewcommand{\arraystretch}{1.5}
 \begin{table}
     \begin{center}
-        % \begin{tabular}{lp{12cm}}
         \begin{tabular}{lp{6.5cm}}
 %%% Start software table
 
@@ -320,8 +319,6 @@ converts MSMC \citep{SchiffelsDurbin2014,WangSchiffels2020} output to the demes 
     Simulates population genetic models using tree sequences~\citep{kelleher2016efficient,kelleher2020coalescent,baumdicker2021-iu}. Demographic history models can be specified using Demes.\\
 
 \bottomrule
-
-
 %%% end software table
         \end{tabular}
     \end{center}
@@ -378,8 +375,7 @@ the basic population processes precisely is not to be
 proscriptive about what methods may or may not use the specification,
 but so that we can be clear on what situations we can
 expect methods to agree exactly. Arbitrary population
-processes
----for example, within-deme
+processes---for example, within-deme
 continuous spatial structure
 \citep{wright1943isolation,barton2002neutral,barton2010new,
 ringbauer2017inferring,battey2020space}---may
@@ -499,16 +495,16 @@ clear that the benefits are worth the greatly increased parser complexity
     \begin{minipage}{0.45\textwidth}
     \begin{subfigure}{\textwidth}
     \caption{}
-        \begin{tcolorbox}[equal height group=IM]
+        \begin{tcolorbox}
             \inputminted[fontsize=\scriptsize,numbersep=5pt]{yaml}{models/IM.yaml}
         \end{tcolorbox}
     \end{subfigure}
     \end{minipage}\hfill%
 %
-    \begin{minipage}{0.50\textwidth}
+    \begin{minipage}{0.45\textwidth}
     \begin{subfigure}{\textwidth}
     \caption{}
-        \begin{tcolorbox}[equal height group=IM, boxsep=0pt]
+        \begin{tcolorbox}
             \includegraphics[width=\textwidth]{fig/IM}
         \end{tcolorbox}
     \end{subfigure}
@@ -517,7 +513,7 @@ clear that the benefits are worth the greatly increased parser complexity
     \caption{
         \label{fig:IM}
         Example isolation-with-migration Demes model. (A) The Human Data Model
-        representation expressed using YAML.
+        representation expressed as YAML.
         (B) A visual representation of the model using \demesdraw.
         The same model in the Machine Data Model form is provided in
         Figure~\ref{fig:IM-MDM}.
@@ -551,7 +547,7 @@ in the online documentation
 
 \section*{Application: simulation using Demes}
 
-\begin{figure}[tb!]
+\begin{figure}
     \centering
     \includegraphics{fig/showcase}
     \caption{
